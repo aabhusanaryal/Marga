@@ -1,0 +1,7 @@
+{
+  "name": "Marga",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
