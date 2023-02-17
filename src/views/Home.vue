@@ -17,6 +17,7 @@ import {
   IonIcon,
   IonPage,
   IonRouterOutlet,
+  alertController,
 } from "@ionic/vue";
 import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
@@ -36,17 +37,12 @@ onMounted(async () => {
     pos = await Geolocation.getCurrentPosition({
       enableHighAccuracy: true,
     });
-  } catch {
-    console.log("1");
+  } catch (e) {
+    if (e.code == 1) {
+      await alertRequestLocationPermission();
+    }
+    return;
   }
-  // catch (e) {
-  //   if (e.code == 1) {
-  //     alert("Please enable location access");
-  //   } else {
-  //     alert("There seems to be some error. Please try again later");
-  //   }
-  //   return;
-  // }
   currentPosition.latitude = pos.coords.latitude;
   currentPosition.longitude = pos.coords.longitude;
   // Setting up leaflet to display the map inside div#map
@@ -98,6 +94,7 @@ onUnmounted(() => {
   // Removing the Geolocation watcher
   Geolocation.clearWatch({ id: watcherID });
 });
+
 // Returns a circle marker at currentPosition. This is not added to map though
 const createCircleMarker = () =>
   L.circleMarker([currentPosition.latitude, currentPosition.longitude], {
@@ -106,6 +103,29 @@ const createCircleMarker = () =>
     fillOpacity: 0.5,
     radius: 8,
   });
+
+// This function is run if the location permissions have not yet been granted. It is called inside onMounted.
+// Once the user pressed OK on the alert, location permissions are requested.
+const alertRequestLocationPermission = async () => {
+  const alert = await alertController.create({
+    header: "Alert",
+    subHeader: "Grant Location Permission",
+    message:
+      "Please grant location permissions to the application for proper functioning.",
+    buttons: [
+      {
+        text: "OK",
+        role: "accept",
+        cssClass: "secondary",
+        handler: () => {
+          Geolocation.requestPermissions();
+        },
+      },
+    ],
+  });
+
+  await alert.present();
+};
 </script>
 
 <style scoped>
