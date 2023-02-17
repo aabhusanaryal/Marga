@@ -18,7 +18,7 @@ import {
   IonPage,
   IonRouterOutlet,
 } from "@ionic/vue";
-import { onMounted, computed } from "vue";
+import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 
@@ -26,12 +26,16 @@ import L from "leaflet";
 let map;
 // current position of the user, updates if the user moves
 const currentPosition = { latitude: 0, longitude: 0 };
+// Geolocation watcher id
+let watcherID;
 
 onMounted(async () => {
   // Retreiving the current position of the user (Requires location permissions)
   let pos;
   try {
-    pos = await Geolocation.getCurrentPosition();
+    pos = await Geolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+    });
   } catch {
     console.log("1");
   }
@@ -59,20 +63,24 @@ onMounted(async () => {
   // Adding a circle marker to user's current position
   let circleMarker = createCircleMarker().addTo(map);
   // Watching for position change of user
-  Geolocation.watchPosition({}, (pos) => {
-    if (pos) {
-      currentPosition.latitude = pos.coords.latitude;
-      currentPosition.longitude = pos.coords.longitude;
-    }
+  watcherID = await Geolocation.watchPosition(
+    {
+      enableHighAccuracy: true,
+    },
+    (pos) => {
+      if (pos) {
+        currentPosition.latitude = pos.coords.latitude;
+        currentPosition.longitude = pos.coords.longitude;
+      }
 
-    // Updating the circle marker whenever the user moves
-    if (circleMarker) {
-      map.removeLayer(circleMarker);
+      // Updating the circle marker whenever the user moves
+      if (circleMarker) {
+        map.removeLayer(circleMarker);
+      }
+      circleMarker = createCircleMarker().addTo(map);
+      map.setView([currentPosition.latitude, currentPosition.longitude]);
     }
-    circleMarker = createCircleMarker().addTo(map);
-    map.setView([currentPosition.latitude, currentPosition.longitude]);
-  });
-
+  );
   // To correct map size
   setTimeout(() => {
     map.invalidateSize();
@@ -86,6 +94,10 @@ onMounted(async () => {
   });
 });
 
+onUnmounted(() => {
+  // Removing the Geolocation watcher
+  Geolocation.clearWatch({ id: watcherID });
+});
 // Returns a circle marker at currentPosition. This is not added to map though
 const createCircleMarker = () =>
   L.circleMarker([currentPosition.latitude, currentPosition.longitude], {
