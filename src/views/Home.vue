@@ -1,8 +1,13 @@
 <template>
   <ion-page>
-    <h1>This is tab 1</h1>
+    <ion-header :translucent="true">
+      <ion-toolbar>
+        <ion-title>Home</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
     <ion-content>
-      <div id="map" @click="addMarker"></div>
+      <div id="map-home" @click="addMarker"></div>
     </ion-content>
   </ion-page>
 </template>
@@ -17,12 +22,14 @@ import {
   IonIcon,
   IonPage,
   IonRouterOutlet,
+  IonTitle,
+  IonToolbar,
+  IonHeader,
   alertController,
 } from "@ionic/vue";
 import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
-
 // map object for leaflet
 let map;
 // current position of the user, updates if the user moves
@@ -45,8 +52,8 @@ onMounted(async () => {
   }
   currentPosition.latitude = pos.coords.latitude;
   currentPosition.longitude = pos.coords.longitude;
-  // Setting up leaflet to display the map inside div#map
-  map = L.map("map").setView(
+  // Setting up leaflet to display the map inside div#map-home
+  map = L.map("map-home").setView(
     [currentPosition.latitude, currentPosition.longitude],
     13
   );
@@ -56,6 +63,8 @@ onMounted(async () => {
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
+  // Pelias
+  L.Control.geocoder().addTo(map);
   // Adding a circle marker to user's current position
   let circleMarker = createCircleMarker().addTo(map);
   // Watching for position change of user
@@ -129,7 +138,7 @@ const alertRequestLocationPermission = async () => {
 </script>
 
 <style scoped>
-#map {
+#map-home {
   height: 100%;
 }
 </style>
