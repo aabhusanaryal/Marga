@@ -22,6 +22,7 @@
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",
     "leaflet": "^1.9.3",
+    "leaflet-rotate": "^0.2.3",
     "pelias-leaflet-plugin": "^1.12.0",
     "tangram": "^0.21.1",
     "vue": "^3.2.21",

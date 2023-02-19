@@ -66,7 +66,9 @@ onMounted(async () => {
     [currentPosition.latitude, currentPosition.longitude],
     13
   );
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  // dark mode tiles link:
+  // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
+  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution:
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
