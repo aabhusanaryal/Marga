@@ -4,6 +4,15 @@
       <ion-toolbar>
         <ion-title>Home</ion-title>
       </ion-toolbar>
+      <ion-toolbar>
+        <SearchBar
+          placeholder="Start Node"
+          @clickSearchResultItm="clickSearchResultItm"
+        />
+      </ion-toolbar>
+      <ion-toolbar>
+        <SearchBar placeholder="Destination Node" />
+      </ion-toolbar>
     </ion-header>
 
     <ion-content>
@@ -14,22 +23,22 @@
 
 <script setup lang="ts">
 import {
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   IonContent,
-  IonLabel,
-  IonIcon,
   IonPage,
-  IonRouterOutlet,
   IonTitle,
   IonToolbar,
   IonHeader,
+  IonSearchbar,
   alertController,
 } from "@ionic/vue";
 import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
+
+// Imports other than leaflet
+import SearchBar from "@/components/SearchBar.vue";
+
+// Logic code starts
 // map object for leaflet
 let map;
 // current position of the user, updates if the user moves
@@ -63,8 +72,6 @@ onMounted(async () => {
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
-  // Pelias
-  L.Control.geocoder().addTo(map);
   // Adding a circle marker to user's current position
   let circleMarker = createCircleMarker().addTo(map);
   // Watching for position change of user
@@ -134,6 +141,18 @@ const alertRequestLocationPermission = async () => {
   });
 
   await alert.present();
+};
+
+// Logic other than leaflet go below this
+
+const clickSearchResultItm = (event) => {
+  console.log(event);
+  const marker = L.marker([
+    event.geometry.coordinates[1],
+    event.geometry.coordinates[0],
+  ]).addTo(map);
+  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 16);
+  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
 </script>
 
