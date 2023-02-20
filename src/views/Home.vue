@@ -57,7 +57,7 @@ import { search } from "ionicons/icons";
 import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
-
+import "leaflet-rotate";
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/Modal.vue";
@@ -86,10 +86,27 @@ onMounted(async () => {
   currentPosition.latitude = pos.coords.latitude;
   currentPosition.longitude = pos.coords.longitude;
   // Setting up leaflet to display the map inside div#map-home
-  map = L.map("map-home").setView(
-    [currentPosition.latitude, currentPosition.longitude],
-    13
-  );
+  map = L.map("map-home", {
+    // center: [55, 10],
+    // zoom: 2,
+    // layers: [esri],
+    // worldCopyJump: true,
+    // preferCanvas: false,
+    rotate: true,
+    rotateControl: {
+      closeOnZeroBearing: false,
+      // position: 'bottomleft',
+    },
+    bearing: 30,
+    // attributionControl: false,
+    // zoomControl: false,
+    // compassBearing: false,
+    // trackContainerMutation: false,
+    // shiftKeyRotate: false,
+    // touchGestures: true,
+    touchRotate: true,
+    // touchZoom: true
+  }).setView([currentPosition.latitude, currentPosition.longitude], 13);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
   L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
