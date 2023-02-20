@@ -199,8 +199,8 @@ const findRoutes = async () => {
     const modal = await modalController.create({
       component: Modal,
       componentProps: { modalList },
-      breakpoints: [0, 0.25, 0.5, 0.75],
-      initialBreakpoint: 0.5,
+      breakpoints: [0, 0.3],
+      initialBreakpoint: 0.3,
     });
     modal.present();
     // const { data, role } = await modal.onWillDismiss();
