@@ -7,16 +7,29 @@
       <ion-toolbar>
         <SearchBar
           placeholder="Start Node"
-          @clickSearchResultItm="clickSearchResultItm"
+          @clickSearchResultItm="clickStartSearchResultItm"
         />
       </ion-toolbar>
       <ion-toolbar>
-        <SearchBar placeholder="Destination Node" />
+        <SearchBar
+          placeholder="Destination Node"
+          @clickSearchResultItm="clickDestinationSearchResultItm"
+        />
+      </ion-toolbar>
+      <ion-toolbar>
+        <center>
+          <ion-button @click="findRoutes" shape="round">
+            <ion-icon slot="start" :icon="search"></ion-icon>Find
+            Routes</ion-button
+          >
+        </center>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
       <div id="map-home" @click="addMarker"></div>
+
+      <!-- Modal that displays available routes -->
     </ion-content>
   </ion-page>
 </template>
@@ -30,13 +43,24 @@ import {
   IonHeader,
   IonSearchbar,
   alertController,
+  IonModal,
+  IonItem,
+  IonList,
+  IonAvatar,
+  IonImg,
+  IonLabel,
+  IonIcon,
+  modalController,
+  toastController,
 } from "@ionic/vue";
+import { search } from "ionicons/icons";
 import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
+import Modal from "@/components/Modal.vue";
 
 // Logic code starts
 // map object for leaflet
@@ -92,7 +116,7 @@ onMounted(async () => {
         map.removeLayer(circleMarker);
       }
       circleMarker = createCircleMarker().addTo(map);
-      map.setView([currentPosition.latitude, currentPosition.longitude]);
+      // map.setView([currentPosition.latitude, currentPosition.longitude]);
     }
   );
   // To correct map size
@@ -146,15 +170,57 @@ const alertRequestLocationPermission = async () => {
 };
 
 // Logic other than leaflet go below this
-
-const clickSearchResultItm = (event) => {
-  console.log(event);
+let start, destination;
+// This funcion is called when a search result item is clicked on
+const clickStartSearchResultItm = (event) => {
+  start = event;
   const marker = L.marker([
     event.geometry.coordinates[1],
     event.geometry.coordinates[0],
   ]).addTo(map);
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 16);
+  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+};
+const clickDestinationSearchResultItm = (event) => {
+  destination = event;
+  const marker = L.marker([
+    event.geometry.coordinates[1],
+    event.geometry.coordinates[0],
+  ]).addTo(map);
+  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
+  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+};
+
+// Modal Controller
+const modalList = [1, 2, 3];
+const findRoutes = async () => {
+  if (start && destination) {
+    console.log(start);
+    const modal = await modalController.create({
+      component: Modal,
+      componentProps: { modalList },
+      breakpoints: [0, 0.25, 0.5, 0.75],
+      initialBreakpoint: 0.5,
+    });
+    modal.present();
+    // const { data, role } = await modal.onWillDismiss();
+    // if (role === "confirm") {
+    //   console.log("Dismiss");
+    // }
+  } else {
+    presentToast("bottom", "Please select start and destination nodes!");
+  }
+};
+
+// Toast Generator / Presentor
+const presentToast = async (position: "top" | "middle" | "bottom", text) => {
+  const toast = await toastController.create({
+    message: text,
+    duration: 1500,
+    position: position,
+  });
+
+  await toast.present();
 };
 </script>
 
