@@ -58,6 +58,7 @@ import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 import "leaflet-rotate";
+import "leaflet.locatecontrol";
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/Modal.vue";
@@ -67,8 +68,6 @@ import Modal from "@/components/Modal.vue";
 let map;
 // current position of the user, updates if the user moves
 const currentPosition = { latitude: 0, longitude: 0 };
-// Geolocation watcher id
-let watcherID;
 
 onMounted(async () => {
   // Retreiving the current position of the user (Requires location permissions)
@@ -87,26 +86,15 @@ onMounted(async () => {
   currentPosition.longitude = pos.coords.longitude;
   // Setting up leaflet to display the map inside div#map-home
   map = L.map("map-home", {
-    // center: [55, 10],
-    // zoom: 2,
-    // layers: [esri],
-    // worldCopyJump: true,
-    // preferCanvas: false,
     rotate: true,
     rotateControl: {
       closeOnZeroBearing: false,
-      // position: 'bottomleft',
     },
-    bearing: 30,
-    // attributionControl: false,
-    // zoomControl: false,
-    // compassBearing: false,
-    // trackContainerMutation: false,
-    // shiftKeyRotate: false,
-    // touchGestures: true,
+    compassBearing: false,
+    touchGestures: true,
     touchRotate: true,
     // touchZoom: true
-  }).setView([currentPosition.latitude, currentPosition.longitude], 13);
+  }).setView([currentPosition.latitude, currentPosition.longitude], 16);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
   L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -116,27 +104,20 @@ onMounted(async () => {
   }).addTo(map);
 
   // Adding a circle marker to user's current position
-  let circleMarker = createCircleMarker().addTo(map);
-  // Watching for position change of user
-  watcherID = await Geolocation.watchPosition(
-    {
-      enableHighAccuracy: true,
-    },
-    (pos) => {
-      if (pos) {
-        currentPosition.latitude = pos.coords.latitude;
-        currentPosition.longitude = pos.coords.longitude;
-      }
+  const locationControl = L.control
+    .locate({
+      showCompass: true,
+      icon: "leaflet-control-locate-location-arrow",
+      clickBehavior: {
+        inView: "setView",
+        outOfView: "setView",
+        inViewNotFollowing: "inView",
+      },
+      keepCurrentZoomLevel: true,
+    })
+    .addTo(map);
+  locationControl.start();
 
-      // Updating the circle marker whenever the user moves
-      if (circleMarker) {
-        map.removeLayer(circleMarker);
-      }
-      circleMarker = createCircleMarker().addTo(map);
-      // map.setView([currentPosition.latitude, currentPosition.longitude]);
-    }
-  );
-  // To correct map size
   setTimeout(() => {
     map.invalidateSize();
   }, 500);
@@ -148,20 +129,6 @@ onMounted(async () => {
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
   });
 });
-
-onUnmounted(() => {
-  // Removing the Geolocation watcher
-  Geolocation.clearWatch({ id: watcherID });
-});
-
-// Returns a circle marker at currentPosition. This is not added to map though
-const createCircleMarker = () =>
-  L.circleMarker([currentPosition.latitude, currentPosition.longitude], {
-    color: "blue",
-    fillColor: "#1212ff",
-    fillOpacity: 0.5,
-    radius: 8,
-  });
 
 // This function is run if the location permissions have not yet been granted. It is called inside onMounted.
 // Once the user pressed OK on the alert, location permissions are requested.
@@ -244,5 +211,15 @@ const presentToast = async (position: "top" | "middle" | "bottom", text) => {
 <style scoped>
 #map-home {
   height: 100%;
+}
+</style>
+
+<style>
+.leaflet-control-locate-location-arrow {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 7px;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
 }
 </style>
