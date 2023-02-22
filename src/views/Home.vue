@@ -17,12 +17,10 @@
         />
       </ion-toolbar>
       <ion-toolbar>
-        <center>
-          <ion-button @click="findRoutes" shape="round">
-            <ion-icon slot="start" :icon="search"></ion-icon>Find
-            Routes</ion-button
-          >
-        </center>
+        <ion-button @click="findRoutes" shape="round">
+          <ion-icon slot="start" :icon="search"></ion-icon>Find
+          Routes</ion-button
+        >
       </ion-toolbar>
     </ion-header>
 
@@ -41,14 +39,8 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
-  IonSearchbar,
+  IonButton,
   alertController,
-  IonModal,
-  IonItem,
-  IonList,
-  IonAvatar,
-  IonImg,
-  IonLabel,
   IonIcon,
   modalController,
   toastController,
@@ -72,19 +64,21 @@ const currentPosition = { latitude: 0, longitude: 0 };
 onMounted(async () => {
   // Retreiving the current position of the user (Requires location permissions)
   let pos;
+  console.log("tryibg map");
+
   try {
-    pos = await Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-    });
+    pos = await Geolocation.getCurrentPosition();
+    console.log("Got location");
   } catch (e) {
     if (e.code == 1) {
       await alertRequestLocationPermission();
     }
-    return;
+    // return;
   }
   currentPosition.latitude = pos.coords.latitude;
   currentPosition.longitude = pos.coords.longitude;
   // Setting up leaflet to display the map inside div#map-home
+  console.log("creating map");
   map = L.map("map-home", {
     rotate: true,
     rotateControl: {
@@ -102,7 +96,10 @@ onMounted(async () => {
     attribution:
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
-
+  console.log(map);
+  map.on("load", () => {
+    console.log("MAP HAS LOADED");
+  });
   // Adding a circle marker to user's current position
   const locationControl = L.control
     .locate({

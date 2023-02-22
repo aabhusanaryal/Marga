@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 
@@ -30,6 +31,9 @@ declare module "@vue/runtime-core" {
 }
 
 const app = createApp(App).use(IonicVue).use(router);
+const pinia = createPinia();
+
+app.use(pinia);
 
 router.isReady().then(() => {
   app.mount("#app");
