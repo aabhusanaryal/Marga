@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import HomePage from "@/views/Register.vue";
-import Tabs from "@/views/Tabs.vue";
 import { useAuthStore } from "@/store/authStore";
 
 const routes: Array<RouteRecordRaw> = [
@@ -23,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/tabs/",
-    component: Tabs,
+    component: import("@/views/Tabs.vue"),
     children: [
       {
         path: "",
