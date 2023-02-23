@@ -36,14 +36,16 @@
         </ion-item>
         <ion-button type="submit" expand="block">Sign In</ion-button>
       </form>
+    <h3 v-if="authStore.incorrect">Incorrect username or password.</h3>
+
       <ion-row>
         <ion-col>
-          <br />
-          <a class="small-text">Forgot Password?</a>
           <br />
           <a class="small-text" href="/register">Sign up</a>
         </ion-col>
       </ion-row>
+      <ion-button @click="backButtonClicked"> BACK </ion-button>
+
     </ion-content>
   </ion-page>
 </template>
@@ -62,15 +64,21 @@ import {
   IonButton,
   IonCol,
   IonRow,
-  IonButtons,
   IonSpinner,
 } from "@ionic/vue";
 import { useAuthStore } from "@/store/authStore";
-import router from "@/router";
+import {useRouter} from 'vue-router';
 
 let username, password;
 let showLoadingSpinner = ref(false);
 const authStore = useAuthStore();
+const router=useRouter();
+
+if (authStore.userAuthenticated){
+  router.push('/')
+  console.log("Since user logged in,son't show login push to homepage.") 
+}
+
 const submitLoginForm = async (e) => {
   showLoadingSpinner.value = true;
   const formData = new FormData();
@@ -82,11 +90,27 @@ const submitLoginForm = async (e) => {
     body: formData,
   });
   data = await data.json();
-  console.log(data.access_token);
+  console.log("Acess token: ",data.access_token);
   showLoadingSpinner.value = false;
-  authStore.accessToken = data.access_token;
-  authStore.userAuthenticated = true;
-  router.push(authStore.returnURL || "/tabs/home");
+
+  if(data.detail==='Incorrect username or password'){
+    console.log("incorrect")
+    authStore.incorrect=true
+  }
+  else{
+    authStore.incorrect=false
+    authStore.accessToken = data.access_token;
+    authStore.userAuthenticated = true;
+    router.push(authStore.returnURL || "/tabs/home");
+  }
+  // const backButtonClicked=()=>{
+  //     console.log("button clicked")
+  //     router.push('/tabs/home')
+  //   }
+  function backButtonClicked(){
+    console.log("Back button clicked.")
+    router.push('/')
+  }
 };
 </script>
 

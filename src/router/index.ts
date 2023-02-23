@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import HomePage from "@/views/RegisterPage.vue";
+import HomePage from "@/views/Register.vue";
 import Tabs from "@/views/Tabs.vue";
 import { useAuthStore } from "@/store/authStore";
 
@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/account",
     component: () => import("@/views/Login.vue"),
+  },
+  {
+    path:"/register",
+    component:()=>import ("@/views/Register.vue")
   },
   {
     path: "/tabs/",
@@ -43,6 +47,9 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path:'/:pathMatch(.*)*', redirect:'/'
+  }
 ];
 
 const router = createRouter({
@@ -53,7 +60,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   //will be called in every navigation:
   const authStore = useAuthStore();
-  const publicPages = ["/account", "/tabs/home"];
+  const publicPages = ["/account", "/tabs/home","/register"];
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
 
@@ -61,6 +68,7 @@ router.beforeEach(async (to) => {
   console.log("Current path: ", to.path);
   console.log("Authentication Required: ", authRequired);
   console.log("User is logged in: ", authStore.userAuthenticated);
+  console.log("User incorrect: ", authStore.incorrect)
 
   // Yedi page ma auth chainxa vane ani user authenticated xaina vane redirect to login
   if (authRequired && !authStore.userAuthenticated) {
