@@ -17,12 +17,10 @@
         />
       </ion-toolbar>
       <ion-toolbar>
-        <center>
-          <ion-button @click="findRoutes" shape="round">
-            <ion-icon slot="start" :icon="search"></ion-icon>Find
-            Routes</ion-button
-          >
-        </center>
+        <ion-button @click="findRoutes" shape="round">
+          <ion-icon slot="start" :icon="search"></ion-icon>Find
+          Routes</ion-button
+        >
       </ion-toolbar>
     </ion-header>
 
@@ -41,17 +39,12 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
-  IonSearchbar,
+  IonButton,
   alertController,
-  IonModal,
-  IonItem,
-  IonList,
-  IonAvatar,
-  IonImg,
-  IonLabel,
   IonIcon,
   modalController,
   toastController,
+  onIonViewDidEnter,
 } from "@ionic/vue";
 import { search } from "ionicons/icons";
 import { onMounted, computed, onUnmounted } from "vue";
@@ -66,25 +59,10 @@ import Modal from "@/components/Modal.vue";
 // Logic code starts
 // map object for leaflet
 let map;
-// current position of the user, updates if the user moves
-const currentPosition = { latitude: 0, longitude: 0 };
 
 onMounted(async () => {
-  // Retreiving the current position of the user (Requires location permissions)
-  let pos;
-  try {
-    pos = await Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-    });
-  } catch (e) {
-    if (e.code == 1) {
-      await alertRequestLocationPermission();
-    }
-    return;
-  }
-  currentPosition.latitude = pos.coords.latitude;
-  currentPosition.longitude = pos.coords.longitude;
   // Setting up leaflet to display the map inside div#map-home
+  console.log("creating map");
   map = L.map("map-home", {
     rotate: true,
     rotateControl: {
@@ -94,7 +72,7 @@ onMounted(async () => {
     touchGestures: true,
     touchRotate: true,
     // touchZoom: true
-  }).setView([currentPosition.latitude, currentPosition.longitude], 16);
+  }).setView([27.7140421958018, 85.31448709387736], 16);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
   L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -106,7 +84,8 @@ onMounted(async () => {
   // Adding a circle marker to user's current position
   const locationControl = L.control
     .locate({
-      showCompass: true,
+      showCompass: false,
+      onLocationError: requestLocationPermissions,
       icon: "leaflet-control-locate-location-arrow",
       clickBehavior: {
         inView: "setView",
@@ -114,9 +93,15 @@ onMounted(async () => {
         inViewNotFollowing: "inView",
       },
       keepCurrentZoomLevel: true,
+      locateOptions: {
+        enableHighAccuracy: true,
+      },
     })
     .addTo(map);
-  locationControl.start();
+
+  // The line below will automatically locate the user on the page being mounted. This requires user to
+  // grant location permission beforehand.
+  // locationControl.start();
 
   setTimeout(() => {
     map.invalidateSize();
@@ -130,9 +115,13 @@ onMounted(async () => {
   });
 });
 
+onIonViewDidEnter(() => {
+  if (map) map.invalidateSize();
+});
+
 // This function is run if the location permissions have not yet been granted. It is called inside onMounted.
 // Once the user pressed OK on the alert, location permissions are requested.
-const alertRequestLocationPermission = async () => {
+const requestLocationPermissions = async () => {
   const alert = await alertController.create({
     header: "Alert",
     subHeader: "Grant Location Permission",
