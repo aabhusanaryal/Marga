@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <ion-tabs @ionTabsWillChange="tabChange">
+      <ion-tabs>
         <ion-router-outlet></ion-router-outlet>
         <ion-tab-bar slot="bottom">
           <ion-tab-button tab="home" href="/tabs/home">
@@ -14,7 +14,7 @@
             <ion-label>Add Routes</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="review" href="/tabs/review" disabled="true">
+          <ion-tab-button tab="review" href="/tabs/review" :disabled="true">
             <ion-icon :icon="ribbonOutline" />
             <ion-label>Review Routes</ion-label>
           </ion-tab-button>
@@ -46,8 +46,4 @@ import {
   addCircleOutline,
   ribbonOutline,
 } from "ionicons/icons";
-
-function tabChange() {
-  console.log(111);
-}
 </script>

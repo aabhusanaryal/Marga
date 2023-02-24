@@ -5,17 +5,14 @@
     </div>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start"> </ion-buttons>
         <ion-title>Log In</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content class="ion-padding">
       <form @submit.prevent="submitLoginForm">
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding"
-            >Username</ion-label
-          >
+          <ion-label position="floating">Username</ion-label>
           <ion-input
             type="text"
             name="username"
@@ -23,28 +20,27 @@
             required
           ></ion-input>
         </ion-item>
+        <br />
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding"
-            >Password</ion-label
-          >
+          <ion-label position="floating">Password</ion-label>
           <ion-input
             type="password"
             name="password"
             v-model="password"
             required
+            :clearOnEdit="false"
           ></ion-input>
         </ion-item>
+        <br />
         <ion-button type="submit" expand="block">Sign In</ion-button>
       </form>
-      <h3 v-if="authStore.incorrect">Incorrect username or password.</h3>
-
-      <ion-row>
-        <ion-col>
-          <br />
-          <a class="small-text" href="/register">Sign up</a>
-        </ion-col>
-      </ion-row>
-      <ion-button @click="backButtonClicked"> BACK </ion-button>
+      <ion-item v-if="error" color="danger">
+        <h3>{{ errorMessage }}</h3>
+      </ion-item>
+      <br />
+      <router-link class="small-text" to="/tabs/register"
+        >Don't have an account? Register.</router-link
+      >
     </ion-content>
   </ion-page>
 </template>
@@ -61,8 +57,6 @@ import {
   IonLabel,
   IonInput,
   IonButton,
-  IonCol,
-  IonRow,
   IonSpinner,
 } from "@ionic/vue";
 import { useAuthStore } from "@/store/authStore";
@@ -72,7 +66,8 @@ let username, password;
 let showLoadingSpinner = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
-
+let error = false,
+  errorMessage = "";
 if (authStore.userAuthenticated) {
   router.push("/");
   console.log("Since user logged in,son't show login push to homepage.");
@@ -89,14 +84,15 @@ const submitLoginForm = async (e) => {
     body: formData,
   });
   data = await data.json();
+  console.log(data);
   console.log("Acess token: ", data.access_token);
   showLoadingSpinner.value = false;
 
   if (data.detail === "Incorrect username or password") {
     console.log("incorrect");
-    authStore.incorrect = true;
+    error = true;
+    errorMessage = "Incorrect username or password.";
   } else {
-    authStore.incorrect = false;
     authStore.accessToken = data.access_token;
     authStore.userAuthenticated = true;
     router.push(authStore.returnURL || "/tabs/home");
@@ -105,10 +101,6 @@ const submitLoginForm = async (e) => {
   //     console.log("button clicked")
   //     router.push('/tabs/home')
   //   }
-  function backButtonClicked() {
-    console.log("Back button clicked.");
-    router.push("/");
-  }
 };
 </script>
 

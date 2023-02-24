@@ -9,53 +9,51 @@
         <ion-title>Register</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content class="ion-padding">
       <form @submit.prevent="registerClicked">
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding"
-            >Full Name</ion-label
-          >
+          <ion-label position="floating">Full Name</ion-label>
           <ion-input
             type="text"
             v-model="userInfo.full_name"
             required
-          ></ion-input>
-        </ion-item>
+          ></ion-input> </ion-item
+        ><br />
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding"
-            >Username</ion-label
-          >
+          <ion-label position="floating">Username</ion-label>
           <ion-input
             type="text"
             v-model="userInfo.username"
             required
-          ></ion-input>
-        </ion-item>
+          ></ion-input> </ion-item
+        ><br />
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding">Email</ion-label>
-          <ion-input type="text" v-model="userInfo.email" required></ion-input>
-        </ion-item>
+          <ion-label position="floating" class>Email</ion-label>
+          <ion-input
+            type="email"
+            v-model="userInfo.email"
+            required
+          ></ion-input> </ion-item
+        ><br />
         <ion-item lines="full">
-          <ion-label position="floating" class="ion-padding"
-            >Password</ion-label
-          >
+          <ion-label position="floating">Password</ion-label>
           <ion-input
             type="password"
             minlength="8"
             maxlength="15"
             v-model="userInfo.password"
+            :clearOnEdit="false"
             required
-          ></ion-input>
-        </ion-item>
-
-        <ion-row>
-          <ion-col>
-            <ion-button type="submit" expand="block">SUBMIT</ion-button>
-          </ion-col>
-        </ion-row>
+          ></ion-input> </ion-item
+        ><br />
+        <ion-button type="submit" expand="block">SUBMIT</ion-button>
       </form>
-      <ion-item v-if="authStore.incorrect">
-        <h1>User with this {{ message }} already exists</h1>
+      <br />
+      <router-link class="small-text" to="/tabs/login"
+        >Already have an account? Log in.</router-link
+      >
+      <ion-item v-if="error" color="danger">
+        <h3>{{ errorMessage }}</h3>
       </ion-item>
       <!-- This is not working  -->
     </ion-content>
@@ -63,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { Vue, ref } from "vue";
+import { ref } from "vue";
 import {
   IonContent,
   IonHeader,
@@ -71,23 +69,19 @@ import {
   IonTitle,
   IonToolbar,
   IonItem,
-  IonIcon,
   IonLabel,
   IonInput,
-  IonList,
-  IonFab,
-  IonFabButton,
+  IonSpinner,
   IonButton,
-  IonCol,
-  IonRow,
   IonButtons,
-  onIonViewDidEnter,
 } from "@ionic/vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore";
 
 let showLoadingSpinner = ref(false);
-let email, password, full_name, username, message;
+let email, password, full_name, username;
+let error = false,
+  errorMessage;
 const userInfo = {
   email,
   password,
@@ -97,7 +91,6 @@ const userInfo = {
 
 const router = useRouter();
 const authStore = useAuthStore();
-
 if (authStore.userAuthenticated) {
   router.push("/");
   console.log("Since user logged in,don't show register push to homepage.");
@@ -107,7 +100,7 @@ const registerClicked = async () => {
   showLoadingSpinner.value = true;
   console.log(JSON.stringify(userInfo));
   try {
-    userData = await fetch("https://marga-backend.onrender.com/register", {
+    userData = await fetch("https://marga-backend.onrender.com/tabs/register", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(userInfo),
@@ -121,12 +114,12 @@ const registerClicked = async () => {
 
   if (userData.detail === "Username already exists.") {
     console.log("Reached here--username");
-    authStore.incorrect = true;
-    message = "username";
+    error = true;
+    errorMessage = "This username already exists.";
   } else if (userData.detail === "Email already exists.") {
     console.log("Reached here--email");
-    authStore.incorrect = true;
-    message = "email";
+    error = true;
+    errorMessage = "This username already exists.";
   } else {
     router.push("/");
   }

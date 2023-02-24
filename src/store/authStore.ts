@@ -7,14 +7,12 @@ export const useAuthStore = defineStore("auth", () => {
   let userAuthenticated = useLocalStorage("userAuthenticated", false);
   let returnURL = useLocalStorage("returnURL", "");
   let tokenType = useLocalStorage("tokenType", "");
-  let incorrect = false;
   let firstUse = useLocalStorage("firstUse", true);
   return {
     accessToken,
     userAuthenticated,
     returnURL,
     tokenType,
-    incorrect,
     firstUse,
   };
 });

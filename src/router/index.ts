@@ -7,25 +7,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     redirect: "/tabs/home",
   },
-  {
-    path: "/slides",
-    component: () => import("@/views/Slides.vue"),
-  },
-  {
-    path: "/confirm",
-    component: () => import("@/views/Confirm.vue"),
-  },
-  {
-    path: "/account",
-    component: () => import("@/views/Login.vue"),
-  },
-  {
-    path: "/register",
-    component: () => import("@/views/Register.vue"),
-  },
+
   {
     path: "/tabs/",
-    component: import("@/views/Tabs.vue"),
+    component: () => import("@/views/Tabs.vue"),
     children: [
       {
         path: "",
@@ -47,6 +32,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "review",
         component: () => import("@/views/ReviewRoutes.vue"),
       },
+      {
+        path: "login",
+        component: () => import("@/views/Login.vue"),
+      },
+      {
+        path: "register",
+        component: () => import("@/views/Register.vue"),
+      },
     ],
   },
   {
@@ -63,7 +56,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   //will be called in every navigation:
   const authStore = useAuthStore();
-  const publicPages = ["/account", "/tabs/home", "/register"];
+  const publicPages = ["/tabs/login", "/tabs/home", "/tabs/register"];
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
 
@@ -71,13 +64,12 @@ router.beforeEach(async (to) => {
   console.log("Current path: ", to.path);
   console.log("Authentication Required: ", authRequired);
   console.log("User is logged in: ", authStore.userAuthenticated);
-  console.log("User incorrect: ", authStore.incorrect);
 
   // Yedi page ma auth chainxa vane ani user authenticated xaina vane redirect to login
   if (authRequired && !authStore.userAuthenticated) {
-    console.log("Redirecting to the account page.");
+    console.log("Redirecting to the login page.");
     authStore.returnURL = to.fullPath;
-    return "/account";
+    return "/tabs/login";
   }
 });
 
