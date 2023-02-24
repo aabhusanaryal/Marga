@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/authStore";
 
 const routes: Array<RouteRecordRaw> = [
   {
+    name: "Home",
     path: "/",
     redirect: "/tabs/home",
   },
