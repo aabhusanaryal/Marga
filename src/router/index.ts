@@ -7,7 +7,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     redirect: "/tabs/home",
   },
-
+  {
+    path: "/slides",
+    component: () => import("@/views/Tutorial.vue"),
+  },
   {
     path: "/tabs/",
     component: () => import("@/views/Tabs.vue"),
@@ -64,7 +67,12 @@ router.beforeEach(async (to) => {
   console.log("Current path: ", to.path);
   console.log("Authentication Required: ", authRequired);
   console.log("User is logged in: ", authStore.userAuthenticated);
+  console.log("First time user: ", authStore.firstUse);
 
+  if (authStore.firstUse) {
+    authStore.firstUse = false;
+    router.push("/slides");
+  }
   // Yedi page ma auth chainxa vane ani user authenticated xaina vane redirect to login
   if (authRequired && !authStore.userAuthenticated) {
     console.log("Redirecting to the login page.");
