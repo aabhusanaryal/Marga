@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <ion-content>
-      <ion-tabs @ionTabsWillChange="tabChange">
+    <ion-content >
+      <ion-tabs @ionTabsWillChange="tabChange" >
         <ion-router-outlet></ion-router-outlet>
         <ion-tab-bar slot="bottom">
           <ion-tab-button tab="home" href="/tabs/home">
@@ -46,7 +46,8 @@ import {
   addCircleOutline,
   ribbonOutline,
 } from "ionicons/icons";
-
+import {useAuthStore} from "@/store/authStore";
+const authStore=useAuthStore()
 function tabChange() {
   console.log(111);
 }

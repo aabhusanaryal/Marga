@@ -92,7 +92,8 @@
         showLoadingSpinner.value=false
       }
       else{
-        router.push('/')
+
+        router.push('/account')
         showLoadingSpinner.value=false
       }
     }

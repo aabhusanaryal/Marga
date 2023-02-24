@@ -89,14 +89,16 @@ const clickSearchResultItm = (event) => {
 
 const saveData = async () => {
   console.log("Saving.");
-  // router.push('/confirm')
+
   const modal = await modalController.create({
     component: Modal,
     componentProps: { busStops },
     breakpoints: [0, 0.5, 0.75, 0.95, 1],
     initialBreakpoint: 0.95,
   });
+
   modal.present();
+
   const { data, role } = await modal.onWillDismiss();
   if (role === "confirm") {
     console.log("The user has confirmed.");
