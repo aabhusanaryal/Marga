@@ -16,7 +16,7 @@ const createMapInstance = async (divID) => {
     touchGestures: true,
     touchRotate: true,
     // touchZoom: true
-  }).setView([27.7140421958018, 85.31448709387736], 16);
+  }).setView([27.7166, 85.3485], 16);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
   L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
@@ -27,7 +27,8 @@ const createMapInstance = async (divID) => {
 
   // Adding a circle marker to user's current position
   const locationControl = L.control
-    .locate({
+    .locate({ 
+      //tries to locate the user using Geolocation api, fires locationfound(sucess) or locationerror
       showCompass: false,
       onLocationError: requestLocationPermissions,
       icon: "leaflet-control-locate-location-arrow",
@@ -52,8 +53,9 @@ const createMapInstance = async (divID) => {
   // Adding a new marker to map every time a user clicks on any place
   map.on("click", function (ev) {
     const latlng = map.mouseEventToLatLng(ev.originalEvent);
-    console.log(latlng.lat + ", " + latlng.lng);
+    console.log("From here: ",latlng.lat + ", " + latlng.lng);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
+    
   });
 
   return map;
