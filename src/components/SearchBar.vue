@@ -38,7 +38,9 @@ let justSearched = false;
 // OpenRouteService API Key
 const apiKey = process.env.VUE_APP_ORS_API;
 
+//Whatever value is typed by the user in the search box.
 const searchTerm = ref("");
+
 // Stores search results
 const results = ref([]);
 const resultsNameOnly = ref([]);
@@ -49,10 +51,12 @@ const searchbarChange = async () => {
     return;
   }
   if (searchTerm.value) {
+    console.log(searchTerm.value)
     let res = await fetch(
       `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${searchTerm.value}&boundary.country=NP`
     );
     res = await res.json();
+    console.log(res)
     // res.features.forEach((ftr) => console.log(ftr.properties.name));
     results.value = res.features;
     console.log(results.value);
@@ -63,6 +67,7 @@ const searchbarChange = async () => {
 };
 
 const clickSearchResultItm = (idx) => {
+  console.log(idx)
   emit("clickSearchResultItm", results.value[idx]);
   justSearched = true;
   searchTerm.value = resultsNameOnly.value[idx];
