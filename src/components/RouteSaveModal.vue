@@ -92,7 +92,6 @@ const removeYatayat = (idx) => {
 
 const confirm = () => {
   return modalController.dismiss(name, "confirm");
-
   //fetch the data about loongitude and latitue
   //remove all the markers(if the langitude and latitude are stored in the local storage)
   // authStore.addRouteStops=[]

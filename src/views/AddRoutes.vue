@@ -1,5 +1,8 @@
 <template>
   <ion-page>
+    <div class="loadingSpinner" v-if="showLoadingSpinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>Add Route</ion-title>
@@ -47,9 +50,10 @@ import {
   IonFabButton,
   IonFabList,
   IonIcon,
+  IonSpinner,
 } from "@ionic/vue";
 import { chevronUp, save, arrowUndo, trashBin } from "ionicons/icons";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
 import SearchBar from "@/components/SearchBar.vue";
@@ -86,8 +90,9 @@ const clickSearchResultItm = (event) => {
 // let start;
 // let arrBusStops = [];
 // let oneBusStops = [];
-
+let showLoadingSpinner = ref(false);
 const saveData = async () => {
+  showLoadingSpinner.value = true;
   console.log("Saving.");
   // router.push('/confirm')
   const modal = await modalController.create({
@@ -101,6 +106,11 @@ const saveData = async () => {
   if (role === "confirm") {
     console.log("The user has confirmed.");
   }
+  // TODO: Update the code below to make actual fetch request
+  await new Promise((done) =>
+    setTimeout(() => console.log("Data Sent (JK)"), 5000)
+  );
+  showLoadingSpinner.value = false;
 };
 
 const undoMarker = (e) => {
@@ -131,5 +141,15 @@ const deleteMarkers = () => {
   display: flex;
   /* align-content: right; */
   justify-content: right;
+}
+.loadingSpinner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
 }
 </style>
