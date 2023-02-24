@@ -51,7 +51,9 @@ const router=useRouter();
 // map object for leaflet
 let map;
 let arrBusStops=[];
-let oneBusStops=[]
+let oneBusStops=[];
+let markers=[];
+
 onMounted(async () => {
   map = await createMapInstance("map-add");
    map.on("click", function (ev) {
@@ -62,6 +64,9 @@ onMounted(async () => {
     //need to not use authStore for this:
     authStore.addRouteStops=arrBusStops
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
+    markers.push(marker)
+    marker.bindPopup("<b>Location</b>").openPopup();
+    console.log(markers)
   });
 });
 
@@ -71,10 +76,6 @@ onIonViewDidEnter(() => {
 let start
 const clickStartSearchResultItm=(event)=>{
   start=event;
-  // const marker=L.marker([
-  //   event.geometry.coordinates[1],
-  //   event.geometry.coordinates[0],
-  // ]).addTo(map);
   map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 19);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]])
 }
@@ -88,12 +89,17 @@ const clickOnComplete=async()=>{
   modal.present();
   const {data, role} =await modal.onWillDismiss();
   if(role==='confirm'){
-    console.log("The user has confirmed.")
+    console.log("The user has confirmed the bus stops.")
   }
 }
-
 const clickOnCancel=()=>{
   console.log("Clicked on cancel.")
+  for(let i=0;i<authStore.addRouteStops.length;i++)
+  {
+    console.log("Removing from the loop", i)
+  }
+  authStore.addRouteStops=[]
+  // marker.removeFrom(map)
   //need to remove all the markers on the page, refresh the add routes page.
 }
 
