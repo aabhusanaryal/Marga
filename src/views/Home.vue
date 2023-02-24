@@ -25,9 +25,7 @@
     </ion-header>
 
     <ion-content>
-      <div id="map-home" @click="addMarker"></div>
-
-      <!-- Modal that displays available routes -->
+      <div id="map-home"></div>
     </ion-content>
   </ion-page>
 </template>
@@ -53,7 +51,7 @@ import L from "leaflet";
 import { createMapInstance } from "@/map";
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
-import Modal from "@/components/Modal.vue";
+import Modal from "@/components/SearchResultsModal.vue";
 
 // Logic code starts
 // map object for leaflet

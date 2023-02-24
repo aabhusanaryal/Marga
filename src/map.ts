@@ -27,7 +27,7 @@ const createMapInstance = async (divID) => {
 
   // Adding a circle marker to user's current position
   const locationControl = L.control
-    .locate({ 
+    .locate({
       //tries to locate the user using Geolocation api, fires locationfound(sucess) or locationerror
       showCompass: false,
       onLocationError: requestLocationPermissions,
@@ -49,14 +49,6 @@ const createMapInstance = async (divID) => {
   // Displaying the location marker if permissions are already granted
   if ((await Geolocation.checkPermissions()).location == "granted")
     locationControl.start();
-
-  // Adding a new marker to map every time a user clicks on any place
-  map.on("click", function (ev) {
-    const latlng = map.mouseEventToLatLng(ev.originalEvent);
-    console.log("From here: ",latlng.lat + ", " + latlng.lng);
-    const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
-    
-  });
 
   return map;
 };
