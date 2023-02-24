@@ -25,7 +25,7 @@
     </ion-header>
 
     <ion-content>
-      <div id="map-home" @click="addMarker"></div>
+      <div id="map-home"></div>
 
       <!-- Modal that displays available routes -->
     </ion-content>

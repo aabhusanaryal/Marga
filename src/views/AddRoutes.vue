@@ -5,9 +5,8 @@
         <ion-title>Add Route</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content>
-      <div id="map-add" @click="addMarker"></div>
+      <div id="map-add"></div>
     </ion-content>
   </ion-page>
 </template>
