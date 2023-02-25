@@ -35,14 +35,14 @@
       <ion-label position="floating">Source of information</ion-label>
       <ion-input
         placeholder="e.g. Self, Yatayat Karyalaya etc."
-        v-model="risuthyo"
+        v-model="dataSource"
       ></ion-input>
     </ion-item>
     <br />
     <ion-item>The stops you entered are:</ion-item>
     <ion-list>
       <ion-item v-for="(stop, idx) in busStops" :key="idx">
-        {{ stop.lat }}, {{ stop.lng }}
+        {{ idx + 1 }}. {{ stop.stopName }}
       </ion-item>
     </ion-list>
   </ion-content>
@@ -73,7 +73,7 @@ const cancel = () => {
   //send the user back to the add route page with the markers as it was when they enered the page
 };
 
-let name;
+let name, dataSource;
 let yatayatList = ref([]);
 let yatayat = ref("");
 

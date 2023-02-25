@@ -79,41 +79,37 @@ onMounted(async () => {
     let bodyData = {
       request: "pois",
       geometry: {
-        bbox: [
-          [8.8034, 53.0756],
-          [8.7834, 53.0456],
-        ],
-        geojson: {
-          type: "Point",
-          coordinates: [8.8034, 53.0756],
-        },
+        geojson: { type: "Point", coordinates: [latlng.lng, latlng.lat] },
+        buffer: 200,
+      },
+      filters: {
+        category_ids: [607, 608, 609, 610],
       },
     };
-    let geoJSON = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept:
-          "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
-        "Content-Type": "application/json",
-        Authorization:
-          "5b3ce3597851110001cf6248db241cd9150149008e788cee52b77f81",
-      },
-      body: `{"request":"pois","geometry":{"geojson":{"type":"Point","coordinates":[${latlng.lng},${latlng.lat}]},"buffer":200}, "filters": {
-    "category_ids": [607, 608, 609, 610]
-  } }`,
-    });
-    geoJSON = await geoJSON.json();
-    console.log(geoJSON.features[0].properties.osm_tags.name);
-    // console.log(
-    //   "STOP:",
-    //   geoJSON.features.filter(
-    //     (feature) =>
-    //       feature.properties.label.toLowerCase().includes("stop") ||
-    //       feature.properties.label.toLowerCase().includes("bus")
-    //   )
-    // );
-    // console.log(geoJSON?.features[0].properties.label);
-    busStops.push({ lat: latlng.lat, lng: latlng.lng, marker });
+    let geoJSON, stopName;
+    try {
+      geoJSON = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept:
+            "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+          "Content-Type": "application/json",
+          Authorization:
+            "5b3ce3597851110001cf6248db241cd9150149008e788cee52b77f81",
+        },
+        body: JSON.stringify(bodyData),
+      });
+      geoJSON = await geoJSON.json();
+      stopName = geoJSON.features[0].properties.osm_tags.name;
+    } catch {
+      geoJSON = await fetch(
+        `https://api.openrouteservice.org/geocode/reverse?api_key=${process.env.VUE_APP_ORS_API}&point.lon=${latlng.lng}&point.lat=${latlng.lat}`
+      );
+      geoJSON = await geoJSON.json();
+      stopName = geoJSON.features[0].properties.label;
+    }
+    marker.bindTooltip(stopName, { permanent: true }).openTooltip();
+    busStops.push({ lat: latlng.lat, lng: latlng.lng, stopName, marker });
     // console.log(busStops);
   });
 });
