@@ -19,7 +19,8 @@
       <ion-toolbar>
         <ion-button @click="findRoutes" shape="round">
           <ion-icon slot="start" :icon="search"></ion-icon>Find
-          Routes</ion-button>
+          Routes</ion-button
+        >
       </ion-toolbar>
     </ion-header>
 
@@ -72,134 +73,54 @@ onIonViewDidEnter(() => {
 let start, destination;
 let startMarker, destinationMarker;
 let startCoord, destinationCoord;
-let coordStartEnd:[]=[];
-let showInfo=false;
-let distance,changes;
+let coordStartEnd: [] = [];
+let distance, changes;
 
 // This funcion is called when a search result item is clicked on
 const clickStartSearchResultItm = (event) => {
   //event stroes the location value
   start = event;
+  console.log(event);
   if (startMarker) map.removeLayer(startMarker);
-  startMarker = L.marker(
-    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
-    {
-      draggable: true,
-    }
-  ).addTo(map);
-  startCoord={
-    lat:event.geometry.coordinates[1],
-    lng:event.geometry.coordinates[0]
-  }
-  console.log("Start coords: ",startCoord)
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
-  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+  startMarker = L.marker([event.lat, event.lng], {
+    draggable: true,
+  }).addTo(map);
+  map.flyTo([event.lat, event.lng], 17);
+  console.log([event.lat, event.lng]);
 };
 
 const clickDestinationSearchResultItm = (event) => {
   destination = event;
   if (destinationMarker) map.removeLayer(destinationMarker);
-  destinationMarker = L.marker(
-    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
-    {
-      draggable: true,
-    }
-  ).addTo(map);
-  destinationCoord={
-    lat:event.geometry.coordinates[1],
-    lng:event.geometry.coordinates[0]
-  }
-  coordStartEnd.push(destinationCoord)
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
-  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+  destinationMarker = L.marker([event.lat, event.lng], {
+    draggable: true,
+  }).addTo(map);
+  map.flyTo([event.lat, event.lng], 17);
+  console.log([event.lat, event.lng]);
 };
-
-// Modal Controller
-
-
-const modalList1=[
-  {
-    "yatayat": [
-      [
-        ""
-      ]
-    ],
-    "vehicleTypes": [
-      [
-        ""
-      ]
-    ],
-    "route": [
-      {
-        "lat": 27.716851369776982,
-        "lng": 85.31591892242433,
-        "stopName": "Lainchaur Stop"
-      },
-      {
-        "lat": 27.713527097566296,
-        "lng": 85.3154468536377,
-        "stopName": "Greenline Travels, Kathmandu, TH, Nepal"
-      },
-      {
-        "lat": 27.713071189476622,
-        "lng": 85.31782865524292,
-        "stopName": "Durbar Marg, Kathmandu, TH, Nepal"
-      },
-      {
-        "lat": 27.713622078178442,
-        "lng": 85.32186269760133,
-        "stopName": "Jai Nepal Hall(QFX Jai Nepal), Kathmandu, TH, Nepal"
-      },
-      {
-        "lat": 27.710506670965156,
-        "lng": 85.32199144363403,
-        "stopName": "Krishna Pauroti Stop"
-      },
-      {
-        "lat": 27.709575830814018,
-        "lng": 85.32214164733888,
-        "stopName": "Kamaladi Road (कमलादी) stop"
-      },
-      {
-        "lat": 27.709689811667428,
-        "lng": 85.31742095947267,
-        "stopName": "Ghantaghar Stop"
-      },
-      {
-        "lat": 27.712159367580337,
-        "lng": 85.31516790390016,
-        "stopName": "Tourist Bus Station"
-      },
-      {
-        "lat": 27.708474009757715,
-        "lng": 85.31458854675294,
-        "stopName": "Jamal"
-      }
-    ],
-    "details": {
-      "km": 28,
-      "change": 0
-    }
-  }
-]
-// const modalList = []; //should be array of bus stops
 
 const findRoutes = async () => {
   if (start && destination) {
-    console.log(start);
-    console.log("Start and destination coords are: ", coordStartEnd)  
-    
+    let bodyData = {
+      start: start.node_id,
+      end: destination.node_id,
+    };
+    console.log(JSON.stringify(bodyData));
     // Code to fetch the bus route list:
-    // let busRouteList=await fetch(`backendlink`,{
-    //   method:"POST",
-    //   body:TSON.stringify(coordStartEnd)
-    // })
-    // busRouteList=await busRouteList.json()
-    // console.log(busRouteList)
+    let busRouteList = await fetch(
+      `https://marga-backend.onrender.com/getroutes?start=${start.node_id}&end=${destination.node_id}`,
+      {
+        method: "POST",
+        body: JSON.stringify(bodyData),
+        headers: { "content-type": "application/json" },
+      }
+    );
+    busRouteList = await busRouteList.json();
+    console.log("HELLO", busRouteList);
 
     const modal = await modalController.create({
       component: Modal,
-      componentProps: { modalList1 },
+      componentProps: { busRouteList },
       breakpoints: [0, 0.3, 0.95],
       initialBreakpoint: 0.3,
     });
@@ -207,22 +128,78 @@ const findRoutes = async () => {
 
     const { data, role } = await modal.onWillDismiss();
     if (role === "confirm") {
-      showInfo=true
-      console.log("Value passed back: ",data)
+      // for (let i = 0; i < modalList1[data].route.length; i++) {
 
-      for (let i=0;i<modalList1[data].route.length;i++){
-        const marker=L.marker([modalList1[data].route[i].lat,modalList1[data].route[i].lng]).addTo(map);
-        marker.bindTooltip(`${i+1} ${modalList1[data].route[i].stopName}`, { permanent: true }).openTooltip();
-      }
-      changes=modalList1[data].details.change;
-      distance=modalList1[data].details.km;
-      map.setView([modalList1[data].route[0].lat,modalList1[data].route[0].lng],16)
-      // console.log(markerBusStops)
+      // }
+      // changes = modalList1[data].details.change;
+      // distance = modalList1[data].details.km;
+      // map.setView(
+      //   [modalList1[data].route[0].lat, modalList1[data].route[0].lng],
+      //   16
+      // );
+      let routeSwitches = [[]];
+      busRouteList[data].route.forEach((busStop, idx) => {
+        console.log(busStop);
+        // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
+        if (!busStop.change)
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+        else {
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+          routeSwitches.push([]);
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+        }
+        const marker = L.marker([busStop.lat, busStop.lng]).addTo(map);
+        marker
+          .bindTooltip(`${idx + 1} ${busStop.stopName}`, {
+            permanent: true,
+          })
+          .openTooltip();
+      });
+      // Drawing path between route stops
+      routeSwitches.forEach(async (route) => {
+        console.log("R", route);
+        let coordinates = [];
+        route.forEach((stop) => {
+          coordinates.push([stop.lng, stop.lat]);
+        });
+        console.log(coordinates);
+        const bodyData = {
+          coordinates,
+        };
+        let res = await fetch(
+          "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `${process.env.VUE_APP_ORS_API}`,
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
+        res = await res.json();
+        L.geoJSON(res, {
+          style: {
+            color: randomColorPicker(),
+            weight: 5,
+          },
+        }).addTo(map);
+        console.log(res);
+      });
+      // console.log(routeSwitches);
+      // busRouteList[data].forEach((route) => {
+      //   let stops = route.route;
+      //   console.log(stops);
+
+      // });
     }
-
   } else {
     presentToast("bottom", "Please select start and destination nodes!");
   }
+  const randomColorPicker = () => {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return "#" + n.slice(0, 6);
+  };
 };
 
 // Toast Generator / Presentor
@@ -235,7 +212,6 @@ const presentToast = async (position: "top" | "middle" | "bottom", text) => {
 
   await toast.present();
 };
-
 </script>
 
 <style scoped>
