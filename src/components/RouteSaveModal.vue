@@ -31,6 +31,7 @@
         placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
         v-model="yatayat"
         @keyup.enter="onInputYatayat"
+        enterkeyhint="enter"
       ></ion-input>
     </ion-item>
     <br />
@@ -46,6 +47,7 @@
         placeholder="e.g. Micro, Tempo, Bus, etc."
         v-model="vehicleType"
         @keyup.enter="onInputVehicleType"
+        enterkeyhint="enter"
       ></ion-input>
     </ion-item>
     <br />
