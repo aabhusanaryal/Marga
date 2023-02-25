@@ -60,7 +60,12 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   //will be called in every navigation:
   const authStore = useAuthStore();
-  const publicPages = ["/tabs/login", "/tabs/home", "/tabs/register"];
+  const publicPages = [
+    "/tabs/login",
+    "/tabs/home",
+    "/tabs/register",
+    "/slides",
+  ];
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
   
