@@ -66,8 +66,8 @@ let username, password;
 let showLoadingSpinner = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
-let error = false,
-  errorMessage = "";
+let error = ref(false),
+  errorMessage = ref("");
 if (authStore.userAuthenticated) {
   router.push("/");
   console.log("Since user logged in,son't show login push to homepage.");
@@ -87,20 +87,18 @@ const submitLoginForm = async (e) => {
   console.log(data);
   console.log("Acess token: ", data.access_token);
   showLoadingSpinner.value = false;
+  error.value = false;
+  errorMessage.value = "";
 
   if (data.detail === "Incorrect username or password") {
     console.log("incorrect");
-    error = true;
-    errorMessage = "Incorrect username or password.";
+    error.value = true;
+    errorMessage.value = "Incorrect username or password.";
   } else {
     authStore.accessToken = data.access_token;
     authStore.userAuthenticated = true;
     router.push(authStore.returnURL || "/tabs/home");
   }
-  // const backButtonClicked=()=>{
-  //     console.log("button clicked")
-  //     router.push('/tabs/home')
-  //   }
 };
 </script>
 

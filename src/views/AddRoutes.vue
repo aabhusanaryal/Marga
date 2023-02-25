@@ -60,6 +60,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import { useRouter } from "vue-router";
 import Modal from "../components/RouteSaveModal.vue";
 import { useAuthStore } from "../store/authStore";
+import { removeProperties } from "@babel/types";
 
 const authStore = useAuthStore();
 // map object for leaflet
@@ -69,11 +70,51 @@ let busStops: { lat: number; lng: number; marker: any }[] = [];
 onMounted(async () => {
   map = await createMapInstance("map-add");
   // Adding a new marker to map every time a user clicks on any place
-  map.on("click", function (event) {
+  map.on("click", async (event) => {
     const latlng = map.mouseEventToLatLng(event.originalEvent);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
+    console.log(`${latlng.lat}, ${latlng.lng}`);
+    // Reverse geocoding
+    let url = "https://api.openrouteservice.org/pois";
+    let bodyData = {
+      request: "pois",
+      geometry: {
+        bbox: [
+          [8.8034, 53.0756],
+          [8.7834, 53.0456],
+        ],
+        geojson: {
+          type: "Point",
+          coordinates: [8.8034, 53.0756],
+        },
+      },
+    };
+    let geoJSON = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept:
+          "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+        "Content-Type": "application/json",
+        Authorization:
+          "5b3ce3597851110001cf6248db241cd9150149008e788cee52b77f81",
+      },
+      body: `{"request":"pois","geometry":{"geojson":{"type":"Point","coordinates":[${latlng.lng},${latlng.lat}]},"buffer":200}, "filters": {
+    "category_ids": [607, 608, 609, 610]
+  } }`,
+    });
+    geoJSON = await geoJSON.json();
+    console.log(geoJSON.features[0].properties.osm_tags.name);
+    // console.log(
+    //   "STOP:",
+    //   geoJSON.features.filter(
+    //     (feature) =>
+    //       feature.properties.label.toLowerCase().includes("stop") ||
+    //       feature.properties.label.toLowerCase().includes("bus")
+    //   )
+    // );
+    // console.log(geoJSON?.features[0].properties.label);
     busStops.push({ lat: latlng.lat, lng: latlng.lng, marker });
-    console.log(busStops);
+    // console.log(busStops);
   });
 });
 
