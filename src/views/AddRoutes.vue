@@ -119,8 +119,9 @@ onIonViewDidEnter(() => {
 });
 
 const clickSearchResultItm = (event) => {
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 19);
-  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+  console.log(event);
+  map.flyTo([event.lat, event.lng], 17);
+  // console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
 
 // Code other than leaflet:

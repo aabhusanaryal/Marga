@@ -74,26 +74,20 @@ let startMarker, destinationMarker;
 const clickStartSearchResultItm = (event) => {
   start = event;
   if (startMarker) map.removeLayer(startMarker);
-  startMarker = L.marker(
-    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
-    {
-      draggable: true,
-    }
-  ).addTo(map);
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
-  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+  startMarker = L.marker([event.lat, event.lng], {
+    draggable: true,
+  }).addTo(map);
+  map.flyTo([event.lat, event.lng], 17);
+  console.log([event.lat, event.lng]);
 };
 const clickDestinationSearchResultItm = (event) => {
   destination = event;
   if (destinationMarker) map.removeLayer(destinationMarker);
-  destinationMarker = L.marker(
-    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
-    {
-      draggable: true,
-    }
-  ).addTo(map);
-  map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
-  console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
+  destinationMarker = L.marker([event.lat, event.lng], {
+    draggable: true,
+  }).addTo(map);
+  map.flyTo([event.lat, event.lng], 17);
+  console.log([event.lat, event.lng]);
 };
 
 // Modal Controller
