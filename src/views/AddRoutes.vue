@@ -131,7 +131,6 @@ let showLoadingSpinner = ref(false);
 const saveData = async () => {
   const modal = await modalController.create({
     component: Modal,
-
     componentProps: { busStops },
     breakpoints: [0, 0.5, 0.75, 0.95, 1],
     initialBreakpoint: 0.95,
