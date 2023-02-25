@@ -17,4 +17,5 @@ import {
   IonToolbar,
   IonHeader,
 } from "@ionic/vue";
+
 </script>

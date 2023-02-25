@@ -49,6 +49,7 @@ import { onMounted, computed, onUnmounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
+
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/SearchResultsModal.vue";
@@ -71,6 +72,7 @@ onIonViewDidEnter(() => {
 let start, destination;
 // This funcion is called when a search result item is clicked on
 const clickStartSearchResultItm = (event) => {
+  //event stroes the location value
   start = event;
   const marker = L.marker([
     event.geometry.coordinates[1],
@@ -90,7 +92,7 @@ const clickDestinationSearchResultItm = (event) => {
 };
 
 // Modal Controller
-const modalList = [1, 2, 3];
+const modalList = [1, 2, 3]; //should be array of bus stops
 const findRoutes = async () => {
   if (start && destination) {
     console.log(start);

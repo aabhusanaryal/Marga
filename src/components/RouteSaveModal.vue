@@ -69,11 +69,6 @@ import { closeCircle } from "ionicons/icons";
 import { ref } from "vue";
 const props = defineProps(["busStops"]);
 
-const cancel = () => {
-  return modalController.dismiss(null, "cancel");
-  //send the user back to the add route page with the markers as it was when they enered the page
-};
-
 let name;
 let yatayatList = ref([]);
 let yatayat = ref("");
@@ -90,10 +85,16 @@ const removeYatayat = (idx) => {
   yatayatList.value.splice(idx, idx);
 };
 
+const cancel = () => {
+  return modalController.dismiss(null, "cancel");
+  //send the user back to the add route page with the markers as it was when they enered the page
+};
+
 const confirm = () => {
-  return modalController.dismiss(name, "confirm");
+  // console.log("From the router save modal",yatayatList.value)
+
+  return modalController.dismiss(yatayatList.value, "confirm");
   //fetch the data about loongitude and latitue
-  //remove all the markers(if the langitude and latitude are stored in the local storage)
-  // authStore.addRouteStops=[]
+
 };
 </script>

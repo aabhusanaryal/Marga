@@ -70,7 +70,7 @@ import { defineComponent } from "vue";
 // register();
 
 const props = defineProps(["modalList"]);
-console.log(props.modalList);
+console.log("From search results modal: ",props.modalList);
 
 const slideOptions = {
   slidesPerView: 1.2,

@@ -57,11 +57,12 @@ import { onMounted, ref } from "vue";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
 import SearchBar from "@/components/SearchBar.vue";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import Modal from "../components/RouteSaveModal.vue";
 import { useAuthStore } from "../store/authStore";
 
 const authStore = useAuthStore();
+
 // map object for leaflet
 let map;
 let busStops: { lat: number; lng: number; marker: any }[] = [];
@@ -73,7 +74,7 @@ onMounted(async () => {
     const latlng = map.mouseEventToLatLng(event.originalEvent);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
     busStops.push({ lat: latlng.lat, lng: latlng.lng, marker });
-    console.log(busStops);
+    console.log("BusStops",busStops);
   });
 });
 
@@ -88,8 +89,7 @@ const clickSearchResultItm = (event) => {
 
 // Code other than leaflet:
 // let start;
-// let arrBusStops = [];
-// let oneBusStops = [];
+
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
   showLoadingSpinner.value = true;
@@ -107,7 +107,9 @@ const saveData = async () => {
   const { data, role } = await modal.onWillDismiss();
   if (role === "confirm") {
     console.log("The user has confirmed.");
+    // console.log("This is form the add route",data)
   }
+
   // TODO: Update the code below to make actual fetch request
   await new Promise((done) =>
     setTimeout(() => console.log("Data Sent (JK)"), 5000)
@@ -131,7 +133,6 @@ const deleteMarkers = () => {
     let stop = busStops.pop();
     map.removeLayer(stop?.marker);
   }
-  //need to remove all the markers on the page, refresh the add routes page.
 };
 </script>
 

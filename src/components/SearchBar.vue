@@ -48,6 +48,7 @@ const resultsNameOnly = ref([]);
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
+    // console.log("just searched ")
     return;
   }
   if (searchTerm.value) {
@@ -56,7 +57,7 @@ const searchbarChange = async () => {
       `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${searchTerm.value}&boundary.country=NP`
     );
     res = await res.json();
-    console.log(res)
+    // console.log(res)
     // res.features.forEach((ftr) => console.log(ftr.properties.name));
     results.value = res.features;
     console.log(results.value);
@@ -71,6 +72,7 @@ const clickSearchResultItm = (idx) => {
   emit("clickSearchResultItm", results.value[idx]);
   justSearched = true;
   searchTerm.value = resultsNameOnly.value[idx];
+  // console.log("From click search result item",searchTerm.value)
   results.value = [];
   resultsNameOnly.value = [];
 };
