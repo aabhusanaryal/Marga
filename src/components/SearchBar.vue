@@ -55,14 +55,10 @@ const searchbarChange = async () => {
 
   if (searchTerm.value) {
     let res = await fetch(
-      `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${searchTerm.value}&boundary.country=NP`
+      `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${searchTerm.value}&boundary.country=NP&focus.point.lon=85.3485&focus.point.lat=27.7166`
     );
     res = await res.json();
-<<<<<<< HEAD
-    // console.log(res)
-=======
     console.log(res);
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
     // res.features.forEach((ftr) => console.log(ftr.properties.name));
     results.value = res.features;
     // If no results are found
@@ -75,15 +71,6 @@ const searchbarChange = async () => {
 };
 
 const clickSearchResultItm = (idx) => {
-<<<<<<< HEAD
-  console.log(idx)
-  emit("clickSearchResultItm", results.value[idx]);
-  justSearched = true;
-  searchTerm.value = resultsNameOnly.value[idx];
-  // console.log("From click search result item",searchTerm.value)
-  results.value = [];
-  resultsNameOnly.value = [];
-=======
   if (results.value[idx].properties.name != noResultMsg) {
     emit("clickSearchResultItm", results.value[idx]);
     justSearched = true;
@@ -91,7 +78,6 @@ const clickSearchResultItm = (idx) => {
     results.value = [];
     resultsNameOnly.value = [];
   }
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 };
 </script>
 

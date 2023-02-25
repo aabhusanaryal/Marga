@@ -1,14 +1,19 @@
 <template>
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
-      <ion-slide v-for="(itm, idx) in modalList" :key="idx">
-        <ion-card @click="displayRoute">
+      <ion-slide v-for="(itm, idx) in modalList1" :key="idx">
+        <ion-card>
           <ion-card-header>
-            <ion-card-title>{{ itm.name }}</ion-card-title>
+            <!-- <ion-card-title>{{ itm.name }}</ion-card-title> -->
+            <ion-card-content v-for="(rout,ind) in itm.route" :key="ind">
+              <p>{{rout.stopName}}<br/></p>
+            </ion-card-content>
             <ion-card-subtitle ></ion-card-subtitle>
           </ion-card-header>
+          <p><b>Number of bus changes:{{itm.details.change}} 
+          <br/>Distance(in km): {{itm.details.km}}</b></p>
           <ion-buttons >
-            <ion-button @click="confirm(idx)">Confirm</ion-button>
+            <ion-button @click="confirm(idx)">Select</ion-button>
           </ion-buttons>
         </ion-card>
       </ion-slide>
@@ -32,10 +37,10 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 
-const props = defineProps(["modalList"]);
+const props = defineProps(["modalList1"]);
 
 console.log("From search results modal: ")
-console.log(props.modalList);
+console.log(props.modalList1);
 
 const slideOptions = {
   slidesPerView: 1.2,
@@ -47,3 +52,7 @@ const confirm = (idx:number) => {
   return modalController.dismiss( idx,"confirm");
 };
 </script>
+
+<style scoped>
+
+</style>

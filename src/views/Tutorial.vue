@@ -26,9 +26,9 @@
       </swiper-slide>
       <swiper-slide>
         <div class="slide">
-          <img
+          <!-- <img
             src="../search.png"
-          />
+          /> -->
           <h2>Bus Routes</h2>
           <p>
             Enter your starting and ending destinations, and we'll show you all the bus routes that connect them. <br/><b><i>It's that easy!</i></b> 
@@ -37,9 +37,9 @@
       </swiper-slide>
       <swiper-slide>
         <div class="slide">
-          <img
+          <!-- <img
             src="https://images-ext-1.discordapp.net/external/pTn0vew6xvHmfPZ-f4ProKunzDfCYNV-iruuDomaGdg/https/ionicframework.com/docs/demos/api/slides/slide-1.png"
-          />
+          /> -->
           <h2>Add Routes</h2>
           <p>
             Share your <i>insider</i> knowledge! With our app, you can add bus routes you know, 
@@ -49,9 +49,9 @@
       </swiper-slide>
       <swiper-slide>
         <div class="slide">
-          <img
-            src="https://images-ext-1.discordapp.net/external/pTn0vew6xvHmfPZ-f4ProKunzDfCYNV-iruuDomaGdg/https/ionicframework.com/docs/demos/api/slides/slide-1.png"
-          />
+          <!-- <img
+            src="https://static.vecteezy.com/system/resources/previews/015/310/648/non_2x/rating-star-review-png.png"
+          /> -->
           <h2>Review Routes</h2>
           <p>
              You can also review routes added by others and discover new ways to get around. 

@@ -74,10 +74,6 @@ onMounted(async () => {
   map.on("click", async (event) => {
     const latlng = map.mouseEventToLatLng(event.originalEvent);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
-<<<<<<< HEAD
-    busStops.push({ lat: latlng.lat, lng: latlng.lng, marker });
-    console.log("BusStops",busStops);
-=======
     console.log(`${latlng.lat}, ${latlng.lng}`);
     // Reverse geocoding
     let url = "https://api.openrouteservice.org/pois";
@@ -116,7 +112,6 @@ onMounted(async () => {
     marker.bindTooltip(stopName, { permanent: true }).openTooltip();
     busStops.push({ lat: latlng.lat, lng: latlng.lng, stopName, marker });
     // console.log(busStops);
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
   });
 });
 
@@ -144,24 +139,10 @@ const saveData = async () => {
 
   modal.present();
 
-<<<<<<< HEAD
-  const { data, role } = await modal.onWillDismiss();
-  if (role === "confirm") {
-    console.log("The user has confirmed.");
-    // console.log("This is form the add route",data)
-  }
-
-  // TODO: Update the code below to make actual fetch request
-  await new Promise((done) =>
-    setTimeout(() => console.log("Data Sent (JK)"), 5000)
-  );
-  showLoadingSpinner.value = false;
-=======
   // const { role } = await modal.onWillDismiss();
   // if (role === "confirm") {
   //   showLoadingSpinner = false;
   // }
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 };
 
 const undoMarker = (e) => {

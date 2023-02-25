@@ -33,7 +33,7 @@
         </ion-item>
         <br />
         <ion-button type="submit" expand="block">Sign In</ion-button>
-        <!-- <button type="submit">Sign In</button> -->
+        <!-- <button type="submit">Sign In</ -->
       </form>
       <ion-item v-if="error" color="danger">
         <h3>{{ errorMessage }}</h3>
@@ -65,16 +65,11 @@ import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
 const router = useRouter();
-<<<<<<< HEAD
 let username, password;
 let showLoadingSpinner = ref(false);
 let error = false,
   errorMessage = "";
 
-=======
-let error = ref(false),
-  errorMessage = ref("");
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 if (authStore.userAuthenticated) {
   router.push("/");
   console.log("Since user authenticated,son't show login push to homepage.");
@@ -94,13 +89,11 @@ const submitLoginForm = async (e) => {
   // console.log(data);
   // console.log("Acess token: ", data.access_token);
   showLoadingSpinner.value = false;
-  error.value = false;
-  errorMessage.value = "";
 
   if (data.detail === "Incorrect username or password") {
     console.log("incorrect");
-    error.value = true;
-    errorMessage.value = "Incorrect username or password.";
+    error = true;
+    errorMessage = "Incorrect username or password.";
   } else {
     authStore.accessToken = data.access_token;
     authStore.userAuthenticated = true;

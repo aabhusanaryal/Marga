@@ -89,16 +89,12 @@ import { ref, defineEmits } from "vue";
 const props = defineProps(["busStops"]);
 let showLoadingSpinner = ref(false);
 
-<<<<<<< HEAD
-let name;
-=======
 const cancel = () => {
   return modalController.dismiss(null, "cancel");
   //send the user back to the add route page with the markers as it was when they enered the page
 };
 
 let name, dataSource;
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 let yatayatList = ref([]);
 let yatayat = ref("");
 let vehicleTypeList = ref([]);
@@ -119,24 +115,9 @@ const removeYatayat = (idx) => {
   if (idx == 0) yatayatList.value = yatayatList.value.splice(1);
   yatayatList.value.splice(idx, idx);
 };
-<<<<<<< HEAD
-
-const cancel = () => {
-  return modalController.dismiss(null, "cancel");
-  //send the user back to the add route page with the markers as it was when they enered the page
-};
-
-const confirm = () => {
-  // console.log("From the router save modal",yatayatList.value)
-
-  return modalController.dismiss(yatayatList.value, "confirm");
-  //fetch the data about loongitude and latitue
-
-=======
 const removeVehicleType = (idx) => {
   if (idx == 0) vehicleTypeList.value = vehicleTypeList.value.splice(1);
   vehicleTypeList.value.splice(idx, idx);
->>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 };
 const bodyData = {
   name: name || "",
