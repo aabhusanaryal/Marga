@@ -53,6 +53,7 @@ import { createMapInstance } from "@/map";
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/SearchResultsModal.vue";
+// import OverlayEventDetail from '@ionic/core'
 
 // Logic code starts
 // map object for leaflet
@@ -71,6 +72,9 @@ onIonViewDidEnter(() => {
 // Logic other than leaflet go below this
 let start, destination;
 let startMarker, destinationMarker;
+let startCoord, destinationCoord;
+let coordStartEnd:[]=[];
+
 // This funcion is called when a search result item is clicked on
 const clickStartSearchResultItm = (event) => {
   //event stroes the location value
@@ -82,9 +86,15 @@ const clickStartSearchResultItm = (event) => {
       draggable: true,
     }
   ).addTo(map);
+  startCoord={
+    lat:event.geometry.coordinates[1],
+    lng:event.geometry.coordinates[0]
+  }
+  console.log("Start coords: ",startCoord)
   map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
+
 const clickDestinationSearchResultItm = (event) => {
   destination = event;
   if (destinationMarker) map.removeLayer(destinationMarker);
@@ -94,26 +104,111 @@ const clickDestinationSearchResultItm = (event) => {
       draggable: true,
     }
   ).addTo(map);
+  destinationCoord={
+    lat:event.geometry.coordinates[1],
+    lng:event.geometry.coordinates[0]
+  }
+  coordStartEnd.push(destinationCoord)
   map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
 
 // Modal Controller
-const modalList = [1, 2, 3]; //should be array of bus stops
+const list2={
+  name:"Chabahil - Jorpati 2",
+  busStops:[
+  {
+    name:"Chabahil",
+    lat:27.715877, 
+    lng:85.345877,
+  },
+  {
+    name:"Buadha",
+    lat:27.721429, 
+    lng:85.362002 ,
+  },
+  {
+    name:"Jorpati",
+    lat:27.725187,
+    lng:85.379552,
+  },
+  {
+    name:"apple",
+    lat:27.725187,
+    lng:86.379552,
+  },
+  {
+    name:"banana",
+    lat:26.725187,
+    lng:85.379552,
+  }]}
+const modalList=[{
+  name:"Chabahil-Jorpati",
+  busStops:[
+  {
+    name:"Chabahil",
+    lat:27.715877, 
+    lng:85.345877,
+  },
+  {
+    name:"Buadha",
+    lat:27.721429, 
+    lng:85.362002 ,
+  },
+  {
+    name:"Jorpati",
+    lat:27.725187,
+    lng:85.379552,
+  },
+  {
+    name:"apple",
+    lat:27.725187,
+    lng:86.379552,
+  },
+  {
+    name:"banana",
+    lat:26.725187,
+    lng:85.379552,
+  }]}
+]
+modalList.push(list2)
+// const modalList = []; //should be array of bus stops
+
 const findRoutes = async () => {
   if (start && destination) {
     console.log(start);
+    console.log("Start and destination coords are: ", coordStartEnd)  
+    
+    // Code to fetch the bus route list:
+    // let busRouteList=await fetch(`backendlink`,{
+    //   method:"POST",
+    //   body:coordStartEnd
+    // })
+    // busRouteList=await busRouteList.json()
+    // console.log(busRouteList)
+
     const modal = await modalController.create({
       component: Modal,
       componentProps: { modalList },
-      breakpoints: [0, 0.3],
+      breakpoints: [0, 0.3, 0.95],
       initialBreakpoint: 0.3,
     });
     modal.present();
-    // const { data, role } = await modal.onWillDismiss();
-    // if (role === "confirm") {
-    //   console.log("Dismiss");
-    // }
+
+    const { data, role } = await modal.onWillDismiss();
+    
+    if (role === "confirm") {
+
+      console.log("Value passed back: ",data)
+
+      console.log(modalList[data].busStops.length)
+      for (let i=0;i<modalList[data].busStops.length;i++){
+        const marker=L.marker([modalList[data].busStops[i].lat,modalList[data].busStops[i].lng ]).addTo(map);
+        // First implement delay then:
+        // map.flyTo([modalList[indx].busStops[i].lat, modalList[indx].busStops[i].lng])
+      }
+    }
+
   } else {
     presentToast("bottom", "Please select start and destination nodes!");
   }

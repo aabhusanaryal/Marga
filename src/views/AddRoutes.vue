@@ -60,21 +60,63 @@ import SearchBar from "@/components/SearchBar.vue";
 // import { useRouter } from "vue-router";
 import Modal from "../components/RouteSaveModal.vue";
 import { useAuthStore } from "../store/authStore";
+import { removeProperties } from "@babel/types";
 
 const authStore = useAuthStore();
 
 // map object for leaflet
 let map;
-let busStops: { lat: number; lng: number; marker: any }[] = [];
+let busStops: { lat: number; lng: number; marker: any; name: string }[] = [];
 
 onMounted(async () => {
   map = await createMapInstance("map-add");
   // Adding a new marker to map every time a user clicks on any place
-  map.on("click", function (event) {
+  map.on("click", async (event) => {
     const latlng = map.mouseEventToLatLng(event.originalEvent);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
+<<<<<<< HEAD
     busStops.push({ lat: latlng.lat, lng: latlng.lng, marker });
     console.log("BusStops",busStops);
+=======
+    console.log(`${latlng.lat}, ${latlng.lng}`);
+    // Reverse geocoding
+    let url = "https://api.openrouteservice.org/pois";
+    let bodyData = {
+      request: "pois",
+      geometry: {
+        geojson: { type: "Point", coordinates: [latlng.lng, latlng.lat] },
+        buffer: 200,
+      },
+      filters: {
+        category_ids: [607, 608, 609, 610],
+      },
+    };
+    let geoJSON, stopName;
+    try {
+      geoJSON = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept:
+            "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+          "Content-Type": "application/json",
+          Authorization:
+            "5b3ce3597851110001cf6248db241cd9150149008e788cee52b77f81",
+        },
+        body: JSON.stringify(bodyData),
+      });
+      geoJSON = await geoJSON.json();
+      stopName = geoJSON.features[0].properties.osm_tags.name;
+    } catch {
+      geoJSON = await fetch(
+        `https://api.openrouteservice.org/geocode/reverse?api_key=${process.env.VUE_APP_ORS_API}&point.lon=${latlng.lng}&point.lat=${latlng.lat}`
+      );
+      geoJSON = await geoJSON.json();
+      stopName = geoJSON.features[0].properties.label;
+    }
+    marker.bindTooltip(stopName, { permanent: true }).openTooltip();
+    busStops.push({ lat: latlng.lat, lng: latlng.lng, stopName, marker });
+    // console.log(busStops);
+>>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
   });
 });
 
@@ -92,11 +134,9 @@ const clickSearchResultItm = (event) => {
 
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
-  showLoadingSpinner.value = true;
-  console.log("Saving.");
-
   const modal = await modalController.create({
     component: Modal,
+
     componentProps: { busStops },
     breakpoints: [0, 0.5, 0.75, 0.95, 1],
     initialBreakpoint: 0.95,
@@ -104,6 +144,7 @@ const saveData = async () => {
 
   modal.present();
 
+<<<<<<< HEAD
   const { data, role } = await modal.onWillDismiss();
   if (role === "confirm") {
     console.log("The user has confirmed.");
@@ -115,6 +156,12 @@ const saveData = async () => {
     setTimeout(() => console.log("Data Sent (JK)"), 5000)
   );
   showLoadingSpinner.value = false;
+=======
+  // const { role } = await modal.onWillDismiss();
+  // if (role === "confirm") {
+  //   showLoadingSpinner = false;
+  // }
+>>>>>>> 20843354aec9af9c37e5ccdf165de5bad62fc714
 };
 
 const undoMarker = (e) => {

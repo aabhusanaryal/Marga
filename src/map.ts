@@ -15,6 +15,7 @@ const createMapInstance = async (divID) => {
     compassBearing: false,
     touchGestures: true,
     touchRotate: true,
+    shiftKeyRotate: true,
     // touchZoom: true
   }).setView([27.7166, 85.3485], 16);
   // dark mode tiles link:

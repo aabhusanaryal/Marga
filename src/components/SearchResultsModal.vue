@@ -2,53 +2,17 @@
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
       <ion-slide v-for="(itm, idx) in modalList" :key="idx">
-        <ion-card>
+        <ion-card @click="displayRoute">
           <ion-card-header>
-            <ion-card-title>{{ itm }}</ion-card-title>
-            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+            <ion-card-title>{{ itm.name }}</ion-card-title>
+            <ion-card-subtitle ></ion-card-subtitle>
           </ion-card-header>
-          <ion-card-content>
-            Here's a small text description for the card content. Nothing more,
-            nothing less.
-          </ion-card-content>
+          <ion-buttons >
+            <ion-button @click="confirm(idx)">Confirm</ion-button>
+          </ion-buttons>
         </ion-card>
       </ion-slide>
-      ...
     </ion-slides>
-    <!--     
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Card Title</ion-card-title>
-        <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        Here's a small text description for the card content. Nothing more,
-        nothing less.
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Card Title</ion-card-title>
-        <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        Here's a small text description for the card content. Nothing more,
-        nothing less.
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Card Title</ion-card-title>
-        <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        Here's a small text description for the card content. Nothing more,
-        nothing less.
-      </ion-card-content>
-    </ion-card> -->
   </ion-content>
 </template>
 
@@ -63,23 +27,23 @@ import {
   IonCardHeader,
   IonSlides,
   IonSlide,
+  IonButtons,
+  IonButton
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-// import { register } from "swiper/element/bundle";
-
-// register();
 
 const props = defineProps(["modalList"]);
-console.log("From search results modal: ",props.modalList);
+
+console.log("From search results modal: ")
+console.log(props.modalList);
 
 const slideOptions = {
   slidesPerView: 1.2,
   autoHeight: true,
 };
-// function cancel() {
-//   return modalController.dismiss(null, "cancel");
-// }
-// function confirm() {
-//   return modalController.dismiss(name, "confirm");
-// }
+
+const confirm = (idx:number) => {
+  console.log("Confirm button has been clicked and the id is: ",idx)
+  return modalController.dismiss( idx,"confirm");
+};
 </script>
