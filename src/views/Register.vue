@@ -28,7 +28,7 @@
           ></ion-input> </ion-item
         ><br />
         <ion-item lines="full">
-          <ion-label position="floating" class>Email</ion-label>
+          <ion-label position="floating">Email</ion-label>
           <ion-input
             type="email"
             v-model="userInfo.email"
@@ -93,12 +93,12 @@ const router = useRouter();
 const authStore = useAuthStore();
 if (authStore.userAuthenticated) {
   router.push("/");
-  console.log("Since user logged in,don't show register push to homepage.");
+  console.log("Since user authenticated,don't show register push to homepage.");
 }
 let userData;
 const registerClicked = async () => {
   showLoadingSpinner.value = true;
-  console.log(JSON.stringify(userInfo));
+  // console.log(JSON.stringify(userInfo));
   try {
     userData = await fetch("https://marga-backend.onrender.com/register", {
       method: "POST",
@@ -113,15 +113,15 @@ const registerClicked = async () => {
   showLoadingSpinner.value = false;
 
   if (userData.detail === "Username already exists.") {
-    console.log("Reached here--username");
+    // console.log("Reached here--username");
     error = true;
     errorMessage = "This username already exists.";
   } else if (userData.detail === "Email already exists.") {
-    console.log("Reached here--email");
+    // console.log("Reached here--email");
     error = true;
     errorMessage = "This username already exists.";
   } else {
-    router.push("/");
+    router.push("/tabs/login");
   }
 };
 </script>

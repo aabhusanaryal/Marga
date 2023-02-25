@@ -68,7 +68,8 @@ router.beforeEach(async (to) => {
   ];
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
-
+  
+  console.log()
   console.log("Information about the current page: ");
   console.log("Current path: ", to.path);
   console.log("Authentication Required: ", authRequired);

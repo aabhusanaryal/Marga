@@ -16,36 +16,45 @@
       <swiper-slide>
         <div class="slide">
           <img
-            src="https://images-ext-1.discordapp.net/external/pTn0vew6xvHmfPZ-f4ProKunzDfCYNV-iruuDomaGdg/https/ionicframework.com/docs/demos/api/slides/slide-1.png"
+            src="../logo.png"
           />
-          <h2>Welcome</h2>
+          <h1>MARGA</h1>
           <p>
-            The <b>ionic conference app</b> is a practical preview of the ionic
-            framework in action, and a demonstration of proper code use.
+            Your new travel <b> best friend</b>.
           </p>
         </div>
       </swiper-slide>
       <swiper-slide>
         <div class="slide">
-          <img
-            src="https://images-ext-1.discordapp.net/external/pTn0vew6xvHmfPZ-f4ProKunzDfCYNV-iruuDomaGdg/https/ionicframework.com/docs/demos/api/slides/slide-1.png"
-          />
-          <h2>Welcome</h2>
+          <!-- <img
+            src="../search.png"
+          /> -->
+          <h2>Bus Routes</h2>
           <p>
-            The <b>ionic conference app</b> is a practical preview of the ionic
-            framework in action, and a demonstration of proper code use.
+            Enter your starting and ending destinations, and we'll show you all the bus routes that connect them. <br/><b><i>It's that easy!</i></b> 
           </p>
         </div>
       </swiper-slide>
       <swiper-slide>
         <div class="slide">
-          <img
+          <!-- <img
             src="https://images-ext-1.discordapp.net/external/pTn0vew6xvHmfPZ-f4ProKunzDfCYNV-iruuDomaGdg/https/ionicframework.com/docs/demos/api/slides/slide-1.png"
-          />
-          <h2>Welcome</h2>
+          /> -->
+          <h2>Add Routes</h2>
           <p>
-            The <b>ionic conference app</b> is a practical preview of the ionic
-            framework in action, and a demonstration of proper code use.
+            Share your <i>insider</i> knowledge! With our app, you can add bus routes you know, 
+            making our service even more comprehensive. Join our community of savvy travelers.
+          </p>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="slide">
+          <!-- <img
+            src="https://static.vecteezy.com/system/resources/previews/015/310/648/non_2x/rating-star-review-png.png"
+          /> -->
+          <h2>Review Routes</h2>
+          <p>
+             You can also review routes added by others and discover new ways to get around. 
           </p>
           <ion-button fill="clear" @click="closeTutorial"
             >Continue <ion-icon slot="end" :icon="arrowForward"></ion-icon

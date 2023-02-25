@@ -57,12 +57,13 @@ import { onMounted, ref } from "vue";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
 import SearchBar from "@/components/SearchBar.vue";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import Modal from "../components/RouteSaveModal.vue";
 import { useAuthStore } from "../store/authStore";
 import { removeProperties } from "@babel/types";
 
 const authStore = useAuthStore();
+
 // map object for leaflet
 let map;
 let busStops: { lat: number; lng: number; marker: any; name: string }[] = [];
@@ -126,8 +127,7 @@ const clickSearchResultItm = (event) => {
 
 // Code other than leaflet:
 // let start;
-// let arrBusStops = [];
-// let oneBusStops = [];
+
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
   const modal = await modalController.create({
@@ -162,7 +162,6 @@ const deleteMarkers = () => {
     let stop = busStops.pop();
     map.removeLayer(stop?.marker);
   }
-  //need to remove all the markers on the page, refresh the add routes page.
 };
 </script>
 
