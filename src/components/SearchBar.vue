@@ -5,7 +5,7 @@
       :placeholder="placeholder"
       @ionChange="searchbarChange"
       v-model="searchTerm"
-      debounce="500"
+      debounce="1"
     />
     <ion-list v-if="resultsNameOnly">
       <ion-item

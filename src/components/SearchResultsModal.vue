@@ -1,18 +1,22 @@
 <template>
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
-      <ion-slide v-for="(itm, idx) in modalList1" :key="idx">
+      <ion-slide v-for="(itm, idx) in busRouteList" :key="idx">
         <ion-card>
           <ion-card-header>
             <!-- <ion-card-title>{{ itm.name }}</ion-card-title> -->
-            <ion-card-content v-for="(rout,ind) in itm.route" :key="ind">
-              <p>{{rout.stopName}}<br/></p>
+            <ion-card-content v-for="(route, idx) in itm.route" :key="idx">
+              <p>{{ route.stopName }}<br /></p>
             </ion-card-content>
-            <ion-card-subtitle ></ion-card-subtitle>
+            <ion-card-subtitle></ion-card-subtitle>
           </ion-card-header>
-          <p><b>Number of bus changes:{{itm.details.change}} 
-          <br/>Distance(in km): {{itm.details.km}}</b></p>
-          <ion-buttons >
+          <p>
+            <b
+              >Number of bus changes:{{ itm.details.change }} <br />Distance(in
+              km): {{ itm.details.km }}</b
+            >
+          </p>
+          <ion-buttons>
             <ion-button @click="confirm(idx)">Select</ion-button>
           </ion-buttons>
         </ion-card>
@@ -33,26 +37,24 @@ import {
   IonSlides,
   IonSlide,
   IonButtons,
-  IonButton
+  IonButton,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 
-const props = defineProps(["modalList1"]);
+const props = defineProps(["busRouteList"]);
 
-console.log("From search results modal: ")
-console.log(props.modalList1);
+// console.log("From search results modal: ")
+// console.log(props.modalList1);
 
 const slideOptions = {
   slidesPerView: 1.2,
   autoHeight: true,
 };
 
-const confirm = (idx:number) => {
-  console.log("Confirm button has been clicked and the id is: ",idx)
-  return modalController.dismiss( idx,"confirm");
+const confirm = (idx: number) => {
+  // console.log("Confirm button has been clicked and the id is: ",idx)
+  return modalController.dismiss(idx, "confirm");
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

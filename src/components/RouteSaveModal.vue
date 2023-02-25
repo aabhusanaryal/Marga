@@ -82,6 +82,7 @@ import {
   IonIcon,
   toastController,
   IonSpinner,
+  IonChip,
 } from "@ionic/vue";
 import { closeCircle } from "ionicons/icons";
 
