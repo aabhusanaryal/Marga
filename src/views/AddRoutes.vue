@@ -65,7 +65,7 @@ import { removeProperties } from "@babel/types";
 const authStore = useAuthStore();
 // map object for leaflet
 let map;
-let busStops: { lat: number; lng: number; marker: any }[] = [];
+let busStops: { lat: number; lng: number; marker: any; name: string }[] = [];
 
 onMounted(async () => {
   map = await createMapInstance("map-add");
@@ -129,11 +129,9 @@ const clickSearchResultItm = (event) => {
 // let oneBusStops = [];
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
-  showLoadingSpinner.value = true;
-  console.log("Saving.");
-
   const modal = await modalController.create({
     component: Modal,
+
     componentProps: { busStops },
     breakpoints: [0, 0.5, 0.75, 0.95, 1],
     initialBreakpoint: 0.95,
@@ -141,15 +139,10 @@ const saveData = async () => {
 
   modal.present();
 
-  const { data, role } = await modal.onWillDismiss();
-  if (role === "confirm") {
-    console.log("The user has confirmed.");
-  }
-  // TODO: Update the code below to make actual fetch request
-  await new Promise((done) =>
-    setTimeout(() => console.log("Data Sent (JK)"), 5000)
-  );
-  showLoadingSpinner.value = false;
+  // const { role } = await modal.onWillDismiss();
+  // if (role === "confirm") {
+  //   showLoadingSpinner = false;
+  // }
 };
 
 const undoMarker = (e) => {
