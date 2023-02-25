@@ -27,7 +27,7 @@
       <ion-input
         placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
         v-model="yatayat"
-        @ionInput="onInput"
+        @keyup.enter="onInput"
       ></ion-input>
     </ion-item>
     <br />
@@ -35,8 +35,7 @@
       <ion-label position="floating">Source of information</ion-label>
       <ion-input
         placeholder="e.g. Self, Yatayat Karyalaya etc."
-        v-model="yatayat"
-        @ionInput="onInput"
+        v-model="risuthyo"
       ></ion-input>
     </ion-item>
     <br />
@@ -78,15 +77,14 @@ let name;
 let yatayatList = ref([]);
 let yatayat = ref("");
 
-const onInput = (e) => {
-  if (e.target.value[e.target.value.length - 1] == ",") {
-    yatayatList.value.push(yatayat.value);
-    yatayat.value = "";
-    console.log(yatayatList.value);
-  }
+const onInput = () => {
+  yatayatList.value.push(yatayat.value);
+  yatayat.value = "";
+  console.log(yatayatList.value);
 };
 
 const removeYatayat = (idx) => {
+  if (idx == 0) yatayatList.value = yatayatList.value.splice(1);
   yatayatList.value.splice(idx, idx);
 };
 

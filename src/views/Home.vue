@@ -69,22 +69,29 @@ onIonViewDidEnter(() => {
 
 // Logic other than leaflet go below this
 let start, destination;
+let startMarker, destinationMarker;
 // This funcion is called when a search result item is clicked on
 const clickStartSearchResultItm = (event) => {
   start = event;
-  const marker = L.marker([
-    event.geometry.coordinates[1],
-    event.geometry.coordinates[0],
-  ]).addTo(map);
+  if (startMarker) map.removeLayer(startMarker);
+  startMarker = L.marker(
+    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
+    {
+      draggable: true,
+    }
+  ).addTo(map);
   map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
 const clickDestinationSearchResultItm = (event) => {
   destination = event;
-  const marker = L.marker([
-    event.geometry.coordinates[1],
-    event.geometry.coordinates[0],
-  ]).addTo(map);
+  if (destinationMarker) map.removeLayer(destinationMarker);
+  destinationMarker = L.marker(
+    [event.geometry.coordinates[1], event.geometry.coordinates[0]],
+    {
+      draggable: true,
+    }
+  ).addTo(map);
   map.flyTo([event.geometry.coordinates[1], event.geometry.coordinates[0]], 17);
   console.log([event.geometry.coordinates[1], event.geometry.coordinates[0]]);
 };
