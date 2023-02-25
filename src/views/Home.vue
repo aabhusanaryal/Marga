@@ -137,7 +137,17 @@ const findRoutes = async () => {
       //   [modalList1[data].route[0].lat, modalList1[data].route[0].lng],
       //   16
       // );
+      let routeSwitches = [[]];
       busRouteList[data].route.forEach((busStop, idx) => {
+        console.log(busStop);
+        // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
+        if (!busStop.change)
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+        else {
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+          routeSwitches.push([]);
+          routeSwitches[routeSwitches.length - 1].push(busStop);
+        }
         const marker = L.marker([busStop.lat, busStop.lng]).addTo(map);
         marker
           .bindTooltip(`${idx + 1} ${busStop.stopName}`, {
@@ -145,6 +155,38 @@ const findRoutes = async () => {
           })
           .openTooltip();
       });
+      // Drawing path between route stops
+      routeSwitches.forEach(async (route) => {
+        console.log("R", route);
+        let coordinates = [];
+        route.forEach((stop) => {
+          coordinates.push([stop.lng, stop.lat]);
+        });
+        console.log(coordinates);
+        const bodyData = {
+          coordinates,
+        };
+        let res = await fetch(
+          "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `${process.env.VUE_APP_ORS_API}`,
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
+        res = await res.json();
+        L.geoJSON(res, {
+          style: {
+            color: randomColorPicker(),
+            weight: 5,
+          },
+        }).addTo(map);
+        console.log(res);
+      });
+      // console.log(routeSwitches);
       // busRouteList[data].forEach((route) => {
       //   let stops = route.route;
       //   console.log(stops);
@@ -154,6 +196,10 @@ const findRoutes = async () => {
   } else {
     presentToast("bottom", "Please select start and destination nodes!");
   }
+  const randomColorPicker = () => {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return "#" + n.slice(0, 6);
+  };
 };
 
 // Toast Generator / Presentor
