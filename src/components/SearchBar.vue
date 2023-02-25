@@ -5,7 +5,7 @@
       :placeholder="placeholder"
       @ionChange="searchbarChange"
       v-model="searchTerm"
-      debounce="1000"
+      debounce="500"
     />
     <ion-list v-if="resultsNameOnly">
       <ion-item
@@ -32,9 +32,6 @@ import {
 const props = defineProps(["placeholder"]);
 const emit = defineEmits(["clickSearchResultItm"]);
 
-// Important flag. Used so that the searchbarChange doesnt trigger when the value of the searchBar is changed inside the clickSearchResultItm function
-let justSearched = false;
-
 // OpenRouteService API Key
 const apiKey = process.env.VUE_APP_ORS_API;
 
@@ -45,21 +42,27 @@ const searchTerm = ref("");
 const results = ref([]);
 const resultsNameOnly = ref([]);
 
+let noResultMsg = "No results found.";
+
+// Important flag. Used so that the searchbarChange doesnt trigger when the value of the searchBar is changed inside the clickSearchResultItm function
+let justSearched = false;
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
     return;
   }
+
   if (searchTerm.value) {
-    console.log(searchTerm.value)
     let res = await fetch(
       `https://api.openrouteservice.org/geocode/autocomplete?api_key=${apiKey}&text=${searchTerm.value}&boundary.country=NP`
     );
     res = await res.json();
-    console.log(res)
+    console.log(res);
     // res.features.forEach((ftr) => console.log(ftr.properties.name));
     results.value = res.features;
-    console.log(results.value);
+    // If no results are found
+    if (!results.value.length)
+      results.value.push({ properties: { name: noResultMsg } });
   } else {
     results.value = [];
   }
@@ -67,12 +70,13 @@ const searchbarChange = async () => {
 };
 
 const clickSearchResultItm = (idx) => {
-  console.log(idx)
-  emit("clickSearchResultItm", results.value[idx]);
-  justSearched = true;
-  searchTerm.value = resultsNameOnly.value[idx];
-  results.value = [];
-  resultsNameOnly.value = [];
+  if (results.value[idx].properties.name != noResultMsg) {
+    emit("clickSearchResultItm", results.value[idx]);
+    justSearched = true;
+    searchTerm.value = resultsNameOnly.value[idx];
+    results.value = [];
+    resultsNameOnly.value = [];
+  }
 };
 </script>
 
