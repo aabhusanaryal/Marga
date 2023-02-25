@@ -132,6 +132,14 @@ const bodyData = {
 console.log(bodyData, JSON.stringify(bodyData));
 
 const confirm = async () => {
+  if (yatayat.value) {
+    yatayatList.value.push(yatayat.value);
+    yatayat.value = "";
+  }
+  if (vehicleType.value) {
+    vehicleTypeList.value.push(vehicleType.value);
+    vehicleType.value = "";
+  }
   showLoadingSpinner.value = true;
   try {
     const req = await fetch("https://marga-backend.onrender.com/addroute/", {
