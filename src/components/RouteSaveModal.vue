@@ -31,6 +31,7 @@
         placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
         v-model="yatayat"
         @keyup.enter="onInputYatayat"
+        enterkeyhint="enter"
       ></ion-input>
     </ion-item>
     <br />
@@ -46,6 +47,7 @@
         placeholder="e.g. Micro, Tempo, Bus, etc."
         v-model="vehicleType"
         @keyup.enter="onInputVehicleType"
+        enterkeyhint="enter"
       ></ion-input>
     </ion-item>
     <br />
@@ -130,6 +132,14 @@ const bodyData = {
 console.log(bodyData, JSON.stringify(bodyData));
 
 const confirm = async () => {
+  if (yatayat.value) {
+    yatayatList.value.push(yatayat.value);
+    yatayat.value = "";
+  }
+  if (vehicleType.value) {
+    vehicleTypeList.value.push(vehicleType.value);
+    vehicleType.value = "";
+  }
   showLoadingSpinner.value = true;
   try {
     const req = await fetch("https://marga-backend.onrender.com/addroute/", {

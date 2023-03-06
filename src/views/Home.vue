@@ -128,6 +128,12 @@ const findRoutes = async () => {
 
     const { data, role } = await modal.onWillDismiss();
     if (role === "confirm") {
+      // Removing everything before rendering new markers
+      map.eachLayer((layer) => {
+        // Removing everything other than the tile layer
+        // PS: Only the tile layer has _url
+        if (!layer._url) map.removeLayer(layer);
+      });
       // for (let i = 0; i < modalList1[data].route.length; i++) {
 
       // }

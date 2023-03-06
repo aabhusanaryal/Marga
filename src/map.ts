@@ -8,26 +8,23 @@ const createMapInstance = async (divID) => {
   // Setting up leaflet to display the map inside div#map-home
   console.log("creating map");
   let map = L.map(divID, {
-    rotate: true,
+    rotate: false,
     rotateControl: {
       closeOnZeroBearing: false,
     },
     compassBearing: false,
     touchGestures: true,
-    touchRotate: true,
-    shiftKeyRotate: true,
+    touchRotate: false,
+    shiftKeyRotate: false,
     // touchZoom: true
   }).setView([27.7166, 85.3485], 16);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
-  L.tileLayer(
-    "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png",
-    {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }
-  ).addTo(map);
+  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
 
   // Adding a circle marker to user's current position
   const locationControl = L.control
