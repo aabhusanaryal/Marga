@@ -12,6 +12,7 @@
           placeholder="Search"
           @clickSearchResultItm="clickSearchResultItm"
         />
+
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -101,12 +102,14 @@ onMounted(async () => {
         body: JSON.stringify(bodyData),
       });
       geoJSON = await geoJSON.json();
+      console.log(geoJSON)
       stopName = geoJSON.features[0].properties.osm_tags.name;
     } catch {
       geoJSON = await fetch(
         `https://api.openrouteservice.org/geocode/reverse?api_key=${process.env.VUE_APP_ORS_API}&point.lon=${latlng.lng}&point.lat=${latlng.lat}`
       );
       geoJSON = await geoJSON.json();
+      console.log("Seconf",geoJSON)
       stopName = geoJSON.features[0].properties.label;
     }
     marker.bindTooltip(stopName, { permanent: true }).openTooltip();

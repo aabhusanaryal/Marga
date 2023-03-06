@@ -33,8 +33,18 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/AddRoutes.vue"),
       },
       {
+        path:"ind/:routeID",
+        component:()=>import("@/views/Route.vue")
+      },
+      {
         path: "review",
         component: () => import("@/views/ReviewRoutes.vue"),
+        // children:[
+        //   {
+        //     path:"routeID",
+        //     component:()=>import("@/views/Route.vue"),
+        //   },
+        // ]
       },
       {
         path: "login",
@@ -43,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "register",
         component: () => import("@/views/Register.vue"),
-      },
+      }
     ],
   },
   {

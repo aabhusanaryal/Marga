@@ -46,10 +46,11 @@ let noResultMsg = "No results found.";
 
 // Important flag. Used so that the searchbarChange doesnt trigger when the value of the searchBar is changed inside the clickSearchResultItm function
 let justSearched = false;
+
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
-    // console.log("just searched ")
+    console.log("just searched here ")
     return;
   }
   if (searchTerm.value) {
@@ -85,6 +86,7 @@ const clickSearchResultItm = (idx) => {
 };
 let result;
 onMounted(async () => {
+  console.log("Reached herea")
   let res = await fetch(`https://marga-backend.onrender.com/getnodes`);
   res = await res.json();
   console.log(res);

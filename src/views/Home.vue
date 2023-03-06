@@ -148,6 +148,7 @@ const findRoutes = async () => {
           routeSwitches.push([]);
           routeSwitches[routeSwitches.length - 1].push(busStop);
         }
+        console.log("Route switches are: ", routeSwitches)
         const marker = L.marker([busStop.lat, busStop.lng]).addTo(map);
         marker
           .bindTooltip(`${idx + 1} ${busStop.stopName}`, {

@@ -14,7 +14,7 @@
             <ion-label>Add Routes</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="review" href="/tabs/review" :disabled="true">
+          <ion-tab-button tab="review" href="/tabs/review" >
             <ion-icon :icon="ribbonOutline" />
             <ion-label>Review Routes</ion-label>
           </ion-tab-button>
