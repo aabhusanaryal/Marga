@@ -95,7 +95,11 @@ const submitLoginForm = async (e) => {
     error = true;
     errorMessage = "Incorrect username or password.";
   } else {
+    console.log("Data", data);
     authStore.accessToken = data.access_token;
+    authStore.fullName = data.full_name;
+    authStore.username = data.username;
+    authStore.emailAddress = data.email_address;
     authStore.userAuthenticated = true;
     router.push(authStore.returnURL || "/tabs/home");
   }

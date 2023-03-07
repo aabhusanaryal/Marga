@@ -2,7 +2,7 @@
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
       <ion-slide v-for="(itm, idx) in busRouteList" :key="idx">
-        <ion-card>
+        <ion-card mode="ios">
           <ion-card-header>
             <!-- <ion-card-title>{{ itm.name }}</ion-card-title> -->
             <ion-card-content v-for="(route, idx) in itm.route" :key="idx">

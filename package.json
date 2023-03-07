@@ -26,6 +26,7 @@
     "leaflet": "^1.9.3",
     "leaflet-rotate": "^0.2.3",
     "leaflet.locatecontrol": "^0.79.0",
+    "md5": "^2.3.0",
     "pinia": "^2.0.32",
     "swiper": "^9.0.5",
     "tangram": "^0.21.1",
