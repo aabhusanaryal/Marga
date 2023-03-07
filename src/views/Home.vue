@@ -63,16 +63,11 @@ const authStore=useAuthStore();
 onMounted(async () => {
   console.log("Mounter from homepage.")
   map = await createMapInstance("map-home");
-  let bodyData = {
-    start: 1,
-    end:9,
-  };
+
   let busRouteList = await fetch(
-    `https://marga-backend.onrender.com/getroutes?start=1&end=9`,
+    `https://marga-backend.onrender.com/getallroutes`,
     {
-      method: "POST",
-      body: JSON.stringify(bodyData),
-      headers: { "content-type": "application/json" },
+      method: "GET",
     }
   );
   busRouteList = await busRouteList.json();
