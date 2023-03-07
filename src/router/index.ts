@@ -33,18 +33,24 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/AddRoutes.vue"),
       },
       {
-        path:"ind/:routeID",
-        component:()=>import("@/views/Route.vue")
-      },
-      {
         path: "review",
         component: () => import("@/views/ReviewRoutes.vue"),
-        // children:[
+        // children: [
         //   {
-        //     path:"routeID",
-        //     component:()=>import("@/views/Route.vue"),
+        //     path: ":routeID",
+        //     component: () => import("@/views/Route.vue"),
         //   },
-        // ]
+        // ],
+      },
+      {
+        path: "review/:routeID",
+        component: () => import("@/views/RouteDetails.vue"),
+        // children: [
+        //   {
+        //     path: ":routeID",
+        //     component: () => import("@/views/Route.vue"),
+        //   },
+        // ],
       },
       {
         path: "login",
@@ -53,7 +59,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "register",
         component: () => import("@/views/Register.vue"),
-      }
+      },
     ],
   },
   {
@@ -78,8 +84,8 @@ router.beforeEach(async (to) => {
   ];
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
-  
-  console.log()
+
+  console.log();
   console.log("Information about the current page: ");
   console.log("Current path: ", to.path);
   console.log("Authentication Required: ", authRequired);
