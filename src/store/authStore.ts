@@ -8,11 +8,13 @@ export const useAuthStore = defineStore("auth", () => {
   let returnURL = useLocalStorage("returnURL", "");
   let tokenType = useLocalStorage("tokenType", "");
   let firstUse = useLocalStorage("firstUse", true);
+  let routeDetails=useLocalStorage("routeDetails",[]);
   return {
     accessToken,
     userAuthenticated,
     returnURL,
     tokenType,
     firstUse,
+    routeDetails,
   };
 });

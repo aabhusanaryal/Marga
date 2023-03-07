@@ -53,13 +53,31 @@ import { createMapInstance } from "@/map";
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/SearchResultsModal.vue";
+import { useAuthStore } from "@/store/authStore";
 // import OverlayEventDetail from '@ionic/core'
 
 // Logic code starts
 // map object for leaflet
 let map;
+const authStore=useAuthStore();
 onMounted(async () => {
+  console.log("Mounter from homepage.")
   map = await createMapInstance("map-home");
+  let bodyData = {
+    start: 1,
+    end:9,
+  };
+  let busRouteList = await fetch(
+    `https://marga-backend.onrender.com/getroutes?start=1&end=9`,
+    {
+      method: "POST",
+      body: JSON.stringify(bodyData),
+      headers: { "content-type": "application/json" },
+    }
+  );
+  busRouteList = await busRouteList.json();
+  authStore.routeDetails=busRouteList;
+  console.log("Homepage bus route list: ", authStore.routeDetails);
 });
 
 onIonViewDidEnter(() => {
@@ -219,6 +237,8 @@ const presentToast = async (position: "top" | "middle" | "bottom", text) => {
 
   await toast.present();
 };
+
+
 </script>
 
 <style scoped>

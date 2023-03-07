@@ -35,22 +35,6 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "review",
         component: () => import("@/views/ReviewRoutes.vue"),
-        // children: [
-        //   {
-        //     path: ":routeID",
-        //     component: () => import("@/views/Route.vue"),
-        //   },
-        // ],
-      },
-      {
-        path: "review/:routeID",
-        component: () => import("@/views/RouteDetails.vue"),
-        // children: [
-        //   {
-        //     path: ":routeID",
-        //     component: () => import("@/views/Route.vue"),
-        //   },
-        // ],
       },
       {
         path: "login",
