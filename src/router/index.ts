@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import { useAuthStore } from "@/store/authStore";
-
+import { useRouteStore } from "@/store/routeStore";
+import {Response} from 'node-fetch';
 const routes: Array<RouteRecordRaw> = [
   {
     name: "Home",
@@ -64,6 +65,8 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   //will be called in every navigation:
   const authStore = useAuthStore();
+  const routeStore=useRouteStore();
+
   const publicPages = [
     "/tabs/login",
     "/tabs/home",
@@ -84,6 +87,22 @@ router.beforeEach(async (to) => {
     authStore.firstUse = false;
     router.push("/slides");
   }
+
+  if(!routeStore.detailsLoaded){
+    console.log("The details are being loaded.")
+    let busRouteList:Response = await fetch(
+    `https://marga-backend.onrender.com/getallroutes`,
+    {
+      method: "GET",
+    }
+    );
+    busRouteList = await busRouteList.json();
+    console.log(busRouteList)
+    routeStore.routeDetails = busRouteList;
+    console.log("Bus route lists are: ", routeStore.routeDetails);
+    routeStore.detailsLoaded=true;
+  }
+
   // Yedi page ma auth chainxa vane ani user authenticated xaina vane redirect to login
   if (authRequired && !authStore.userAuthenticated) {
     console.log("Redirecting to the login page.");

@@ -71,15 +71,15 @@ const routeStore=useRouteStore();
 onMounted(async () => {
   console.log("Mounter from homepage.");
   map = await createMapInstance("map-home");
-  let busRouteList = await fetch(
-    `https://marga-backend.onrender.com/getallroutes`,
-    {
-      method: "GET",
-    }
-  );
-  busRouteList = await busRouteList.json();
-  routeStore.routeDetails = busRouteList;
-  console.log("Homepage bus route list: ", routeStore.routeDetails);
+  // let busRouteList = await fetch(
+  //   `https://marga-backend.onrender.com/getallroutes`,
+  //   {
+  //     method: "GET",
+  //   }
+  // );
+  // busRouteList = await busRouteList.json();
+  // routeStore.routeDetails = busRouteList;
+  // console.log("Homepage bus route list: ", routeStore.routeDetails);
 });
 
 onIonViewDidEnter(() => {

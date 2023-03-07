@@ -4,8 +4,10 @@ import { useLocalStorage } from "@vueuse/core";
 
 export const useRouteStore=defineStore("route",()=>{
     let routeDetails = useLocalStorage("routeDetails",[]);
+    let detailsLoaded=useLocalStorage("detailsLoaded",false);
 
     return {
-        routeDetails
+        routeDetails,
+        detailsLoaded
     };
 });
