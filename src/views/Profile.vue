@@ -6,10 +6,15 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-button @click="logout">Log Out</ion-button>
+      <img :src="gravatarURL" alt="Profile Image" id="profileImage" />
+      <h2>
+        {{ fullName }}
+      </h2>
+      <h6>@{{ username }}</h6>
       <ion-button @click="showTutorial"
         >Show Tutorial on Next Launch</ion-button
       >
+      <ion-button @click="logout">Log Out</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -23,14 +28,39 @@ import {
   IonHeader,
   IonButton,
   toastController,
+  onIonViewWillEnter,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/vue";
 
 import { useAuthStore } from "@/store/authStore";
+import { ref, watch } from "vue";
 import router from "@/router";
+import md5 from "md5";
 const authStore = useAuthStore();
+
+let emailAddress = ref(authStore.emailAddress);
+let fullName = ref(authStore.fullName);
+let username = ref(authStore.username);
+const imageHash = ref(md5(emailAddress.value));
+const gravatarURL = ref(`https://www.gravatar.com/avatar/${imageHash.value}?s=200`);
+console.log(emailAddress, imageHash, gravatarURL);
+
+onIonViewWillEnter(() => {
+  console.log("Will enter");
+  fullName.value = authStore.fullName;
+  username.value = authStore.username;
+  emailAddress.value = authStore.emailAddress;
+  imageHash.value = md5(emailAddress.value);
+  gravatarURL.value = `https://www.gravatar.com/avatar/${imageHash.value}?s=200`;
+});
 
 const logout = () => {
   authStore.accessToken = "";
+  authStore.fullName = "";
+  authStore.username = "";
+  authStore.emailAddress = "";
   authStore.userAuthenticated = false;
   router.push("/");
 };
@@ -47,3 +77,19 @@ const showTutorial = async () => {
   await toast.present();
 };
 </script>
+
+<style scoped>
+#profileImage {
+  border-radius: 50%;
+}
+
+ion-content {
+  text-align: center;
+}
+h2 {
+  margin-bottom: 0;
+}
+h6 {
+  margin-top: 0;
+}
+</style>

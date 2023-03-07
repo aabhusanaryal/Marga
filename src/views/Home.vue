@@ -1,5 +1,8 @@
 <template>
   <ion-page>
+    <div class="loadingSpinner" v-if="showLoadingSpinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>Home</ion-title>
@@ -38,32 +41,36 @@ import {
   IonToolbar,
   IonHeader,
   IonButton,
-  alertController,
   IonIcon,
   modalController,
   toastController,
   onIonViewDidEnter,
+  IonSpinner,
 } from "@ionic/vue";
 import { search } from "ionicons/icons";
-import { onMounted, computed, onUnmounted } from "vue";
+import { onMounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
+import { ref } from "vue";
 
 // Imports other than leaflet
 import SearchBar from "@/components/SearchBar.vue";
 import Modal from "@/components/SearchResultsModal.vue";
 import { useAuthStore } from "@/store/authStore";
+import {useRouteStore} from "@/store/routeStore";
 // import OverlayEventDetail from '@ionic/core'
 
 // Logic code starts
 // map object for leaflet
 let map;
-const authStore=useAuthStore();
-onMounted(async () => {
-  console.log("Mounter from homepage.")
-  map = await createMapInstance("map-home");
+let showLoadingSpinner = ref(false);
 
+const authStore = useAuthStore();
+const routeStore=useRouteStore();
+onMounted(async () => {
+  console.log("Mounter from homepage.");
+  map = await createMapInstance("map-home");
   let busRouteList = await fetch(
     `https://marga-backend.onrender.com/getallroutes`,
     {
@@ -71,8 +78,8 @@ onMounted(async () => {
     }
   );
   busRouteList = await busRouteList.json();
-  authStore.routeDetails=busRouteList;
-  console.log("Homepage bus route list: ", authStore.routeDetails);
+  routeStore.routeDetails = busRouteList;
+  console.log("Homepage bus route list: ", routeStore.routeDetails);
 });
 
 onIonViewDidEnter(() => {
@@ -114,6 +121,8 @@ const clickDestinationSearchResultItm = (event) => {
 
 const findRoutes = async () => {
   if (start && destination) {
+    showLoadingSpinner.value = true;
+    console.log("Start");
     let bodyData = {
       start: start.node_id,
       end: destination.node_id,
@@ -129,7 +138,6 @@ const findRoutes = async () => {
       }
     );
     busRouteList = await busRouteList.json();
-    console.log("HELLO", busRouteList);
 
     const modal = await modalController.create({
       component: Modal,
@@ -138,6 +146,8 @@ const findRoutes = async () => {
       initialBreakpoint: 0.3,
     });
     modal.present();
+    console.log("Stop");
+    showLoadingSpinner.value = false;
 
     const { data, role } = await modal.onWillDismiss();
     if (role === "confirm") {
@@ -167,7 +177,7 @@ const findRoutes = async () => {
           routeSwitches.push([]);
           routeSwitches[routeSwitches.length - 1].push(busStop);
         }
-        console.log("Route switches are: ", routeSwitches)
+        console.log("Route switches are: ", routeSwitches);
         const marker = L.marker([busStop.lat, busStop.lng]).addTo(map);
         marker
           .bindTooltip(`${idx + 1} ${busStop.stopName}`, {
@@ -232,12 +242,20 @@ const presentToast = async (position: "top" | "middle" | "bottom", text) => {
 
   await toast.present();
 };
-
-
 </script>
 
 <style scoped>
 #map-home {
   height: 100%;
+}
+.loadingSpinner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
 }
 </style>

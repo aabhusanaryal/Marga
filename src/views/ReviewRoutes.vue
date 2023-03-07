@@ -12,11 +12,11 @@
       <ion-list>
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
         <ion-item
-          v-for="(n, idx) in authStore.routeDetails"
+          v-for="(n, idx) in routeStore.routeDetails"
           :key="idx"
           @click="openRouteDetails(idx)"
         >
-          <h1>{{ n.route[0].stopName }} - {{ n.route[1].stopName }}</h1>
+          <p>{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</p>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -39,10 +39,10 @@ import SearchBar from "@/components/SearchBar.vue";
 import { onMounted, ref } from "vue";
 import router from "@/router";
 import RouteModal from "../components/DetailModal.vue"
-import { useAuthStore } from "@/store/authStore";
+import { useRouteStore } from "@/store/routeStore";
 
 
-const authStore=useAuthStore();
+const routeStore=useRouteStore();
 onMounted(async () => {
   console.log("Reached at review routes page.");
 });
@@ -56,6 +56,8 @@ const openRouteDetails = async (idx) => {
   });
 
   modal.present();
+
+  // router.push(path:`/tabs/review/${idx}`,params:{id:idx})
 };
 </script>
 <style scoped>

@@ -37,6 +37,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/ReviewRoutes.vue"),
       },
       {
+        path: "review/:routeID",
+        component:()=>import("@/views/RouteDetails.vue")
+      },
+      {
         path: "login",
         component: () => import("@/views/Login.vue"),
       },
