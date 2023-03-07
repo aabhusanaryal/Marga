@@ -6,52 +6,15 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-grid :fixed="true">
-        <!-- Profile Image -->
-        <ion-row>
-          <ion-col></ion-col>
-          <ion-col>
-            <img :src="gravatarURL" alt="Profile Image" id="profileImage" />
-          </ion-col>
-          <ion-col></ion-col>
-        </ion-row>
-        <!-- Name and info -->
-        <!-- Full Name -->
-        <ion-row>
-          <ion-col></ion-col>
-          <ion-col
-            ><h2>
-              {{ fullName }}
-            </h2></ion-col
-          >
-          <ion-col></ion-col>
-        </ion-row>
-        <!-- Username -->
-        <ion-row>
-          <ion-col></ion-col>
-          <ion-col
-            ><h6>@{{ username }}</h6></ion-col
-          >
-          <ion-col></ion-col>
-        </ion-row>
-        <!-- Buttons -->
-        <ion-row>
-          <ion-col></ion-col>
-          <ion-col>
-            <ion-button @click="showTutorial"
-              >Show Tutorial on Next Launch</ion-button
-            >
-          </ion-col>
-          <ion-col></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col></ion-col>
-          <ion-col>
-            <ion-button @click="logout">Log Out</ion-button>
-          </ion-col>
-          <ion-col></ion-col>
-        </ion-row>
-      </ion-grid>
+      <img :src="gravatarURL" alt="Profile Image" id="profileImage" />
+      <h2>
+        {{ fullName }}
+      </h2>
+      <h6>@{{ username }}</h6>
+      <ion-button @click="showTutorial"
+        >Show Tutorial on Next Launch</ion-button
+      >
+      <ion-button @click="logout">Log Out</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -120,7 +83,7 @@ const showTutorial = async () => {
   border-radius: 50%;
 }
 
-ion-col {
+ion-content {
   text-align: center;
 }
 h2 {

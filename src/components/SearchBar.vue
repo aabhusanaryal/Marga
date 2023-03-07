@@ -86,7 +86,6 @@ const clickSearchResultItm = (idx) => {
 };
 let result;
 onMounted(async () => {
-  console.log("Reached herea")
   let res = await fetch(`https://marga-backend.onrender.com/getnodes`);
   res = await res.json();
   console.log(res);

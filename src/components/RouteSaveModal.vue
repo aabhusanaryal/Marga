@@ -24,15 +24,9 @@
       <ion-icon :icon="closeCircle" @click="removeYatayat(idx)"></ion-icon>
     </ion-chip>
     <ion-item>
-      <ion-label position="floating"
-        >Enter the name of vehicles that run in this route</ion-label
-      >
-      <ion-input
-        placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
-        v-model="yatayat"
-        @keyup.enter="onInputYatayat"
-        enterkeyhint="enter"
-      ></ion-input>
+      <ion-label position="floating">Enter the name of vehicles that run in this route</ion-label>
+      <ion-input placeholder="e.g. Nepal Yatayat, Safa Tempo etc." v-model="yatayat" @keyup.enter="onInputYatayat"
+        enterkeyhint="enter"></ion-input>
     </ion-item>
     <br />
     <ion-chip v-for="(vehicleType, idx) in vehicleTypeList" :key="idx">
@@ -40,23 +34,14 @@
       <ion-icon :icon="closeCircle" @click="removeVehicleType(idx)"></ion-icon>
     </ion-chip>
     <ion-item>
-      <ion-label position="floating"
-        >Enter the types of vehicles that run in this route</ion-label
-      >
-      <ion-input
-        placeholder="e.g. Micro, Tempo, Bus, etc."
-        v-model="vehicleType"
-        @keyup.enter="onInputVehicleType"
-        enterkeyhint="enter"
-      ></ion-input>
+      <ion-label position="floating">Enter the types of vehicles that run in this route</ion-label>
+      <ion-input placeholder="e.g. Micro, Tempo, Bus, etc." v-model="vehicleType" @keyup.enter="onInputVehicleType"
+        enterkeyhint="enter"></ion-input>
     </ion-item>
     <br />
     <ion-item>
       <ion-label position="floating">Source of information</ion-label>
-      <ion-input
-        placeholder="e.g. Self, Yatayat Karyalaya etc."
-        v-model="dataSource"
-      ></ion-input>
+      <ion-input placeholder="e.g. Self, Yatayat Karyalaya etc." v-model="dataSource"></ion-input>
     </ion-item>
     <br />
     <ion-item>The stops you entered are:</ion-item>
