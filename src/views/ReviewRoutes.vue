@@ -38,9 +38,9 @@ import { search } from "ionicons/icons";
 import SearchBar from "@/components/SearchBar.vue";
 import { onMounted, ref } from "vue";
 import router from "@/router";
-import RouteModal from "../components/DetailModal.vue"
 import { useRouteStore } from "@/store/routeStore";
 
+// import RouteModal from "../components/DetailModal.vue"
 
 const routeStore=useRouteStore();
 onMounted(async () => {
@@ -48,16 +48,16 @@ onMounted(async () => {
 });
 
 const openRouteDetails = async (idx) => {
-  const modal=await modalController.create({
-    component: RouteModal,
-    componentProps:{idx},
-    breakpoints:[0,0.5, 0.75, 0.95, 1],
-    initialBreakpoint: 0.95
-  });
+  // const modal=await modalController.create({
+  //   component: RouteModal,
+  //   componentProps:{idx},
+  //   breakpoints:[0,0.5, 0.75, 0.95, 1],
+  //   initialBreakpoint: 0.95
+  // });
 
-  modal.present();
-
-  // router.push(path:`/tabs/review/${idx}`,params:{id:idx})
+  // modal.present();
+  console.log(`/tabs/review/${idx}`)
+  router.push({path:`/tabs/review/${idx}`,params:{idx}})
 };
 </script>
 <style scoped>
