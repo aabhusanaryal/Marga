@@ -23,24 +23,17 @@
           <h5>{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</h5>
           <br/>
           <ion-item v-if="searchClicked">
-            <!-- <ion-item v-for="stops,i in n" :key="i"> -->
-            <ion-item>
-
-              <p>{{stop.name}}</p>
+            <ion-item v-for="stops,i in n.route" :key="i">
+              <ion-item v-if="searchedTerm===stops.stopName">
+                <br/>
+                <p>{{ i+1 }}: {{ stops.stopName }}</p>
+                <!-- <h1>Reached here</h1> -->
+              </ion-item>
             </ion-item>
           </ion-item>
         </ion-item>
       </ion-list>
 
-      <!-- <ion-list  v-if="searchClicked">
-        <h1>search clicked is true</h1>
-        <ion-item v-for="idx,i in viewRouteID"
-        :key="i"
-        @click="openRouteDetails(idx)">
-        <h1>ID: {{ idx }}</h1>
-          <p>{{ routeStore.routeDetails[idx].route[0].name }} - {{ routeStore.routeDetails[idx].route[routeStore.routeDetails[idx].route.length - 1].name }}</p>
-        </ion-item>
-      </ion-list> -->
     </ion-content>
   </ion-page>
 </template>
@@ -68,10 +61,8 @@ import { useRouteStore } from "@/store/routeStore";
 const routeStore=useRouteStore();
 let routeInfo = ref([]);
 let searchClicked = false;
-let stop=[{
-  name:"Stop name",
-  num:0
-}]
+let searchedTerm;
+// let busStopName;
 
 // let stop = [{
   // id:"route index/id",
@@ -124,6 +115,7 @@ const clickSearchedBusStop=(event)=>{
     for (stops in rte.route){
       if(rte.route[stops].lat==event.lat && rte.route[stops].lng == event.lng){
         console.log(true)
+        // busStopName=
         routeInfo.value.push(rte)
         break
       }

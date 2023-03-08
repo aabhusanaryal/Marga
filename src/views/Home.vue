@@ -72,7 +72,7 @@ onMounted(async () => {
   console.log("Mounter from homepage.");
   map = await createMapInstance("map-home");
   // let busRouteList = await fetch(
-  //   `https://marga-backend.onrender.com/getallroutes`,
+  //   `https://marga-backend.aabhusanaryal.com.np/getallroutes`,
   //   {
   //     method: "GET",
   //   }
@@ -130,7 +130,7 @@ const findRoutes = async () => {
     console.log(JSON.stringify(bodyData));
     // Code to fetch the bus route list:
     let busRouteList = await fetch(
-      `https://marga-backend.onrender.com/getroutes?start=${start.node_id}&end=${destination.node_id}`,
+      `https://marga-backend.aabhusanaryal.com.np/getroutes?start=${start.node_id}&end=${destination.node_id}`,
       {
         method: "POST",
         body: JSON.stringify(bodyData),

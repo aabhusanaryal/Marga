@@ -100,7 +100,7 @@ const registerClicked = async () => {
   showLoadingSpinner.value = true;
   // console.log(JSON.stringify(userInfo));
   try {
-    userData = await fetch("https://marga-backend.onrender.com/register", {
+    userData = await fetch("https://marga-backend.aabhusanaryal.com.np/register", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(userInfo),

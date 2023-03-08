@@ -81,7 +81,7 @@ const submitLoginForm = async (e) => {
   formData.append("username", username);
   formData.append("password", password);
 
-  let data = await fetch(`https://marga-backend.onrender.com/token`, {
+  let data = await fetch(`https://marga-backend.aabhusanaryal.com.np/token`, {
     method: "POST",
     body: formData,
   });

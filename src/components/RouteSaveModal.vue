@@ -127,7 +127,7 @@ const confirm = async () => {
   }
   showLoadingSpinner.value = true;
   try {
-    const req = await fetch("https://marga-backend.onrender.com/addroute/", {
+    const req = await fetch("https://marga-backend.aabhusanaryal.com.np/addroute/", {
       method: "POST",
       body: JSON.stringify(bodyData),
       headers: { "content-type": "application/json" },

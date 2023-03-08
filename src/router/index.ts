@@ -91,7 +91,7 @@ router.beforeEach(async (to) => {
   if(!routeStore.detailsLoaded){
     console.log("The details are being loaded.")
     let busRouteList:Response = await fetch(
-    `https://marga-backend.onrender.com/getallroutes`,
+    `https://marga-backend.aabhusanaryal.com.np/getallroutes`,
     {
       method: "GET",
     }

@@ -59,7 +59,7 @@ const searchbarChange = async () => {
       if (res.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
         results.value.push(res);
     });
-    //   let res = await fetch(`https://marga-backend.onrender.com/getnodes`);
+    //   let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
     //   res = await res.json();
     //   console.log(res);
     //   // res.features.forEach((ftr) => console.log(ftr.properties.name));
@@ -86,7 +86,7 @@ const clickSearchResultItm = (idx) => {
 };
 let result;
 onMounted(async () => {
-  let res = await fetch(`https://marga-backend.onrender.com/getnodes`);
+  let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
   res = await res.json();
   console.log(res);
   result = res;
