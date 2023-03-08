@@ -50,7 +50,7 @@ let justSearched = false;
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
-    console.log("just searched here ")
+    // console.log("just searched here ")
     return;
   }
   if (searchTerm.value) {
