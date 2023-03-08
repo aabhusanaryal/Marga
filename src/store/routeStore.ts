@@ -6,8 +6,8 @@ export const useRouteStore=defineStore("route",()=>{
     let routeDetails = useLocalStorage("routeDetails",[]);
     let nodeDetails=useLocalStorage("nodeDetails", []);
     // let routeDetails=[];
-    // let detailsLoaded=useLocalStorage("detailsLoaded",false);
-    let detailsLoaded=false;
+    let detailsLoaded=useLocalStorage("detailsLoaded",false);
+    // let detailsLoaded=false;
 
 
     return {

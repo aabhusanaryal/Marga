@@ -32,25 +32,68 @@ import {
     IonItem,
     IonList,
     IonButton,
-    IonButtons
+    IonButtons,
+    toastController
 } from "@ionic/vue";
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useRouteStore } from '@/store/routeStore';
 
 const route=useRoute()
+const router=useRouter()
 const routeStore=useRouteStore();
 const id:number= route.params.routeID;
 const routeInfo = routeStore.routeDetails[id];
+let text="Thank you for voting!"
+let route_id, vote_type
 
-
-const upVote=()=>{
-    console.log("Upvote");
-    //increase the count for validity for a route.
+const votingDetails={
+    route_id:id,
+    vote_type:"upvote"
 }
 
-const downVote=()=>{
+const upVote=async ()=>{
+    votingDetails.vote_type="upvote";
+    console.log(votingDetails)
+    //send user details token as well store user details as well
+    //check if this user has already voted for that route or not 
+    
+
+    let res=await fetch("https://marga-backend.aabhusanaryal.com.np/vote",{
+        method:"POST",
+        body:JSON.stringify(votingDetails),
+        headers:{"content-type":"application/json"}
+    })
+    res=await res.json();
+    console.log(res);
+    console.log("Upvote");
+    router.push("/tabs/review");
+    presentToast("bottom", text);
+}
+
+const presentToast = async (position: "top" | "middle" | "bottom", text) => {
+    const toast = await toastController.create({
+        message: text,
+        duration: 1500,
+        position: position,
+    });
+
+    await toast.present();
+};
+
+const downVote=async ()=>{
+    votingDetails.vote_type = "downvote";
+    console.log(votingDetails)
+    let res = await fetch("https://marga-backend.aabhusanaryal.com.np/vote", {
+        method: "POST",
+        body: JSON.stringify(votingDetails),
+        headers: { "content-type": "application/json" }
+    })
+    res = await res.json();
+    console.log(res);
     console.log("Downvote");
-    //decrease the count for validity for a route.
+    router.push("/tabs/review");
+    presentToast("bottom", text);
 }
 console.log("Route ID: ",id)
 
