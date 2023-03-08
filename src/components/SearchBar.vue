@@ -28,6 +28,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/vue";
+import { useRouteStore } from "@/store/routeStore";
 
 const props = defineProps(["placeholder"]);
 const emit = defineEmits(["clickSearchResultItm"]);
@@ -47,9 +48,14 @@ let noResultMsg = "No results found.";
 // Important flag. Used so that the searchbarChange doesnt trigger when the value of the searchBar is changed inside the clickSearchResultItm function
 let justSearched = false;
 
+
+//
+const routeStore=useRouteStore();
+
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
+    console.log("just searched here ");
     // console.log("just searched here ")
     return;
   }
@@ -85,11 +91,14 @@ const clickSearchResultItm = (idx) => {
   }
 };
 let result;
+
 onMounted(async () => {
-  let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
-  res = await res.json();
-  console.log(res);
-  result = res;
+  // let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
+  // res = await res.json();
+  // console.log(res);
+  // result = res;
+  result=routeStore.nodeDetails;
+  console.log("The loaded node list are: (Search page) ",result)
 });
 </script>
 

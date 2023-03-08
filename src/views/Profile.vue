@@ -44,7 +44,9 @@ let emailAddress = ref(authStore.emailAddress);
 let fullName = ref(authStore.fullName);
 let username = ref(authStore.username);
 const imageHash = ref(md5(emailAddress.value));
-const gravatarURL = ref(`https://www.gravatar.com/avatar/${imageHash.value}?s=200`);
+const gravatarURL = ref(
+  `https://www.gravatar.com/avatar/${imageHash.value}?s=200`
+);
 console.log(emailAddress, imageHash, gravatarURL);
 
 onIonViewWillEnter(() => {
