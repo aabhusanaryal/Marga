@@ -17,7 +17,7 @@
         <ion-item>The intermediate bus stops are:</ion-item>
         <ion-list>
             <ion-item v-for="(stop, idx) in routeInfo.route" :key="idx">
-                {{ idx + 1 }}. {{ stop.stopName }}
+                {{ idx + 1 }}. {{ stop.name }}
             </ion-item>
         </ion-list>
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">
@@ -52,21 +52,19 @@ import {
 } from "ionicons/icons"
 
 import { ref, defineEmits } from "vue";
-import { useAuthStore } from "@/store/authStore";
+import { useRouteStore } from "@/store/routeStore";
 
-const authStore=useAuthStore();
+const routeStore=useRouteStore();
 const props = defineProps(["idx"]);
-const routeInfo = authStore.routeDetails[props.idx]
+const routeInfo = routeStore.routeDetails[props.idx]
 
 let showLoadingSpinner = ref(false);
 
 const cancel = () => {
-    
     return modalController.dismiss(null, "cancel");
 };
 
 const confirm = async () => {
-    
     return modalController.dismiss("confirm");
 };
 
