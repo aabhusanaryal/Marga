@@ -6,7 +6,6 @@
       @ionChange="searchbarChange"
       v-model="searchTerm"
       debounce="1"
-      :disabled="disabled"
     />
     <ion-list v-if="resultsNameOnly">
       <ion-item
@@ -29,29 +28,25 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/vue";
-
+import { useRouteStore } from "@/store/routeStore";
 const props = defineProps(["placeholder"]);
 const emit = defineEmits(["clickSearchResultItm"]);
-let disabled = ref(true);
 // OpenRouteService API Key
 const apiKey = process.env.VUE_APP_ORS_API;
-
 //Whatever value is typed by the user in the search box.
 const searchTerm = ref("");
-
 // Stores search results
 const results = ref([]);
 const resultsNameOnly = ref([]);
-
 let noResultMsg = "No results found.";
-
 // Important flag. Used so that the searchbarChange doesnt trigger when the value of the searchBar is changed inside the clickSearchResultItm function
 let justSearched = false;
-
+//
+const routeStore = useRouteStore();
 const searchbarChange = async () => {
   if (justSearched) {
     justSearched = false;
-    console.log("just searched here ");
+    // console.log("just searched here ")
     return;
   }
   if (searchTerm.value) {
@@ -75,7 +70,6 @@ const searchbarChange = async () => {
   resultsNameOnly.value = results.value.map((res) => res.name);
   console.log(resultsNameOnly.value);
 };
-
 const clickSearchResultItm = (idx) => {
   if (results.value[idx].name != noResultMsg) {
     emit("clickSearchResultItm", results.value[idx]);
@@ -87,11 +81,12 @@ const clickSearchResultItm = (idx) => {
 };
 let result;
 onMounted(async () => {
-  let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
-  res = await res.json();
-  console.log(res);
-  result = res;
-  disabled.value = false;
+  // let res = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
+  // res = await res.json();
+  // console.log(res);
+  // result = res;
+  result = routeStore.nodeDetails;
+  console.log("The node details are: ", result);
 });
 </script>
 

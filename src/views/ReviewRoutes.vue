@@ -12,26 +12,27 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list v-if="!searchClicked">
+      <!-- <ion-list v-if="!searchClicked"> -->
+      <ion-list>
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
         <ion-item
-          v-for="(n, idx) in routeStore.routeDetails"
+          v-for="(n, idx) in routeInfo"
           :key="idx"
           @click="openRouteDetails(idx)"
         >
-          <p>{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</p>
+          <h5 v-if="n.route[0]">{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</h5>
+          
+          <!-- <span v-if="searchClicked">
+            <span v-for="stops,i in n.route" :key="i">
+              <span v-if="searchedTerm===stops.name">
+                <br/>
+                <p>{{ i+1 }}: {{ stops.name }}</p>
+              </span>
+            </span>
+          </span> -->
         </ion-item>
       </ion-list>
 
-      <ion-list  v-if="searchClicked">
-        <h1>search clicked is true</h1>
-        <ion-item v-for="idx,i in viewRouteID"
-        :key="i"
-        @click="openRouteDetails(idx)">
-        <h1>{{ idx }}</h1>
-          <p>{{ routeStore.routeDetails[idx].route[0].name }} - {{ routeStore.routeDetails[idx].route[routeStore.routeDetails[idx].route.length - 1].name }}</p>
-        </ion-item>
-      </ion-list>
     </ion-content>
   </ion-page>
 </template>
@@ -43,9 +44,9 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
-  modalController,
   IonItem,
   IonList,
+  onIonViewWillEnter,
 } from "@ionic/vue";
 import { search } from "ionicons/icons";
 import SearchBar from "@/components/SearchBar.vue";
@@ -56,42 +57,43 @@ import { useRouteStore } from "@/store/routeStore";
 // import RouteModal from "../components/DetailModal.vue"
 
 const routeStore=useRouteStore();
-onMounted(async () => {
-  console.log("Reached at review routes page.");
-});
+let routeInfo = ref([]);
+let searchClicked = false;
+let searchedTerm;
+
+routeInfo.value=routeStore.routeDetails;
+
+onIonViewWillEnter(()=>{
+  routeInfo.value=routeStore.routeDetails;
+  searchClicked=false;
+    console.log("Reached at review routes page.");
+})
 
 const openRouteDetails = async (idx) => {
-  // const modal=await modalController.create({
-  //   component: RouteModal,
-  //   componentProps:{idx},
-  //   breakpoints:[0,0.5, 0.75, 0.95, 1],
-  //   initialBreakpoint: 0.95
-  // });
-
-  // modal.present();
   console.log(`/tabs/review/${idx}`)
   router.push({path:`/tabs/review/${idx}`,params:{idx}})
 };
 
 //when cross button is clicked then set the search clicked back to false
-let routes,stops;
-let searchClicked=false;
 
 const clickSearchedBusStop=(event)=>{
+  routeInfo.value=[]
   searchClicked=true;
-  let index = 0;
-  let viewRouteID: [] = [];
-  console.log("clicked on search button from review routes ",event.lng, event.lat);
-  for (routes in routeStore.routeDetails){
-    for (stops in routeStore.routeDetails[routes].route){
-      if (routeStore.routeDetails[routes].route[stops].lat == event.lat && routeStore.routeDetails[routes].route[stops].lng == event.lng) {
-        viewRouteID.push(index);
-        break;
+  let stops;
+
+  console.log("Before loop route info has: ", routeInfo.value)
+  routeStore.routeDetails.forEach((rte)=>{
+    for (stops in rte.route){
+      if(rte.route[stops].lat==event.lat && rte.route[stops].lng == event.lng){
+        console.log(true)
+        searchedTerm=rte.route[stops].name
+
+        routeInfo.value.push(rte)
+        break
       }
     }
-    index=index+1;
-  }
-  console.log(viewRouteID)
+    console.log("Route info has: ",routeInfo.value)
+  })  
 
 }
 
