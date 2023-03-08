@@ -52,6 +52,7 @@ import { onMounted } from "vue";
 import { Geolocation } from "@capacitor/geolocation";
 import L from "leaflet";
 import { createMapInstance } from "@/map";
+import { randomColorPicker } from "@/randomColorPicker";
 import { ref } from "vue";
 
 // Imports other than leaflet
@@ -67,7 +68,10 @@ let showLoadingSpinner = ref(false);
 
 const authStore = useAuthStore();
 onMounted(async () => {
-  map = await createMapInstance("map-home");
+  map = await createMapInstance(
+    "map-home"
+    // "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+  );
 });
 
 onIonViewDidEnter(() => {
@@ -171,8 +175,6 @@ const findRoutes = async () => {
       // Drawing path between route stops
       let stopIdx = 1;
       routeSwitches[data].forEach(async (bus) => {
-        let coordinates = [];
-
         const markerStart = L.marker([bus[0].lat, bus[0].lng]).addTo(map);
         markerStart
           .bindTooltip(`${bus[0].stopName}`, {
@@ -191,6 +193,7 @@ const findRoutes = async () => {
 
         console.log(bus[0].stopName, bus[bus.length - 1].stopName);
 
+        let coordinates = [];
         bus.forEach((stop, idx) => {
           coordinates.push([stop.lng, stop.lat]);
           // Drawing bus icon marker at each stop
@@ -228,16 +231,6 @@ const findRoutes = async () => {
   } else {
     presentToast("bottom", "Please select start and destination nodes!");
   }
-  const randomColorPicker = () => {
-    const randomInt = (min, max) => {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-
-    const h = randomInt(0, 360);
-    const s = randomInt(42, 98);
-    const l = randomInt(40, 90);
-    return `hsl(${h},${s}%,${l}%)`;
-  };
 };
 
 // Toast Generator / Presentor

@@ -4,9 +4,11 @@ import "leaflet-rotate";
 import "leaflet.locatecontrol";
 import { alertController } from "@ionic/vue";
 
-const createMapInstance = async (divID) => {
+const createMapInstance = async (
+  divID,
+  tileProvider = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+) => {
   // Setting up leaflet to display the map inside div#map-home
-  console.log("creating map");
   let map = L.map(divID, {
     rotate: false,
     rotateControl: {
@@ -20,7 +22,7 @@ const createMapInstance = async (divID) => {
   }).setView([27.7166, 85.3485], 16);
   // dark mode tiles link:
   // https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png
-  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+  L.tileLayer(tileProvider, {
     maxZoom: 19,
     attribution:
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
