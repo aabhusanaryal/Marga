@@ -89,6 +89,9 @@ import {
 import { closeCircle } from "ionicons/icons";
 
 import { ref, defineEmits } from "vue";
+import { useAuthStore } from "@/store/authStore";
+
+const authStore = useAuthStore();
 const props = defineProps(["busStops"]);
 let showLoadingSpinner = ref(false);
 
@@ -147,7 +150,10 @@ const confirm = async () => {
       {
         method: "POST",
         body: JSON.stringify(bodyData),
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${authStore.accessToken}`,
+        },
       }
     );
   } catch {

@@ -6,6 +6,7 @@
       @ionChange="searchbarChange"
       v-model="searchTerm"
       debounce="1"
+      :disabled="disabled"
     />
     <ion-list v-if="resultsNameOnly">
       <ion-item
@@ -31,7 +32,7 @@ import {
 
 const props = defineProps(["placeholder"]);
 const emit = defineEmits(["clickSearchResultItm"]);
-
+let disabled = ref(true);
 // OpenRouteService API Key
 const apiKey = process.env.VUE_APP_ORS_API;
 
@@ -90,6 +91,7 @@ onMounted(async () => {
   res = await res.json();
   console.log(res);
   result = res;
+  disabled.value = false;
 });
 </script>
 

@@ -5,7 +5,7 @@
         <ion-title>Profile</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content class="ion-padding">
       <img :src="gravatarURL" alt="Profile Image" id="profileImage" />
       <h2>
         {{ fullName }}

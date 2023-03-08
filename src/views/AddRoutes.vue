@@ -12,7 +12,6 @@
           placeholder="Search"
           @clickSearchResultItm="clickSearchResultItm"
         />
-
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -96,20 +95,19 @@ onMounted(async () => {
           Accept:
             "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
           "Content-Type": "application/json",
-          Authorization:
-            "5b3ce3597851110001cf6248db241cd9150149008e788cee52b77f81",
+          Authorization: `${process.env.VUE_APP_ORS_API}`,
         },
         body: JSON.stringify(bodyData),
       });
       geoJSON = await geoJSON.json();
-      console.log(geoJSON)
+      console.log(geoJSON);
       stopName = geoJSON.features[0].properties.osm_tags.name;
     } catch {
       geoJSON = await fetch(
         `https://api.openrouteservice.org/geocode/reverse?api_key=${process.env.VUE_APP_ORS_API}&point.lon=${latlng.lng}&point.lat=${latlng.lat}`
       );
       geoJSON = await geoJSON.json();
-      console.log("Seconf",geoJSON)
+      console.log("Seconf", geoJSON);
       stopName = geoJSON.features[0].properties.label;
     }
     marker.bindTooltip(stopName, { permanent: true }).openTooltip();

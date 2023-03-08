@@ -68,20 +68,6 @@ let showLoadingSpinner = ref(false);
 const authStore = useAuthStore();
 onMounted(async () => {
   map = await createMapInstance("map-home");
-  let bodyData = {
-    start: 1,
-    end: 9,
-  };
-  let busRouteList = await fetch(
-    `https://marga-backend.onrender.com/getroutes?start=1&end=9`,
-    {
-      method: "POST",
-      body: JSON.stringify(bodyData),
-      headers: { "content-type": "application/json" },
-    }
-  );
-  busRouteList = await busRouteList.json();
-  authStore.routeDetails = busRouteList;
 });
 
 onIonViewDidEnter(() => {
@@ -127,7 +113,7 @@ const findRoutes = async () => {
     };
     // Code to fetch the bus route list:
     let busRouteList = await fetch(
-      `https://marga-backend.onrender.com/getroutes?start=${start.node_id}&end=${destination.node_id}`,
+      `https://marga-backend.aabhusanaryal.com.np/getroutes?start=${start.node_id}&end=${destination.node_id}`,
       {
         method: "POST",
         body: JSON.stringify(bodyData),
@@ -136,9 +122,26 @@ const findRoutes = async () => {
     );
     busRouteList = await busRouteList.json();
 
+    // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
+    let routeSwitches = [];
+
+    busRouteList.forEach((busRoute) => {
+      let arr = [[]]; // Required 2D array
+      busRoute.route.forEach((busStop, idx) => {
+        if (!busStop.change) arr[arr.length - 1].push(busStop);
+        else {
+          arr[arr.length - 1].push(busStop);
+          arr.push([]);
+          arr[arr.length - 1].push(busStop);
+        }
+      });
+      routeSwitches.push(arr);
+    });
+
+    console.log(busRouteList, routeSwitches);
     const modal = await modalController.create({
       component: Modal,
-      componentProps: { busRouteList },
+      componentProps: { routeSwitches },
       breakpoints: [0, 0.3, 0.95],
       initialBreakpoint: 0.3,
     });
@@ -155,30 +158,48 @@ const findRoutes = async () => {
         if (!layer._url) map.removeLayer(layer);
       });
 
-      // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
-      let routeSwitches = [[]]; // Required 2D array
-      busRouteList[data].route.forEach((busStop, idx) => {
-        if (!busStop.change)
-          routeSwitches[routeSwitches.length - 1].push(busStop);
-        else {
-          routeSwitches[routeSwitches.length - 1].push(busStop);
-          routeSwitches.push([]);
-          routeSwitches[routeSwitches.length - 1].push(busStop);
-        }
-      });
+      const busMarker = L.icon({
+        iconUrl: require("@/assets/bus.png"),
+        // shadowUrl: "leaf-shadow.png",
 
+        iconSize: [17, 20], // size of the icon
+        // shadowSize: [50, 64], // size of the shadow
+        iconAnchor: [15, 15], // point of the icon which will correspond to marker's location
+        // shadowAnchor: [4, 62], // the same for the shadow
+        popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+      });
       // Drawing path between route stops
-      routeSwitches.forEach(async (route) => {
+      let stopIdx = 1;
+      routeSwitches[data].forEach(async (bus) => {
         let coordinates = [];
-        route.forEach((stop, idx) => {
+
+        const markerStart = L.marker([bus[0].lat, bus[0].lng]).addTo(map);
+        markerStart
+          .bindTooltip(`${bus[0].stopName}`, {
+            permanent: true,
+          })
+          .openTooltip();
+        const markerStop = L.marker([
+          bus[bus.length - 1].lat,
+          bus[bus.length - 1].lng,
+        ]).addTo(map);
+        markerStop
+          .bindTooltip(`${bus[bus.length - 1].stopName}`, {
+            permanent: true,
+          })
+          .openTooltip();
+
+        console.log(bus[0].stopName, bus[bus.length - 1].stopName);
+
+        bus.forEach((stop, idx) => {
           coordinates.push([stop.lng, stop.lat]);
-          // Drawing marker at each stop
-          const marker = L.marker([stop.lat, stop.lng]).addTo(map);
-          marker
-            .bindTooltip(`${idx + 1} ${stop.stopName}`, {
-              permanent: true,
-            })
-            .openTooltip();
+          // Drawing bus icon marker at each stop
+          const marker = L.marker([stop.lat, stop.lng], {
+            icon: busMarker,
+          }).addTo(map);
+          marker.bindTooltip(`${stop.stopName}`, {
+            permanent: false,
+          });
         });
         const bodyData = {
           coordinates,

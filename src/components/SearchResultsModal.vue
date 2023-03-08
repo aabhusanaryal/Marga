@@ -1,21 +1,30 @@
 <template>
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
-      <ion-slide v-for="(itm, idx) in busRouteList" :key="idx">
+      <ion-slide v-for="(route, idx) in routeSwitches" :key="idx">
         <ion-card>
           <ion-card-header>
-            <!-- <ion-card-title>{{ itm.name }}</ion-card-title> -->
-            <ion-card-content v-for="(route, idx) in itm.route" :key="idx">
-              <p>{{ route.stopName }}<br /></p>
-            </ion-card-content>
-            <ion-card-subtitle></ion-card-subtitle>
-          </ion-card-header>
-          <p>
-            <b
-              >Number of bus changes:{{ itm.details.change }} <br />Distance(in
-              km): {{ itm.details.km }}</b
+            <ion-card-title
+              >{{ route[0][0].stopName }} -
+              {{
+                route[route.length - 1][route[0].length - 1].stopName
+              }}</ion-card-title
             >
-          </p>
+            <ion-card-subtitle>
+              <ion-chip>
+                <ion-icon :icon="bus" color="primary"></ion-icon>
+                <ion-label>{{ routeSwitches.length + 1 }} buses</ion-label>
+              </ion-chip>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item v-for="(bus, idx) in route" :key="idx"
+                >Bus {{ idx + 1 }}. {{ bus[0].stopName }} -
+                {{ bus[bus.length - 1].stopName }}</ion-item
+              >
+            </ion-list>
+          </ion-card-content>
           <ion-buttons>
             <ion-button @click="confirm(idx)">Select</ion-button>
           </ion-buttons>
@@ -38,10 +47,17 @@ import {
   IonSlide,
   IonButtons,
   IonButton,
+  IonItem,
+  IonList,
+  IonIcon,
+  IonLabel,
+  IonChip,
 } from "@ionic/vue";
+import { bus } from "ionicons/icons";
+
 import { defineComponent } from "vue";
 
-const props = defineProps(["busRouteList"]);
+const props = defineProps(["routeSwitches"]);
 
 // console.log("From search results modal: ")
 // console.log(props.modalList1);
