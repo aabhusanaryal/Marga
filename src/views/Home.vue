@@ -66,15 +66,23 @@ let map;
 let showLoadingSpinner = ref(false);
 
 const authStore = useAuthStore();
+const busMarker = L.icon({
+  iconUrl: require(`@/assets/bus.svg`),
+  // shadowUrl: "leaf-shadow.png",
+  iconSize: [38, 95], // size of the icon
+  // shadowSize: [50, 64], // size of the shadow
+  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+  // shadowAnchor: [4, 62], // the same for the shadow
+  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+});
 onMounted(async () => {
-  console.log("Mounter from homepage.");
   map = await createMapInstance("map-home");
   let bodyData = {
     start: 1,
     end: 9,
   };
   let busRouteList = await fetch(
-    `https://marga-backend.onrender.com/getroutes?start=1&end=9`,
+    `https://marga-backend.aabhusanaryal.com.np/getroutes?start=1&end=9`,
     {
       method: "POST",
       body: JSON.stringify(bodyData),
@@ -83,7 +91,6 @@ onMounted(async () => {
   );
   busRouteList = await busRouteList.json();
   authStore.routeDetails = busRouteList;
-  console.log("Homepage bus route list: ", authStore.routeDetails);
 });
 
 onIonViewDidEnter(() => {
@@ -104,13 +111,11 @@ let distance, changes;
 const clickStartSearchResultItm = (event) => {
   //event stroes the location value
   start = event;
-  console.log(event);
   if (startMarker) map.removeLayer(startMarker);
   startMarker = L.marker([event.lat, event.lng], {
     draggable: true,
   }).addTo(map);
   map.flyTo([event.lat, event.lng], 17);
-  console.log([event.lat, event.lng]);
 };
 
 const clickDestinationSearchResultItm = (event) => {
@@ -120,21 +125,18 @@ const clickDestinationSearchResultItm = (event) => {
     draggable: true,
   }).addTo(map);
   map.flyTo([event.lat, event.lng], 17);
-  console.log([event.lat, event.lng]);
 };
 
 const findRoutes = async () => {
   if (start && destination) {
     showLoadingSpinner.value = true;
-    console.log("Start");
     let bodyData = {
       start: start.node_id,
       end: destination.node_id,
     };
-    console.log(JSON.stringify(bodyData));
     // Code to fetch the bus route list:
     let busRouteList = await fetch(
-      `https://marga-backend.onrender.com/getroutes?start=${start.node_id}&end=${destination.node_id}`,
+      `https://marga-backend.aabhusanaryal.com.np/getroutes?start=${start.node_id}&end=${destination.node_id}`,
       {
         method: "POST",
         body: JSON.stringify(bodyData),
@@ -150,10 +152,10 @@ const findRoutes = async () => {
       initialBreakpoint: 0.3,
     });
     modal.present();
-    console.log("Stop");
     showLoadingSpinner.value = false;
 
     const { data, role } = await modal.onWillDismiss();
+
     if (role === "confirm") {
       // Removing everything before rendering new markers
       map.eachLayer((layer) => {
@@ -161,19 +163,10 @@ const findRoutes = async () => {
         // PS: Only the tile layer has _url
         if (!layer._url) map.removeLayer(layer);
       });
-      // for (let i = 0; i < modalList1[data].route.length; i++) {
 
-      // }
-      // changes = modalList1[data].details.change;
-      // distance = modalList1[data].details.km;
-      // map.setView(
-      //   [modalList1[data].route[0].lat, modalList1[data].route[0].lng],
-      //   16
-      // );
-      let routeSwitches = [[]];
+      // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
+      let routeSwitches = [[]]; // Required 2D array
       busRouteList[data].route.forEach((busStop, idx) => {
-        console.log(busStop);
-        // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
         if (!busStop.change)
           routeSwitches[routeSwitches.length - 1].push(busStop);
         else {
@@ -181,22 +174,23 @@ const findRoutes = async () => {
           routeSwitches.push([]);
           routeSwitches[routeSwitches.length - 1].push(busStop);
         }
-        console.log("Route switches are: ", routeSwitches);
-        const marker = L.marker([busStop.lat, busStop.lng]).addTo(map);
-        marker
-          .bindTooltip(`${idx + 1} ${busStop.stopName}`, {
-            permanent: true,
-          })
-          .openTooltip();
       });
+
       // Drawing path between route stops
       routeSwitches.forEach(async (route) => {
-        console.log("R", route);
         let coordinates = [];
-        route.forEach((stop) => {
+        route.forEach((stop, idx) => {
           coordinates.push([stop.lng, stop.lat]);
+          // Drawing marker at each stop
+          const marker = L.marker([stop.lat, stop.lng], {
+            icon: busMarker,
+          }).addTo(map);
+          marker
+            .bindTooltip(`${idx + 1} ${stop.stopName}`, {
+              permanent: true,
+            })
+            .openTooltip();
         });
-        console.log(coordinates);
         const bodyData = {
           coordinates,
         };
@@ -218,14 +212,8 @@ const findRoutes = async () => {
             weight: 5,
           },
         }).addTo(map);
-        console.log(res);
+        res;
       });
-      // console.log(routeSwitches);
-      // busRouteList[data].forEach((route) => {
-      //   let stops = route.route;
-      //   console.log(stops);
-
-      // });
     }
   } else {
     presentToast("bottom", "Please select start and destination nodes!");

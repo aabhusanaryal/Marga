@@ -100,11 +100,14 @@ const registerClicked = async () => {
   showLoadingSpinner.value = true;
   // console.log(JSON.stringify(userInfo));
   try {
-    userData = await fetch("https://marga-backend.onrender.com/register", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(userInfo),
-    });
+    userData = await fetch(
+      "https://marga-backend.aabhusanaryal.com.np/register",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(userInfo),
+      }
+    );
     userData = await userData.json();
     console.log(userData);
   } catch (err) {

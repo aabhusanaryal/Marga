@@ -24,9 +24,15 @@
       <ion-icon :icon="closeCircle" @click="removeYatayat(idx)"></ion-icon>
     </ion-chip>
     <ion-item>
-      <ion-label position="floating">Enter the name of vehicles that run in this route</ion-label>
-      <ion-input placeholder="e.g. Nepal Yatayat, Safa Tempo etc." v-model="yatayat" @keyup.enter="onInputYatayat"
-        enterkeyhint="enter"></ion-input>
+      <ion-label position="floating"
+        >Enter the name of vehicles that run in this route</ion-label
+      >
+      <ion-input
+        placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
+        v-model="yatayat"
+        @keyup.enter="onInputYatayat"
+        enterkeyhint="enter"
+      ></ion-input>
     </ion-item>
     <br />
     <ion-chip v-for="(vehicleType, idx) in vehicleTypeList" :key="idx">
@@ -34,14 +40,23 @@
       <ion-icon :icon="closeCircle" @click="removeVehicleType(idx)"></ion-icon>
     </ion-chip>
     <ion-item>
-      <ion-label position="floating">Enter the types of vehicles that run in this route</ion-label>
-      <ion-input placeholder="e.g. Micro, Tempo, Bus, etc." v-model="vehicleType" @keyup.enter="onInputVehicleType"
-        enterkeyhint="enter"></ion-input>
+      <ion-label position="floating"
+        >Enter the types of vehicles that run in this route</ion-label
+      >
+      <ion-input
+        placeholder="e.g. Micro, Tempo, Bus, etc."
+        v-model="vehicleType"
+        @keyup.enter="onInputVehicleType"
+        enterkeyhint="enter"
+      ></ion-input>
     </ion-item>
     <br />
     <ion-item>
       <ion-label position="floating">Source of information</ion-label>
-      <ion-input placeholder="e.g. Self, Yatayat Karyalaya etc." v-model="dataSource"></ion-input>
+      <ion-input
+        placeholder="e.g. Self, Yatayat Karyalaya etc."
+        v-model="dataSource"
+      ></ion-input>
     </ion-item>
     <br />
     <ion-item>The stops you entered are:</ion-item>
@@ -127,11 +142,14 @@ const confirm = async () => {
   }
   showLoadingSpinner.value = true;
   try {
-    const req = await fetch("https://marga-backend.onrender.com/addroute/", {
-      method: "POST",
-      body: JSON.stringify(bodyData),
-      headers: { "content-type": "application/json" },
-    });
+    const req = await fetch(
+      "https://marga-backend.aabhusanaryal.com.np/addroute/",
+      {
+        method: "POST",
+        body: JSON.stringify(bodyData),
+        headers: { "content-type": "application/json" },
+      }
+    );
   } catch {
     const toast = await toastController.create({
       message: "There was an error. Please try again later!",
