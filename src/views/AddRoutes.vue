@@ -74,7 +74,7 @@ onMounted(async () => {
   map.on("click", async (event) => {
     const latlng = map.mouseEventToLatLng(event.originalEvent);
     const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
-    console.log(`${latlng.lat}, ${latlng.lng}`);
+
     // Reverse geocoding
     let url = "https://api.openrouteservice.org/pois";
     let bodyData = {
@@ -110,9 +110,25 @@ onMounted(async () => {
       console.log("Seconf", geoJSON);
       stopName = geoJSON.features[0].properties.label;
     }
-    marker.bindTooltip(stopName, { permanent: true }).openTooltip();
     busStops.push({ lat: latlng.lat, lng: latlng.lng, stopName, marker });
+    marker.bindTooltip(stopName, { permanent: true }).openTooltip();
     // console.log(busStops);
+  });
+
+  // Keyboard Shortcuts
+  // Ctrl + Z
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault(); // present "Save Page" from getting triggered.
+      undoMarker();
+    }
+  });
+  // Ctrl + S
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault(); // present "Save Page" from getting triggered.
+      saveData();
+    }
   });
 });
 
@@ -152,14 +168,14 @@ const saveData = async () => {
   }
 };
 
-const undoMarker = (e) => {
+const undoMarker = (e = "") => {
   console.log("Undo marker", e);
   if (busStops.length) {
     let stop = busStops.pop();
     map.removeLayer(stop?.marker);
   }
   // Not closing the fab when undo is pressed
-  if (busStops.length) e.stopImmediatePropagation();
+  if (busStops.length && e) e.stopImmediatePropagation();
 };
 
 const deleteMarkers = () => {
