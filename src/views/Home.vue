@@ -229,8 +229,14 @@ const findRoutes = async () => {
     presentToast("bottom", "Please select start and destination nodes!");
   }
   const randomColorPicker = () => {
-    let n = (Math.random() * 0xfffff * 1000000).toString(16);
-    return "#" + n.slice(0, 6);
+    const randomInt = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    const h = randomInt(0, 360);
+    const s = randomInt(42, 98);
+    const l = randomInt(40, 90);
+    return `hsl(${h},${s}%,${l}%)`;
   };
 };
 
