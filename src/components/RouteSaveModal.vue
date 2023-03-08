@@ -133,7 +133,7 @@ const bodyData = {
 };
 
 console.log(bodyData, JSON.stringify(bodyData));
-
+let message = "";
 const confirm = async () => {
   if (yatayat.value) {
     yatayatList.value.push(yatayat.value);
@@ -156,17 +156,19 @@ const confirm = async () => {
         },
       }
     );
+    message = "Route added for review!";
   } catch {
-    const toast = await toastController.create({
-      message: "There was an error. Please try again later!",
-      duration: 1500,
-      position: "bottom",
-    });
-
-    await toast.present();
+    message = "There was an error. Please try again later!";
   }
+  const toast = await toastController.create({
+    message: message,
+    duration: 1500,
+    position: "bottom",
+  });
+
   showLoadingSpinner.value = false;
-  return modalController.dismiss("confirm");
+  await toast.present();
+  return modalController.dismiss("", "confirm");
 };
 
 //fetch the data about loongitude and latitue

@@ -140,10 +140,16 @@ const saveData = async () => {
 
   modal.present();
 
-  // const { role } = await modal.onWillDismiss();
-  // if (role === "confirm") {
-  //   showLoadingSpinner = false;
-  // }
+  const { role } = await modal.onWillDismiss();
+
+  if (role === "confirm") {
+    console.log("Dismiss");
+    map.eachLayer((layer) => {
+      // Removing everything other than the tile layer
+      // PS: Only the tile layer has _url
+      if (!layer._url) map.removeLayer(layer);
+    });
+  }
 };
 
 const undoMarker = (e) => {
