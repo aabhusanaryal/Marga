@@ -99,8 +99,16 @@ router.beforeEach(async (to) => {
     busRouteList = await busRouteList.json();
     console.log(busRouteList)
     routeStore.routeDetails = busRouteList;
+
+    console.log("The nodes are being loaded.")
+    let nodeList:Response = await fetch(`https://marga-backend.aabhusanaryal.com.np/getnodes`);
+    nodeList=await nodeList.json();
+    routeStore.nodeDetails=nodeList;
+    // console.log("The node list is: ",routeStore.nodeDetails)
     console.log("Bus route lists are: ", routeStore.routeDetails);
     routeStore.detailsLoaded=true;
+
+  
   }
 
   // Yedi page ma auth chainxa vane ani user authenticated xaina vane redirect to login

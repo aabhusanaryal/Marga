@@ -13,12 +13,6 @@
                     {{ idx + 1 }}. {{ stop.name }}
                 </ion-item>
             </ion-list>
-            
-            <!-- <ion-item>
-                Number of bus changes: {{  }}</br>
-                Distance:</br>
-                Location for bus change:</br>
-            </ion-item> -->
             <ion-buttons>
                 <ion-button @click="upVote()">UPVOTE</ion-button>
                 <ion-button @click="downVote()">DOWNVOTE</ion-button>

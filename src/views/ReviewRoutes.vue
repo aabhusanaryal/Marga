@@ -20,17 +20,16 @@
           :key="idx"
           @click="openRouteDetails(idx)"
         >
-          <h5>{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</h5>
-          <br/>
-          <ion-item v-if="searchClicked">
-            <ion-item v-for="stops,i in n.route" :key="i">
-              <ion-item v-if="searchedTerm===stops.stopName">
+          <h5 v-if="n.route[0]">{{ n.route[0].name }} - {{ n.route[n.route.length-1].name }}</h5>
+          
+          <!-- <span v-if="searchClicked">
+            <span v-for="stops,i in n.route" :key="i">
+              <span v-if="searchedTerm===stops.name">
                 <br/>
-                <p>{{ i+1 }}: {{ stops.stopName }}</p>
-                <!-- <h1>Reached here</h1> -->
-              </ion-item>
-            </ion-item>
-          </ion-item>
+                <p>{{ i+1 }}: {{ stops.name }}</p>
+              </span>
+            </span>
+          </span> -->
         </ion-item>
       </ion-list>
 
@@ -45,7 +44,6 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
-  modalController,
   IonItem,
   IonList,
   onIonViewWillEnter,
@@ -62,34 +60,16 @@ const routeStore=useRouteStore();
 let routeInfo = ref([]);
 let searchClicked = false;
 let searchedTerm;
-// let busStopName;
-
-// let stop = [{
-  // id:"route index/id",
-//   name: "Stop name",
-//   num: 0
-// }]
 
 routeInfo.value=routeStore.routeDetails;
-
-onMounted(async () => {
-  console.log("Reached at review routes page.");
-});
 
 onIonViewWillEnter(()=>{
   routeInfo.value=routeStore.routeDetails;
   searchClicked=false;
+    console.log("Reached at review routes page.");
 })
 
 const openRouteDetails = async (idx) => {
-  // const modal=await modalController.create({
-  //   component: RouteModal,
-  //   componentProps:{idx},
-  //   breakpoints:[0,0.5, 0.75, 0.95, 1],
-  //   initialBreakpoint: 0.95
-  // });
-
-  // modal.present();
   console.log(`/tabs/review/${idx}`)
   router.push({path:`/tabs/review/${idx}`,params:{idx}})
 };
@@ -98,24 +78,16 @@ const openRouteDetails = async (idx) => {
 
 const clickSearchedBusStop=(event)=>{
   routeInfo.value=[]
-  console.log("Before loop route info has: ", routeInfo.value)
   searchClicked=true;
-  // for (routes in routeStore.routeDetails){
-  //   for (stops in routeStore.routeDetails[routes].route){
-  //     if (routeStore.routeDetails[routes].route[stops].lat == event.lat && routeStore.routeDetails[routes].route[stops].lng == event.lng) {
-  //       viewRouteID.push(index);
-  //       break;
-  //     }
-  //   }
-  //   index=index+1;
-  // }
   let stops;
 
+  console.log("Before loop route info has: ", routeInfo.value)
   routeStore.routeDetails.forEach((rte)=>{
     for (stops in rte.route){
       if(rte.route[stops].lat==event.lat && rte.route[stops].lng == event.lng){
         console.log(true)
-        // busStopName=
+        searchedTerm=rte.route[stops].name
+
         routeInfo.value.push(rte)
         break
       }
