@@ -40,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "review",
-        component: () => import("@/views/ReviewRoutes.vue"),
+        component: () => import("@/views/AllRoutes.vue"),
       },
       {
         path: "review/:routeID",

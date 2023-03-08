@@ -2,7 +2,7 @@
   <ion-content class="ion-padding">
     <ion-slides :options="slideOptions">
       <ion-slide v-for="(route, idx) in routeSwitches" :key="idx">
-        <ion-card>
+        <ion-card @click="confirm(idx)">
           <ion-card-header>
             <ion-card-title
               >{{ route[0][0].stopName }} -
@@ -25,9 +25,9 @@
               >
             </ion-list>
           </ion-card-content>
-          <ion-buttons>
+          <!-- <ion-buttons>
             <ion-button @click="confirm(idx)">Select</ion-button>
-          </ion-buttons>
+          </ion-buttons> -->
         </ion-card>
       </ion-slide>
     </ion-slides>
@@ -60,7 +60,7 @@ import { defineComponent } from "vue";
 const props = defineProps(["routeSwitches"]);
 
 // console.log("From search results modal: ")
-// console.log(props.modalList1);
+console.log(props.routeSwitches);
 
 const slideOptions = {
   slidesPerView: 1.2,
@@ -73,4 +73,8 @@ const confirm = (idx: number) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+ion-card {
+  cursor: pointer;
+}
+</style>
