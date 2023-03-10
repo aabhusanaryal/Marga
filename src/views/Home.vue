@@ -68,6 +68,11 @@ let showLoadingSpinner = ref(false);
 const authStore = useAuthStore();
 onMounted(async () => {
   map = await createMapInstance("map-home");
+  //Finding out the time since last time the routedetails were updated
+  // let year, month, time, hour, minute, second, millisecond;
+  // const now=new Date().getTime();
+  // let lastUpdateDiff=
+  // console.log(now);
 });
 
 onIonViewDidEnter(() => {

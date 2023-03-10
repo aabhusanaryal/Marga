@@ -44,8 +44,8 @@ const router=useRouter()
 const routeStore=useRouteStore();
 const id:number= route.params.routeID;
 const routeInfo = routeStore.routeDetails[id];
-let text="Thank you for voting!"
-let route_id, vote_type
+let text="Thank you for voting!";
+let route_id, vote_type;
 
 const votingDetails={
     route_id:id,
@@ -57,7 +57,6 @@ const upVote=async ()=>{
     console.log(votingDetails)
     //send user details token as well store user details as well
     //check if this user has already voted for that route or not 
-    
 
     let res=await fetch("https://marga-backend.aabhusanaryal.com.np/vote",{
         method:"POST",

@@ -8,10 +8,17 @@ export const useRouteStore = defineStore("route", () => {
   // let routeDetails=[];
   let detailsLoaded = useLocalStorage("detailsLoaded", false);
   // let detailsLoaded=false;
+  let lastUpdatedTime=useLocalStorage<number>("lastUpdatedTime",0);
+  // const reset=()=>{
+  //   routeDetails=[];
+  //   nodeDetails=[];
+  //   detailsLoaded=false;
+  // }
 
   return {
     routeDetails,
     detailsLoaded,
     nodeDetails,
+    lastUpdatedTime
   };
 });

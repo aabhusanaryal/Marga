@@ -76,18 +76,32 @@ router.beforeEach(async (to) => {
   // Auth is requrired if the page about to be visited is not in publicPages
   const authRequired = !publicPages.includes(to.path);
 
-  console.log();
-  console.log("Information about the current page: ");
-  console.log("Current path: ", to.path);
-  console.log("Authentication Required: ", authRequired);
-  console.log("User is logged in: ", authStore.userAuthenticated);
-  console.log("First time user: ", authStore.firstUse);
+  // console.log();
+  // console.log("Information about the current page: ");
+  // console.log("Current path: ", to.path);
+  // console.log("Authentication Required: ", authRequired);
+  // console.log("User is logged in: ", authStore.userAuthenticated);
+  // console.log("First time user: ", authStore.firstUse);
 
   if (authStore.firstUse) {
     authStore.firstUse = false;
     router.push("/slides");
   }
 
+  //check the last time the information was updated:
+  const now:number=new Date().getTime();
+  console.log("Current time:",now);
+  console.log("Last updated time: ", routeStore.lastUpdatedTime)
+  let lastUpdateDiff=now-routeStore.lastUpdatedTime;
+
+  if (lastUpdateDiff>10000){
+    console.log("The difference is greater than 10 second")
+  }
+  console.log("The difference is:",lastUpdateDiff)
+
+
+
+  //load the values of route and node details
   if (!routeStore.detailsLoaded) {
     console.log("The details are being loaded.");
     let busRouteList: Response = await fetch(
