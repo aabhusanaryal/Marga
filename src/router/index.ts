@@ -10,6 +10,11 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/tabs/home",
   },
   {
+    name: "ViewAllRoutes",
+    path: "/viewall",
+    component: () => import("@/views/ViewAllRoutes.vue"),
+  },
+  {
     path: "/slides",
     component: () => import("@/views/Tutorial.vue"),
   },
@@ -35,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "review",
-        component: () => import("@/views/ReviewRoutes.vue"),
+        component: () => import("@/views/AllRoutes.vue"),
       },
       {
         path: "review/:routeID",

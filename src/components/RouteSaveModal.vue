@@ -93,6 +93,7 @@ import { useAuthStore } from "@/store/authStore";
 
 const authStore = useAuthStore();
 const props = defineProps(["busStops"]);
+
 let showLoadingSpinner = ref(false);
 
 const cancel = () => {
@@ -130,10 +131,11 @@ const bodyData = {
   yatayat: yatayatList.value,
   vehicleTypes: vehicleTypeList.value,
   route: props.busStops.map(({ marker, ...keepAttrs }) => keepAttrs),
+  geoJSON: "",
 };
 
-console.log(bodyData, JSON.stringify(bodyData));
-
+let message = "";
+let geoJSON = "";
 const confirm = async () => {
   if (yatayat.value) {
     yatayatList.value.push(yatayat.value);
@@ -145,6 +147,22 @@ const confirm = async () => {
   }
   showLoadingSpinner.value = true;
   try {
+    geoJSON = await fetch(
+      "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `${process.env.VUE_APP_ORS_API}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          coordinates: props.busStops.map((stop) => [stop.lng, stop.lat]),
+        }),
+      }
+    );
+    geoJSON = await geoJSON.json();
+
+    bodyData.geoJSON = JSON.stringify(geoJSON);
     const req = await fetch(
       "https://marga-backend.aabhusanaryal.com.np/addroute/",
       {
@@ -156,17 +174,19 @@ const confirm = async () => {
         },
       }
     );
+    message = "Route added for review!";
   } catch {
-    const toast = await toastController.create({
-      message: "There was an error. Please try again later!",
-      duration: 1500,
-      position: "bottom",
-    });
-
-    await toast.present();
+    message = "There was an error. Please try again later!";
   }
+  const toast = await toastController.create({
+    message: message,
+    duration: 1500,
+    position: "bottom",
+  });
+
   showLoadingSpinner.value = false;
-  return modalController.dismiss("confirm");
+  await toast.present();
+  return modalController.dismiss(geoJSON, "confirm");
 };
 
 //fetch the data about loongitude and latitue
