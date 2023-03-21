@@ -17,6 +17,20 @@
         <ion-button @click="upVote()">UPVOTE</ion-button>
         <ion-button @click="downVote()">DOWNVOTE</ion-button>
       </ion-buttons>
+
+      <div v-if="isAdmin" >
+        <ion-fab slot="fixed" vertical="bottom" horizontal="end" >
+          <ion-fab-button 
+            @click="publish()">
+            Publish
+          </ion-fab-button>
+          <ion-fab-button 
+            @click="del()">
+              Delete
+            </ion-fab-button>
+        </ion-fab>
+      </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -34,11 +48,16 @@ import {
   IonButton,
   IonButtons,
   toastController,
+  IonFab,
+  IonFabButton
 } from "@ionic/vue";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import { useRouteStore } from "@/store/routeStore";
+import { useAuthStore } from "@/store/authStore";
 
+const authStore=useAuthStore();
+// authStore.role="admin";
 const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
@@ -47,10 +66,51 @@ const routeInfo = routeStore.routeDetails[id];
 let text = "Thank you for voting!";
 let route_id, vote_type;
 
+let isAdmin=authStore.roles.includes("admin")
+console.log(authStore.roles)
+console.log(isAdmin)
+
 const votingDetails = {
   route_id: id,
   vote_type: "upvote",
 };
+const routeDetailID = {
+  route_id: id,
+}
+
+const del = async () => {
+  console.log("Delete as admins")
+  
+
+  console.log(routeDetailID)
+  let res= await fetch("https://marga-backend.aabhusanaryal.com.np/deleteroute",
+  {
+    method:"POST",
+    headers:{
+        Authorization: `Bearer ${authStore.accessToken}`,
+        "content-type": "application/json",
+    },
+    body:JSON.stringify(routeDetailID)
+  })
+  res=await res.json();
+  console.log(res);
+}
+
+const publish=async ()=>{
+  console.log("Publised by admin")
+  let res = await fetch("https://marga-backend.aabhusanaryal.com.np/approve",
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${authStore.accessToken}`,
+
+      },
+      body: JSON.stringify(routeDetailID)
+    })
+  res = await res.json();
+  console.log(res);
+}
 
 const upVote = async () => {
   votingDetails.vote_type = "upvote";
@@ -61,7 +121,9 @@ const upVote = async () => {
   let res = await fetch("https://marga-backend.aabhusanaryal.com.np/vote", {
     method: "POST",
     body: JSON.stringify(votingDetails),
-    headers: { "content-type": "application/json" },
+    headers: { 
+        "content-type": "application/json",
+   },
   });
   res = await res.json();
   console.log(res);

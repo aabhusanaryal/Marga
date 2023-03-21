@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
   let username = useLocalStorage("username", "");
   let fullName = useLocalStorage("full_name", "");
   let emailAddress = useLocalStorage("emailAddress", "");
+  let roles= useLocalStorage("roles",[]);
 
   return {
     accessToken,
@@ -21,5 +22,6 @@ export const useAuthStore = defineStore("auth", () => {
     username,
     fullName,
     emailAddress,
+    roles,
   };
 });

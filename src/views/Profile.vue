@@ -63,6 +63,7 @@ const logout = () => {
   authStore.fullName = "";
   authStore.username = "";
   authStore.emailAddress = "";
+  authStore.role="";
   authStore.userAuthenticated = false;
   router.push("/");
 };

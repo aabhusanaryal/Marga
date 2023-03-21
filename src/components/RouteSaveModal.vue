@@ -24,9 +24,12 @@
       <ion-icon :icon="closeCircle" @click="removeYatayat(idx)"></ion-icon>
     </ion-chip>
     <ion-item>
-      <ion-label position="floating"
+      <!-- <ion-label position="floating"
         >Enter the name of vehicles that run in this route</ion-label
-      >
+      > -->
+       <ion-label position="floating"
+          >Enter yatayats that run in this route</ion-label
+        >
       <ion-input
         placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
         v-model="yatayat"
@@ -35,20 +38,48 @@
       ></ion-input>
     </ion-item>
     <br />
-    <ion-chip v-for="(vehicleType, idx) in vehicleTypeList" :key="idx">
+    <!-- <ion-chip v-for="(vehicleType, idx) in vehicleTypeList" :key="idx">
       <ion-label>{{ vehicleType }}</ion-label>
       <ion-icon :icon="closeCircle" @click="removeVehicleType(idx)"></ion-icon>
-    </ion-chip>
+    </ion-chip> -->
+    <ion-label position="floating"
+          >Select the types of vehicles that run in this route</ion-label
+        >
     <ion-item>
-      <ion-label position="floating"
+      <!-- <ion-label position="floating"
         >Enter the types of vehicles that run in this route</ion-label
-      >
-      <ion-input
+      > -->
+    <div>
+      <ion-item v-for="vehicle, idx in allVehicles" :key="idx">
+        <ion-checkbox slot="start" class="vehicleCheckbox" :name="vehicle"></ion-checkbox>
+        <ion-label>{{vehicle}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox slot="start" v-model="other"></ion-checkbox>
+        <ion-label>Other</ion-label>
+        <!-- <ion-input 
+          placeholder="Enter the vehicle type"
+          v-if="other"
+          v-model="vehicle">
+        </ion-input> -->
+      </ion-item>
+
+      <ion-item v-if="other">
+        <ion-label position="floating">Enter the vehicle type:</ion-label>
+        <ion-input
+          placeholder="Enter the vehicle type"
+          v-model="vehicle"
+        ></ion-input>
+      </ion-item>
+
+    </div>
+      <!-- <ion-input
         placeholder="e.g. Micro, Tempo, Bus, etc."
         v-model="vehicleType"
         @keyup.enter="onInputVehicleType"
         enterkeyhint="enter"
-      ></ion-input>
+      ></ion-input> -->
     </ion-item>
     <br />
     <ion-item>
@@ -85,6 +116,7 @@ import {
   toastController,
   IonSpinner,
   IonChip,
+  IonCheckbox
 } from "@ionic/vue";
 import { closeCircle } from "ionicons/icons";
 
@@ -106,26 +138,31 @@ let yatayatList = ref([]);
 let yatayat = ref("");
 let vehicleTypeList = ref([]);
 let vehicleType = ref("");
+const allVehicles=['Bus', 'Micro', 'Tempo', 'Minibus']
+let other=ref(false)
+let vehicle
 
 const onInputYatayat = () => {
   yatayatList.value.push(yatayat.value);
   yatayat.value = "";
   console.log(yatayatList.value);
 };
-const onInputVehicleType = () => {
-  vehicleTypeList.value.push(vehicleType.value);
-  vehicleType.value = "";
-  console.log(vehicleTypeList.value);
-};
+
+// const onInputVehicleType = () => {
+//   vehicleTypeList.value.push(vehicleType.value);
+//   vehicleType.value = "";
+//   console.log(vehicleTypeList.value);
+// };
 
 const removeYatayat = (idx) => {
   if (idx == 0) yatayatList.value = yatayatList.value.splice(1);
   yatayatList.value.splice(idx, idx);
 };
-const removeVehicleType = (idx) => {
-  if (idx == 0) vehicleTypeList.value = vehicleTypeList.value.splice(1);
-  vehicleTypeList.value.splice(idx, idx);
-};
+// const removeVehicleType = (idx) => {
+//   if (idx == 0) vehicleTypeList.value = vehicleTypeList.value.splice(1);
+//   vehicleTypeList.value.splice(idx, idx);
+// };
+
 const bodyData = {
   name: name || "",
   yatayat: yatayatList.value,
@@ -137,6 +174,10 @@ const bodyData = {
 let message = "";
 let geoJSON = "";
 const confirm = async () => {
+  console.log("Value of other: ",other.value)
+  if(other.value){
+      vehicleTypeList.value.push(vehicle);
+  }
   if (yatayat.value) {
     yatayatList.value.push(yatayat.value);
     yatayat.value = "";
@@ -145,6 +186,14 @@ const confirm = async () => {
     vehicleTypeList.value.push(vehicleType.value);
     vehicleType.value = "";
   }
+
+  document.querySelectorAll(".vehicleCheckbox").forEach((vehicle)=>{
+    if(vehicle.checked){
+      vehicleTypeList.value.push(vehicle.name);
+    }
+    console.log("Complete vehicle list: ",vehicleTypeList.value);
+  })
+
   showLoadingSpinner.value = true;
   try {
     geoJSON = await fetch(
@@ -205,4 +254,5 @@ const confirm = async () => {
   background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
 }
+
 </style>

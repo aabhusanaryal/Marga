@@ -15,6 +15,10 @@ export const useRouteStore = defineStore("route", () => {
   //   detailsLoaded=false;
   // }
 
+  const getRouteDetails=()=>{
+    console.log("j")
+  }
+
   return {
     routeDetails,
     detailsLoaded,

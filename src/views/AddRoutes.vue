@@ -51,6 +51,7 @@ import {
   IonFabList,
   IonIcon,
   IonSpinner,
+  toastController
 } from "@ionic/vue";
 import { chevronUp, save, arrowUndo, trashBin } from "ionicons/icons";
 import { onMounted, ref } from "vue";
@@ -147,25 +148,34 @@ const clickSearchResultItm = (event) => {
 
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
-  const modal = await modalController.create({
-    component: Modal,
-    componentProps: { busStops },
-    breakpoints: [0, 0.5, 0.75, 0.95, 1],
-    initialBreakpoint: 0.95,
-  });
-
-  modal.present();
-
-  const { role } = await modal.onWillDismiss();
-
-  if (role === "confirm") {
-    console.log("Dismiss");
-    map.eachLayer((layer) => {
-      // Removing everything other than the tile layer
-      // PS: Only the tile layer has _url
-      if (!layer._url) map.removeLayer(layer);
+  if (busStops.length>1){
+    console.log("true")
+    const modal = await modalController.create({
+      component: Modal,
+      componentProps: { busStops },
+      breakpoints: [0, 0.5, 0.75, 0.95, 1],
+      initialBreakpoint: 0.95,
     });
+
+    modal.present();
+
+    const { role } = await modal.onWillDismiss();
+
+    if (role === "confirm") {
+      console.log("Dismiss");
+      map.eachLayer((layer) => {
+        // Removing everything other than the tile layer
+        // PS: Only the tile layer has _url
+        if (!layer._url) map.removeLayer(layer);
+      });
+    }
   }
+  else{
+    console.log("false")
+    presentToast("middle", "Please enter the bus stops!");
+
+  }
+  
 };
 
 const undoMarker = (e = "") => {
@@ -184,6 +194,16 @@ const deleteMarkers = () => {
     let stop = busStops.pop();
     map.removeLayer(stop?.marker);
   }
+};
+
+const presentToast = async (position: "top" | "middle" | "bottom", text) => {
+  const toast = await toastController.create({
+    message: text,
+    duration: 1500,
+    position: position,
+  });
+
+  await toast.present();
 };
 </script>
 

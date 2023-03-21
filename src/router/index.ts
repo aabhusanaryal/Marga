@@ -94,15 +94,15 @@ router.beforeEach(async (to) => {
   }
 
   //check the last time the information was updated:
-  const now:number=new Date().getTime();
-  console.log("Current time:",now);
-  console.log("Last updated time: ", routeStore.lastUpdatedTime)
-  let lastUpdateDiff=now-routeStore.lastUpdatedTime;
+  // const now:number=new Date().getTime();
+  // console.log("Current time:",now);
+  // console.log("Last updated time: ", routeStore.lastUpdatedTime)
+  // let lastUpdateDiff=now-routeStore.lastUpdatedTime;
 
-  if (lastUpdateDiff>10000){
-    console.log("The difference is greater than 10 second")
-  }
-  console.log("The difference is:",lastUpdateDiff)
+  // if (lastUpdateDiff>10000){
+  //   console.log("The difference is greater than 10 second")
+  // }
+  // console.log("The difference is:",lastUpdateDiff)
 
 
 
