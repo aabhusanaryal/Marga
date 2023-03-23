@@ -27,9 +27,9 @@
       <!-- <ion-label position="floating"
         >Enter the name of vehicles that run in this route</ion-label
       > -->
-       <ion-label position="floating"
-          >Enter yatayats that run in this route</ion-label
-        >
+      <ion-label position="floating"
+        >Enter yatayats that run in this route</ion-label
+      >
       <ion-input
         placeholder="e.g. Nepal Yatayat, Safa Tempo etc."
         v-model="yatayat"
@@ -43,37 +43,40 @@
       <ion-icon :icon="closeCircle" @click="removeVehicleType(idx)"></ion-icon>
     </ion-chip> -->
     <ion-label position="floating"
-          >Select the types of vehicles that run in this route</ion-label
-        >
+      >Select the types of vehicles that run in this route</ion-label
+    >
     <ion-item>
       <!-- <ion-label position="floating"
         >Enter the types of vehicles that run in this route</ion-label
       > -->
-    <div>
-      <ion-item v-for="vehicle, idx in allVehicles" :key="idx">
-        <ion-checkbox slot="start" class="vehicleCheckbox" :name="vehicle"></ion-checkbox>
-        <ion-label>{{vehicle}}</ion-label>
-      </ion-item>
+      <div>
+        <ion-item v-for="(vehicle, idx) in allVehicles" :key="idx">
+          <ion-checkbox
+            slot="start"
+            class="vehicleCheckbox"
+            :name="vehicle"
+          ></ion-checkbox>
+          <ion-label>{{ vehicle }}</ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-checkbox slot="start" v-model="other"></ion-checkbox>
-        <ion-label>Other</ion-label>
-        <!-- <ion-input 
+        <ion-item>
+          <ion-checkbox slot="start" v-model="other"></ion-checkbox>
+          <ion-label>Other</ion-label>
+          <!-- <ion-input 
           placeholder="Enter the vehicle type"
           v-if="other"
           v-model="vehicle">
         </ion-input> -->
-      </ion-item>
+        </ion-item>
 
-      <ion-item v-if="other">
-        <ion-label position="floating">Enter the vehicle type:</ion-label>
-        <ion-input
-          placeholder="Enter the vehicle type"
-          v-model="vehicle"
-        ></ion-input>
-      </ion-item>
-
-    </div>
+        <ion-item v-if="other">
+          <ion-label position="floating">Enter the vehicle type:</ion-label>
+          <ion-input
+            placeholder="Enter the vehicle type"
+            v-model="vehicle"
+          ></ion-input>
+        </ion-item>
+      </div>
       <!-- <ion-input
         placeholder="e.g. Micro, Tempo, Bus, etc."
         v-model="vehicleType"
@@ -116,7 +119,7 @@ import {
   toastController,
   IonSpinner,
   IonChip,
-  IonCheckbox
+  IonCheckbox,
 } from "@ionic/vue";
 import { closeCircle } from "ionicons/icons";
 
@@ -138,9 +141,9 @@ let yatayatList = ref([]);
 let yatayat = ref("");
 let vehicleTypeList = ref([]);
 let vehicleType = ref("");
-const allVehicles=['Bus', 'Micro', 'Tempo', 'Minibus']
-let other=ref(false)
-let vehicle
+const allVehicles = ["Bus", "Micro", "Tempo", "Minibus"];
+let other = ref(false);
+let vehicle;
 
 const onInputYatayat = () => {
   yatayatList.value.push(yatayat.value);
@@ -168,15 +171,15 @@ const bodyData = {
   yatayat: yatayatList.value,
   vehicleTypes: vehicleTypeList.value,
   route: props.busStops.map(({ marker, ...keepAttrs }) => keepAttrs),
-  geoJSON: "",
+  geojson: "",
 };
 
 let message = "";
 let geoJSON = "";
 const confirm = async () => {
-  console.log("Value of other: ",other.value)
-  if(other.value){
-      vehicleTypeList.value.push(vehicle);
+  console.log("Value of other: ", other.value);
+  if (other.value) {
+    vehicleTypeList.value.push(vehicle);
   }
   if (yatayat.value) {
     yatayatList.value.push(yatayat.value);
@@ -187,12 +190,12 @@ const confirm = async () => {
     vehicleType.value = "";
   }
 
-  document.querySelectorAll(".vehicleCheckbox").forEach((vehicle)=>{
-    if(vehicle.checked){
+  document.querySelectorAll(".vehicleCheckbox").forEach((vehicle) => {
+    if (vehicle.checked) {
       vehicleTypeList.value.push(vehicle.name);
     }
-    console.log("Complete vehicle list: ",vehicleTypeList.value);
-  })
+    console.log("Complete vehicle list: ", vehicleTypeList.value);
+  });
 
   showLoadingSpinner.value = true;
   try {
@@ -211,18 +214,15 @@ const confirm = async () => {
     );
     geoJSON = await geoJSON.json();
 
-    bodyData.geoJSON = JSON.stringify(geoJSON);
-    const req = await fetch(
-      `${process.env.VUE_APP_BACKEND_URL}/addroute/`,
-      {
-        method: "POST",
-        body: JSON.stringify(bodyData),
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${authStore.accessToken}`,
-        },
-      }
-    );
+    bodyData.geojson = JSON.stringify(geoJSON);
+    const req = await fetch(`${process.env.VUE_APP_BACKEND_URL}/addroute/`, {
+      method: "POST",
+      body: JSON.stringify(bodyData),
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
     message = "Route added for review!";
   } catch {
     message = "There was an error. Please try again later!";
@@ -254,5 +254,4 @@ const confirm = async () => {
   background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
 }
-
 </style>
