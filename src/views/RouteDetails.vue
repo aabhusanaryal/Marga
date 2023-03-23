@@ -13,16 +13,37 @@
     </ion-header>
 
     <ion-content>
-      <ion-item>All the bus stops in this route are:</ion-item>
-      <ion-list>
-        <ion-item v-for="(stop, idx) in routeInfo.route" :key="idx">
-          {{ idx + 1 }}. {{ stop.name }}
-        </ion-item>
-      </ion-list>
-      <ion-buttons>
-        <ion-button @click="upVote()">UPVOTE</ion-button>
-        <ion-button @click="downVote()">DOWNVOTE</ion-button>
-      </ion-buttons>
+      <!-- <ion-item>All the bus stops in this route are:</ion-item> -->
+      <ion-card mode="ios">
+        <ion-card-header>
+          <ion-card-title> Title </ion-card-title>
+          <ion-card-subtitle> </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <!-- <ion-chip color="success" v-if="routeInfo.approved"
+            >Approved</ion-chip
+          >
+          <ion-chip color="warning" v-else>Under Review</ion-chip><br /> -->
+          <!-- {{ routeInfo }} -->
+          <!-- Name: {{ route.name }}<br />
+          Approved: {{ routeInfo.approved }} <br />Upvotes:
+          {{ routeInfo.upvotes }} <br />Downvotes: {{ routeInfo.downvotes }}
+          <br />Yatayat list: {{ routeInfo.yatayat }} <br />Vehicle Type:
+          {{ routeInfo.vehicleTypes }} -->
+          <strong> The intermediate stops are: </strong>
+          <ion-list>
+            <ion-item v-for="(stop, idx) in routeInfo.route" :key="idx">
+              <ion-label> {{ idx + 1 }}. {{ stop.name }} </ion-label>
+            </ion-item>
+          </ion-list>
+          {{ routeInfo.yatayat }}
+          <ion-buttons>
+            <ion-button @click="upVote()">UPVOTE</ion-button>
+            <ion-button @click="downVote()">DOWNVOTE</ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
 
       <div v-if="isAdmin">
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">
@@ -62,6 +83,12 @@ import {
   IonFabList,
   IonIcon,
   IonBackButton,
+  IonCard,
+  IonCardTitle,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonLabel,
 } from "@ionic/vue";
 import { chevronUp, save, trashBin } from "ionicons/icons";
 

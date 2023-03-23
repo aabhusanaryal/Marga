@@ -23,6 +23,13 @@ export const useRouteStore = defineStore("route", () => {
     // console.log("Bus Route List: ",busRouteList);
     routeDetails.value = data;
     console.log("The update route details are: ", routeDetails.value);
+
+    let nodeList: Response = await fetch(
+      `${process.env.VUE_APP_BACKEND_URL}/getnodes`
+    );
+    let nodes = await nodeList.json();
+    nodeDetails = nodes;
+    console.log("The updated nodes are: ", nodeDetails);
     return 1;
     // routeDetails.value = <Array>busRouteList;
   };

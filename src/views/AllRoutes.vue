@@ -10,6 +10,19 @@
           @clickSearchResultItm="clickSearchedBusStop"
         />
       </ion-toolbar>
+      <ion-toolbar>
+        <ion-segment value="all" @ionChange="filterRoutes">
+          <ion-segment-button value="all">
+            <ion-label>All</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="approved">
+            <ion-label>Approved</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="pending">
+            <ion-label>Pending</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
     </ion-header>
 
     <ion-content>
@@ -21,7 +34,7 @@
         <!-- <h1>he</h1> -->
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
         <span
-          v-for="(route, idx) in routeDetails"
+          v-for="(route, idx) in routeDetailsFiltered"
           :key="idx"
           @click="openRouteDetails(idx)"
         >
@@ -44,6 +57,7 @@
             </ion-card-header>
 
             <ion-card-content>
+              Name: {{ route.name }}<br />
               Approved: {{ route.approved }} <br />Upvotes: {{ route.upvotes }}
               <br />Downvotes: {{ route.downvotes }} <br />Yatayat list:
               {{ route.yatayat }} <br />Vehicle Type: {{ route.vehicleTypes }}
@@ -62,7 +76,7 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
-  IonItem,
+  IonSegment,
   IonList,
   onIonViewWillEnter,
   IonCard,
@@ -70,6 +84,11 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonRefresher,
+  IonCardTitle,
+  IonLabel,
+  IonSegmentButton,
+  IonRefresherContent,
+  IonChip,
 } from "@ionic/vue";
 import { search } from "ionicons/icons";
 import SearchBar from "@/components/SearchBar.vue";
@@ -82,6 +101,7 @@ import { storeToRefs } from "pinia";
 
 const routeStore = useRouteStore();
 let routeDetails;
+let routeDetailsFiltered = ref(routeDetails);
 let searchClicked = false;
 let searchedTerm;
 
@@ -89,6 +109,9 @@ onIonViewWillEnter(() => {
   routeDetails = storeToRefs(routeStore).routeDetails;
   console.log(routeDetails);
   routeDetails.value = routeStore.routeDetails;
+  // let segment = document.querySelector("ion-segment");
+  // console.log(segment.value);
+  routeDetailsFiltered.value = routeDetails.value;
   searchClicked = false;
   console.log("Reached at review routes page.");
   // console.log(routeDetails.va)
@@ -128,6 +151,22 @@ const clickSearchedBusStop = (event) => {
     }
     console.log("Route info has: ", routeDetails.value);
   });
+};
+
+const filterRoutes = (event) => {
+  let segment = event.detail.value;
+  if (segment == "all") {
+    routeDetailsFiltered.value = routeDetails.value;
+  } else if (segment == "approved") {
+    routeDetailsFiltered.value = routeDetails.value.filter(
+      (route) => route.approved
+    );
+  } else if (segment == "pending") {
+    routeDetailsFiltered.value = routeDetails.value.filter(
+      (route) => !route.approved
+    );
+  }
+  console.log(event);
 };
 </script>
 

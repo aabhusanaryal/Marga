@@ -11,10 +11,11 @@
         {{ fullName }}
       </h2>
       <h6>@{{ username }}</h6>
+      <ion-chip color="success" v-if="isAdmin">Admin</ion-chip><br />
+      <ion-button @click="logout">Log Out</ion-button>
       <ion-button @click="showTutorial"
         >Show Tutorial on Next Launch</ion-button
       >
-      <ion-button @click="logout">Log Out</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -29,9 +30,7 @@ import {
   IonButton,
   toastController,
   onIonViewWillEnter,
-  IonGrid,
-  IonRow,
-  IonCol,
+  IonChip,
 } from "@ionic/vue";
 
 import { useAuthStore } from "@/store/authStore";
@@ -47,6 +46,7 @@ const imageHash = ref(md5(emailAddress.value));
 const gravatarURL = ref(
   `https://www.gravatar.com/avatar/${imageHash.value}?s=200`
 );
+const isAdmin = ref(authStore.roles.includes("admin"));
 console.log(emailAddress, imageHash, gravatarURL);
 
 onIonViewWillEnter(() => {
@@ -55,6 +55,7 @@ onIonViewWillEnter(() => {
   username.value = authStore.username;
   emailAddress.value = authStore.emailAddress;
   imageHash.value = md5(emailAddress.value);
+  isAdmin.value = authStore.roles.includes("admin");
   gravatarURL.value = `https://www.gravatar.com/avatar/${imageHash.value}?s=200`;
 });
 
@@ -63,7 +64,7 @@ const logout = () => {
   authStore.fullName = "";
   authStore.username = "";
   authStore.emailAddress = "";
-  authStore.role="";
+  authStore.role = "";
   authStore.userAuthenticated = false;
   router.push("/");
 };
