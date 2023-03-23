@@ -17,7 +17,7 @@
         <!-- <h1>he</h1> -->
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
         <ion-item
-          v-for="(n, idx) in routeInfo"
+          v-for="(n, idx) in routeDetails"
           :key="idx"
           @click="openRouteDetails(idx)"
         >
@@ -47,19 +47,22 @@ import SearchBar from "@/components/SearchBar.vue";
 import { onMounted, ref } from "vue";
 import router from "@/router";
 import { useRouteStore } from "@/store/routeStore";
+import { storeToRefs } from "pinia";
 
 // import RouteModal from "../components/DetailModal.vue"
 
 const routeStore = useRouteStore();
-let routeInfo = ref([]);
+let routeDetails;
 let searchClicked = false;
 let searchedTerm;
 
 onIonViewWillEnter(() => {
-  routeInfo.value = routeStore.routeDetails;
+  routeDetails = storeToRefs(routeStore).routeDetails;
+  console.log(routeDetails);
+  routeDetails.value = routeStore.routeDetails;
   searchClicked = false;
   console.log("Reached at review routes page.");
-  // console.log(routeInfo.va)
+  // console.log(routeDetails.va)
 });
 
 const openRouteDetails = async (idx) => {
@@ -70,11 +73,11 @@ const openRouteDetails = async (idx) => {
 //when cross button is clicked then set the search clicked back to false
 
 const clickSearchedBusStop = (event) => {
-  routeInfo.value = [];
+  routeDetails.value = [];
   searchClicked = true;
   let stops;
 
-  console.log("Before loop route info has: ", routeInfo.value);
+  console.log("Before loop route info has: ", routeDetails.value);
   routeStore.routeDetails.forEach((rte) => {
     for (stops in rte.route) {
       if (
@@ -84,11 +87,11 @@ const clickSearchedBusStop = (event) => {
         console.log(true);
         searchedTerm = rte.route[stops].name;
 
-        routeInfo.value.push(rte);
+        routeDetails.value.push(rte);
         break;
       }
     }
-    console.log("Route info has: ", routeInfo.value);
+    console.log("Route info has: ", routeDetails.value);
   });
 };
 </script>

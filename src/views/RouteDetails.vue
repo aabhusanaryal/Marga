@@ -98,7 +98,7 @@ const del = async () => {
   setTimeout(() => {
     showLoadingSpinner.value = true;
     router.back();
-  }, 500);
+  }, 100);
 };
 
 const publish = async () => {
