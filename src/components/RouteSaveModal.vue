@@ -125,8 +125,10 @@ import { closeCircle } from "ionicons/icons";
 
 import { ref, defineEmits } from "vue";
 import { useAuthStore } from "@/store/authStore";
+import { useRouteStore } from "@/store/routeStore";
 
 const authStore = useAuthStore();
+const routeStore = useRouteStore();
 const props = defineProps(["busStops"]);
 
 let showLoadingSpinner = ref(false);
@@ -224,6 +226,7 @@ const confirm = async () => {
       },
     });
     message = "Route added for review!";
+    routeStore.getRouteDetails();
   } catch {
     message = "There was an error. Please try again later!";
   }
