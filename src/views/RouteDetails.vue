@@ -67,23 +67,22 @@
           </ion-buttons>
         </ion-card-content>
       </ion-card>
-
-      <div v-if="isAdmin">
-        <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-          <ion-fab-button>
-            <ion-icon :icon="chevronUp"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-list side="top">
-            <ion-fab-button @click="publish()">
-              <ion-icon :icon="save"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button @click="del()">
-              <ion-icon :icon="trashBin"></ion-icon>
-            </ion-fab-button>
-          </ion-fab-list>
-        </ion-fab>
-      </div>
     </ion-content>
+    <div v-if="isAdmin">
+      <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button>
+          <ion-icon :icon="chevronUp"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+          <ion-fab-button @click="publish()">
+            <ion-icon :icon="save"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="del()">
+            <ion-icon :icon="trashBin"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+    </div>
   </ion-page>
 </template>
 

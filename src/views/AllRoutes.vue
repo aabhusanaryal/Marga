@@ -58,10 +58,9 @@
             </ion-card-header>
 
             <ion-card-content>
-              Name: {{ route.name }}<br />
-              Approved: {{ route.approved }} <br />Upvotes: {{ route.upvotes }}
-              <br />Downvotes: {{ route.downvotes }} <br />Yatayat list:
-              {{ route.yatayat }} <br />Vehicle Type: {{ route.vehicleTypes }}
+              Upvotes: {{ route.upvotes }} <br />Downvotes:
+              {{ route.downvotes }} <br />Yatayat list: {{ route.yatayat }}
+              <br />Vehicle Type: {{ route.vehicleTypes }}
             </ion-card-content>
           </ion-card>
         </span>
