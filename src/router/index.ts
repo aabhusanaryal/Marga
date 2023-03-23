@@ -95,6 +95,9 @@ router.beforeEach(async (to) => {
 
   if (!routeStore.detailsLoaded) {
     console.log("The details are being loaded.");
+    // FIXME: Remove the line below later on
+    routeStore.detailsLoaded = true;
+
     let busRouteList: Response = await fetch(
       `https://marga-backend.aabhusanaryal.com.np/getallroutes`,
       {
