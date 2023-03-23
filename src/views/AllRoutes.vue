@@ -41,12 +41,13 @@
           <ion-card mode="ios">
             <ion-card-header>
               <ion-card-title>
-                <span v-if="route.route[0]"
+                <!-- <span v-if="route.route[0]"
                   >{{ route.route[0].name.slice(0, 15) }} -
                   {{
                     route.route[route.route.length - 1].name.slice(0, 15)
                   }}</span
-                >
+                > -->
+                {{ route.name }}
               </ion-card-title>
               <ion-card-subtitle>
                 <ion-chip color="success" v-if="route.approved"

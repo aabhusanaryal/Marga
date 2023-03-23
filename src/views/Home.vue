@@ -131,6 +131,7 @@ const findRoutes = async () => {
       }
     );
     busRouteList = await busRouteList.json();
+    console.log("BUS ROUTE LIST", busRouteList);
 
     // Breaking down the busStops into 2D array. Each array inside routeSwitches is a route a single bus can follow
     let routeSwitches = [];
@@ -151,7 +152,10 @@ const findRoutes = async () => {
     console.log(busRouteList, routeSwitches);
     const modal = await modalController.create({
       component: Modal,
-      componentProps: { routeSwitches },
+      componentProps: {
+        routeSwitches,
+        busRouteList,
+      },
       breakpoints: [0, 0.3, 0.95],
       initialBreakpoint: 0.3,
     });
@@ -213,25 +217,31 @@ const findRoutes = async () => {
         const bodyData = {
           coordinates,
         };
-        let res = await fetch(
-          "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `${process.env.VUE_APP_ORS_API}`,
-              "content-type": "application/json",
+
+        // Rendering path
+        busRouteList[data].geojsons.forEach((geojson) => {
+          console.log(JSON.parse(geojson));
+          L.geoJSON(JSON.parse(geojson), {
+            style: {
+              color: randomColorPicker(),
+              weight: 5,
             },
-            body: JSON.stringify(bodyData),
-          }
-        );
-        res = await res.json();
-        L.geoJSON(res, {
-          style: {
-            color: randomColorPicker(),
-            weight: 5,
-          },
-        }).addTo(map);
-        res;
+          }).addTo(map);
+        });
+        // Getting geojson from API instead
+        // let res = await fetch(
+        //   "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       Authorization: `${process.env.VUE_APP_ORS_API}`,
+        //       "content-type": "application/json",
+        //     },
+        //     body: JSON.stringify(bodyData),
+        //   }
+        // );
+        // res = await res.json();
+        // console.log("VALID GEOJSON: ", res);
       });
     }
   } else {

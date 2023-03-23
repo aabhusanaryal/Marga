@@ -16,7 +16,7 @@
       <!-- <ion-item>All the bus stops in this route are:</ion-item> -->
       <ion-card mode="ios">
         <ion-card-header>
-          <ion-card-title> Title </ion-card-title>
+          <ion-card-title> {{ routeInfo.name }} </ion-card-title>
           <ion-card-subtitle> </ion-card-subtitle>
         </ion-card-header>
 
@@ -31,13 +31,36 @@
           {{ routeInfo.upvotes }} <br />Downvotes: {{ routeInfo.downvotes }}
           <br />Yatayat list: {{ routeInfo.yatayat }} <br />Vehicle Type:
           {{ routeInfo.vehicleTypes }} -->
+          <ion-list>
+            <ion-item> Available Yatayat: {{ routeInfo.yatayat }} </ion-item>
+            <ion-item>
+              Estimated Distance:
+              {{
+                JSON.parse(routeInfo.geojson).features[0].properties.summary
+                  .distance / 1000
+              }}
+              km
+            </ion-item>
+            <ion-item>
+              Estimated Fare: Rs
+              {{
+                calculateFare(
+                  JSON.parse(routeInfo.geojson).features[0].properties.summary
+                    .distance / 1000
+                )
+              }}
+            </ion-item>
+          </ion-list>
           <strong> The intermediate stops are: </strong>
           <ion-list>
             <ion-item v-for="(stop, idx) in routeInfo.route" :key="idx">
               <ion-label> {{ idx + 1 }}. {{ stop.name }} </ion-label>
             </ion-item>
           </ion-list>
-          {{ routeInfo.yatayat }}
+          <em
+            >* The distance and bus fare are estimated quantity and may not be
+            accurate.</em
+          >
           <ion-buttons>
             <ion-button @click="upVote()">UPVOTE</ion-button>
             <ion-button @click="downVote()">DOWNVOTE</ion-button>
@@ -215,6 +238,14 @@ const downVote = async () => {
   presentToast("bottom", text);
 };
 console.log("Route ID: ", routeID);
+
+const calculateFare = (distance) => {
+  if (distance > 0 && distance <= 5) return 18;
+  else if (distance > 5 && distance <= 10) return 23;
+  else if (distance > 10 && distance <= 15) return 27;
+  else if (distance > 15 && distance <= 20) return 30;
+  else return 35;
+};
 </script>
 
 <style scoped>

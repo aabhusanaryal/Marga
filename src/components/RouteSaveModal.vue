@@ -15,8 +15,11 @@
   </ion-header>
   <ion-content class="ion-padding">
     <ion-item>
-      <ion-label position="floating">Enter a name for this rotue</ion-label>
-      <ion-input placeholder="e.g. Naxal - Pulchowk"></ion-input>
+      <ion-label position="floating">Enter a name for this route</ion-label>
+      <ion-input
+        placeholder="e.g. Naxal - Pulchowk"
+        v-model="routeName"
+      ></ion-input>
     </ion-item>
     <br />
     <ion-chip v-for="(yatayat, idx) in yatayatList" :key="idx">
@@ -144,7 +147,8 @@ const cancel = () => {
   //send the user back to the add route page with the markers as it was when they enered the page
 };
 
-let name, dataSource;
+let routeName = "";
+let dataSource;
 let yatayatList = ref([]);
 let yatayat = ref("");
 let vehicleTypeList = ref([]);
@@ -175,7 +179,7 @@ const removeYatayat = (idx) => {
 // };
 
 const bodyData = {
-  name: name || "",
+  name: routeName,
   yatayat: yatayatList.value,
   vehicleTypes: vehicleTypeList.value,
   route: props.busStops.map(({ marker, ...keepAttrs }) => keepAttrs),
@@ -186,7 +190,9 @@ let message = "";
 let geoJSON = "";
 const confirm = async () => {
   console.log("Value of other: ", other.value);
+  bodyData.name = routeName;
   if (other.value) {
+    console.log(vehicle);
     vehicleTypeList.value.push(vehicle);
   }
   if (yatayat.value) {
@@ -231,6 +237,7 @@ const confirm = async () => {
         Authorization: `Bearer ${authStore.accessToken}`,
       },
     });
+    console.log("ROUTE JSON", JSON.stringify(bodyData));
     message = "Route added for review!";
     routeStore.getRouteDetails();
   } catch {

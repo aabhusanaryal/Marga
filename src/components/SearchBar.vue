@@ -66,9 +66,9 @@ const searchbarChange = async () => {
   } else {
     results.value = [];
   }
-  console.log(results.value);
+  // console.log(results.value);
   resultsNameOnly.value = results.value.map((res) => res.name);
-  console.log(resultsNameOnly.value);
+  // console.log(resultsNameOnly.value);
 };
 const clickSearchResultItm = (idx) => {
   if (results.value[idx].name != noResultMsg) {
@@ -86,7 +86,7 @@ onMounted(async () => {
   // console.log(res);
   // result = res;
   result = routeStore.nodeDetails;
-  console.log("The node details are: ", result);
+  // console.log("The node details are: ", result);
 });
 </script>
 

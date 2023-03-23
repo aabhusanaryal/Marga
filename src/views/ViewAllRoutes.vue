@@ -49,25 +49,28 @@ onMounted(async () => {
     const bodyData = {
       coordinates,
     };
-    let res = await fetch(
-      "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `${process.env.VUE_APP_ORS_API}`,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      }
-    );
-    res = await res.json();
-    L.geoJSON(res, {
+    // let res = await fetch(
+    //   "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       Authorization: `${process.env.VUE_APP_ORS_API}`,
+    //       "content-type": "application/json",
+    //     },
+    //     body: JSON.stringify(bodyData),
+    //   }
+    // );
+    // res = await res.json();
+    // console.log(
+    //   JSON.parse(route.geojson).features[0].properties.summary.distance / 1000
+    // );
+    L.geoJSON(JSON.parse(route.geojson), {
       style: {
+        // color: randomColorPicker(),
         color: "#150d66",
         weight: 5,
       },
     }).addTo(map);
-    res;
   });
 });
 onIonViewDidEnter(() => {

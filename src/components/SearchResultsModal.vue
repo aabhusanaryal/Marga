@@ -13,7 +13,9 @@
             <ion-card-subtitle>
               <ion-chip>
                 <ion-icon :icon="bus" color="primary"></ion-icon>
-                <ion-label>{{ routeSwitches.length + 1 }} buses</ion-label>
+                <ion-label
+                  >{{ busRouteList[idx].geojsons.length }} bus</ion-label
+                >
               </ion-chip>
             </ion-card-subtitle>
           </ion-card-header>
@@ -57,7 +59,7 @@ import { bus } from "ionicons/icons";
 
 import { defineComponent } from "vue";
 
-const props = defineProps(["routeSwitches"]);
+const props = defineProps(["routeSwitches", "busRouteList"]);
 
 // console.log("From search results modal: ")
 console.log(props.routeSwitches);
