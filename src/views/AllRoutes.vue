@@ -14,6 +14,7 @@
     <ion-content>
       <!-- <ion-list v-if="!searchClicked"> -->
       <ion-list>
+        <!-- <h1>he</h1> -->
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
         <ion-item
           v-for="(n, idx) in routeInfo"
@@ -60,6 +61,7 @@ onIonViewWillEnter(() => {
   routeInfo.value = routeStore.routeDetails;
   searchClicked = false;
   console.log("Reached at review routes page.");
+  // console.log(routeInfo.va)
 });
 
 const openRouteDetails = async (idx) => {

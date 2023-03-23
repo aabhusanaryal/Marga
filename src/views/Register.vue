@@ -13,45 +13,21 @@
       <form @submit.prevent="registerClicked">
         <ion-item lines="full">
           <ion-label position="floating">Full Name</ion-label>
-          <ion-input
-            type="text"
-            v-model="userInfo.full_name"
-            required
-          ></ion-input> </ion-item
-        ><br />
+          <ion-input type="text" v-model="userInfo.full_name" required></ion-input> </ion-item><br />
         <ion-item lines="full">
           <ion-label position="floating">Username</ion-label>
-          <ion-input
-            type="text"
-            v-model="userInfo.username"
-            required
-          ></ion-input> </ion-item
-        ><br />
+          <ion-input type="text" v-model="userInfo.username" required></ion-input> </ion-item><br />
         <ion-item lines="full">
           <ion-label position="floating">Email</ion-label>
-          <ion-input
-            type="email"
-            v-model="userInfo.email"
-            required
-          ></ion-input> </ion-item
-        ><br />
+          <ion-input type="email" v-model="userInfo.email" required></ion-input> </ion-item><br />
         <ion-item lines="full">
           <ion-label position="floating">Password</ion-label>
-          <ion-input
-            type="password"
-            minlength="8"
-            maxlength="15"
-            v-model="userInfo.password"
-            :clearOnEdit="false"
-            required
-          ></ion-input> </ion-item
-        ><br />
+          <ion-input type="password" minlength="8" maxlength="15" v-model="userInfo.password" :clearOnEdit="false"
+            required></ion-input> </ion-item><br />
         <ion-button type="submit" expand="block">SUBMIT</ion-button>
       </form>
       <br />
-      <router-link class="small-text" to="/tabs/login"
-        >Already have an account? Log in.</router-link
-      >
+      <router-link class="small-text" to="/tabs/login">Already have an account? Log in.</router-link>
       <ion-item v-if="error" color="danger">
         <h3>{{ errorMessage }}</h3>
       </ion-item>

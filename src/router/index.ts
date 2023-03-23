@@ -93,24 +93,12 @@ router.beforeEach(async (to) => {
     router.push("/slides");
   }
 
-  //check the last time the information was updated:
-  // const now:number=new Date().getTime();
-  // console.log("Current time:",now);
-  // console.log("Last updated time: ", routeStore.lastUpdatedTime)
-  // let lastUpdateDiff=now-routeStore.lastUpdatedTime;
-
-  // if (lastUpdateDiff>10000){
-  //   console.log("The difference is greater than 10 second")
-  // }
-  // console.log("The difference is:",lastUpdateDiff)
-
-
-
   //load the values of route and node details
   if (!routeStore.detailsLoaded) {
     console.log("The details are being loaded.");
+    
     let busRouteList: Response = await fetch(
-      `https://marga-backend.aabhusanaryal.com.np/getallroutes`,
+      `${process.env.VUE_APP_BACKEND_URL}/getallroutes`,
       {
         method: "GET",
       }
@@ -121,7 +109,7 @@ router.beforeEach(async (to) => {
 
     console.log("The nodes are being loaded.");
     let nodeList: Response = await fetch(
-      `https://marga-backend.aabhusanaryal.com.np/getnodes`
+      `${process.env.VUE_APP_BACKEND_URL}/getnodes`
     );
     nodeList = await nodeList.json();
     routeStore.nodeDetails = nodeList;

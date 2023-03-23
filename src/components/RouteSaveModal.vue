@@ -213,7 +213,7 @@ const confirm = async () => {
 
     bodyData.geoJSON = JSON.stringify(geoJSON);
     const req = await fetch(
-      "https://marga-backend.aabhusanaryal.com.np/addroute/",
+      `${process.env.VUE_APP_BACKEND_URL}/addroute/`,
       {
         method: "POST",
         body: JSON.stringify(bodyData),

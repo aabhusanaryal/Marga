@@ -1,28 +1,35 @@
 import { defineStore } from "pinia";
 import router from "@/router";
 import { useLocalStorage } from "@vueuse/core";
+import {ref} from 'vue'
 
 export const useRouteStore = defineStore("route", () => {
-  let routeDetails = useLocalStorage("routeDetails", []);
+  let routeDetails = ref(useLocalStorage("routeDetails", []));
   let nodeDetails = useLocalStorage("nodeDetails", []);
   // let routeDetails=[];
   let detailsLoaded = useLocalStorage("detailsLoaded", false);
   // let detailsLoaded=false;
-  let lastUpdatedTime=useLocalStorage<number>("lastUpdatedTime",0);
-  // const reset=()=>{
-  //   routeDetails=[];
-  //   nodeDetails=[];
-  //   detailsLoaded=false;
-  // }
 
-  const getRouteDetails=()=>{
-    console.log("j")
+  const getRouteDetails= async ()=>{
+    let busRouteList= await fetch(
+      `${process.env.VUE_APP_BACKEND_URL}/getallroutes`,
+      {
+        method: "GET",
+      }
+    );
+    let data=await busRouteList.json();
+    busRouteList = await busRouteList.json();
+    // <Array>busRouteList
+    // console.log("Bus Route List: ",busRouteList);
+    routeDetails.value=data;
+    console.log("The update route details are: ", routeDetails.value)
+    // routeDetails.value = <Array>busRouteList;
   }
 
   return {
     routeDetails,
     detailsLoaded,
     nodeDetails,
-    lastUpdatedTime
+    getRouteDetails
   };
 });

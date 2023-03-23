@@ -123,7 +123,7 @@ const findRoutes = async () => {
     };
     // Code to fetch the bus route list:
     let busRouteList = await fetch(
-      `https://marga-backend.aabhusanaryal.com.np/getroutes?start=${start.node_id}&end=${destination.node_id}`,
+      `${process.env.VUE_APP_BACKEND_URL}/getroutes?start=${start.node_id}&end=${destination.node_id}`,
       {
         method: "POST",
         body: JSON.stringify(bodyData),

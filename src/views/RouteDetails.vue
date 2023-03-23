@@ -83,7 +83,7 @@ const del = async () => {
   
 
   console.log(routeDetailID)
-  let res= await fetch("https://marga-backend.aabhusanaryal.com.np/deleteroute",
+  let res= await fetch(`${process.env.VUE_APP_BACKEND_URL}/deleteroute`,
   {
     method:"POST",
     headers:{
@@ -93,12 +93,14 @@ const del = async () => {
     body:JSON.stringify(routeDetailID)
   })
   res=await res.json();
-  console.log(res);
+  console.log("response from delete:",res);
+  routeStore.getRouteDetails();
+
 }
 
 const publish=async ()=>{
   console.log("Publised by admin")
-  let res = await fetch("https://marga-backend.aabhusanaryal.com.np/approve",
+  let res = await fetch(`${process.env.VUE_APP_BACKEND_URL}/approve`,
     {
       method: "POST",
       headers: {
@@ -118,7 +120,7 @@ const upVote = async () => {
   //send user details token as well store user details as well
   //check if this user has already voted for that route or not
 
-  let res = await fetch("https://marga-backend.aabhusanaryal.com.np/vote", {
+  let res = await fetch(`${process.env.VUE_APP_BACKEND_URL}/vote`, {
     method: "POST",
     body: JSON.stringify(votingDetails),
     headers: { 
@@ -145,7 +147,7 @@ const presentToast = async (position: "top" | "middle" | "bottom", text) => {
 const downVote = async () => {
   votingDetails.vote_type = "downvote";
   console.log(votingDetails);
-  let res = await fetch("https://marga-backend.aabhusanaryal.com.np/vote", {
+  let res = await fetch(`${process.env.VUE_APP_BACKEND_URL}/vote`, {
     method: "POST",
     body: JSON.stringify(votingDetails),
     headers: { "content-type": "application/json" },
