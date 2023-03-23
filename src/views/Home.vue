@@ -219,29 +219,37 @@ const findRoutes = async () => {
         };
 
         // Rendering path
-        busRouteList[data].geojsons.forEach((geojson) => {
-          console.log(JSON.parse(geojson));
-          L.geoJSON(JSON.parse(geojson), {
-            style: {
-              color: randomColorPicker(),
-              weight: 5,
-            },
-          }).addTo(map);
-        });
-        // Getting geojson from API instead
-        // let res = await fetch(
-        //   "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       Authorization: `${process.env.VUE_APP_ORS_API}`,
-        //       "content-type": "application/json",
+        // busRouteList[data].geojsons.forEach((geojson) => {
+        //   console.log(JSON.parse(geojson));
+        //   L.geoJSON(JSON.parse(geojson), {
+        //     style: {
+        //       color: randomColorPicker(),
+        //       weight: 5,
         //     },
-        //     body: JSON.stringify(bodyData),
-        //   }
-        // );
-        // res = await res.json();
-        // console.log("VALID GEOJSON: ", res);
+        //   }).addTo(map);
+        // });
+        // Getting geojson from API instead
+        let res = await fetch(
+          "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `${process.env.VUE_APP_ORS_API}`,
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
+        res = await res.json();
+
+        L.geoJSON(res, {
+          style: {
+            color: randomColorPicker(),
+            weight: 5,
+          },
+        }).addTo(map);
+
+        console.log("VALID GEOJSON: ", res);
       });
     }
   } else {
