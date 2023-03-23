@@ -5,6 +5,9 @@
     </div>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
         <ion-title>Details</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -23,8 +26,17 @@
 
       <div v-if="isAdmin">
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-          <ion-fab-button @click="publish()"> Publish </ion-fab-button>
-          <ion-fab-button @click="del()"> Delete </ion-fab-button>
+          <ion-fab-button>
+            <ion-icon :icon="chevronUp"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="top">
+            <ion-fab-button @click="publish()">
+              <ion-icon :icon="save"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button @click="del()">
+              <ion-icon :icon="trashBin"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
         </ion-fab>
       </div>
     </ion-content>
@@ -47,7 +59,12 @@ import {
   IonFab,
   IonSpinner,
   IonFabButton,
+  IonFabList,
+  IonIcon,
+  IonBackButton,
 } from "@ionic/vue";
+import { chevronUp, save, trashBin } from "ionicons/icons";
+
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import { useRouteStore } from "@/store/routeStore";
@@ -93,16 +110,19 @@ const del = async () => {
   });
   res = await res.json();
   console.log("response from delete:", res);
-  routeStore.getRouteDetails();
-  // artificial delay :(
-  setTimeout(() => {
-    showLoadingSpinner.value = true;
-    router.back();
-  }, 100);
+  await routeStore.getRouteDetails();
+  showLoadingSpinner.value = false;
+  router.back();
+  // // artificial delay :(
+  // setTimeout(() => {
+  //   showLoadingSpinner.value = true;
+  //   router.back();
+  // }, 100);
 };
 
 const publish = async () => {
   console.log("Publised by admin");
+  showLoadingSpinner.value = true;
   let res = await fetch(`${process.env.VUE_APP_BACKEND_URL}/approve`, {
     method: "POST",
     headers: {
@@ -112,6 +132,14 @@ const publish = async () => {
     body: JSON.stringify(routeDetailID),
   });
   res = await res.json();
+  await routeStore.getRouteDetails();
+  showLoadingSpinner.value = false;
+  router.back();
+  // // artificial delay :(
+  // setTimeout(() => {
+  //   showLoadingSpinner.value = true;
+  //   router.back();
+  // }, 100);
   console.log(res);
 };
 

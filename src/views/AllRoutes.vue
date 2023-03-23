@@ -11,21 +11,45 @@
         />
       </ion-toolbar>
     </ion-header>
+
     <ion-content>
+      <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <!-- <ion-list v-if="!searchClicked"> -->
       <ion-list>
         <!-- <h1>he</h1> -->
         <!-- <ion-item v-for="(n, idx) in 100" :key="idx" href="/tabs/review/routeID"> -->
-        <ion-item
-          v-for="(n, idx) in routeDetails"
+        <span
+          v-for="(route, idx) in routeDetails"
           :key="idx"
           @click="openRouteDetails(idx)"
         >
-          <span v-if="n.route[0]"
-            >{{ n.route[0].name }} -
-            {{ n.route[n.route.length - 1].name }}</span
-          >
-        </ion-item>
+          <ion-card mode="ios">
+            <ion-card-header>
+              <ion-card-title>
+                <span v-if="route.route[0]"
+                  >{{ route.route[0].name.slice(0, 15) }} -
+                  {{
+                    route.route[route.route.length - 1].name.slice(0, 15)
+                  }}</span
+                >
+              </ion-card-title>
+              <ion-card-subtitle>
+                <ion-chip color="success" v-if="route.approved"
+                  >Approved</ion-chip
+                >
+                <ion-chip color="warning" v-else>Under Review</ion-chip>
+              </ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              Approved: {{ route.approved }} <br />Upvotes: {{ route.upvotes }}
+              <br />Downvotes: {{ route.downvotes }} <br />Yatayat list:
+              {{ route.yatayat }} <br />Vehicle Type: {{ route.vehicleTypes }}
+            </ion-card-content>
+          </ion-card>
+        </span>
       </ion-list>
     </ion-content>
   </ion-page>
@@ -41,6 +65,11 @@ import {
   IonItem,
   IonList,
   onIonViewWillEnter,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonRefresher,
 } from "@ionic/vue";
 import { search } from "ionicons/icons";
 import SearchBar from "@/components/SearchBar.vue";
@@ -64,12 +93,18 @@ onIonViewWillEnter(() => {
   console.log("Reached at review routes page.");
   // console.log(routeDetails.va)
 });
-
+setTimeout(() => {
+  console.log("Route Details: ", routeDetails);
+}, 5000);
 const openRouteDetails = async (idx) => {
   console.log(`/tabs/review/${idx}`);
   router.push({ path: `/tabs/review/${idx}`, params: { idx } });
 };
 
+const handleRefresh = async (event: CustomEvent) => {
+  await routeStore.getRouteDetails();
+  event.target.complete();
+};
 //when cross button is clicked then set the search clicked back to false
 
 const clickSearchedBusStop = (event) => {

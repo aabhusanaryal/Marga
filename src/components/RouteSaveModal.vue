@@ -50,14 +50,18 @@
         >Enter the types of vehicles that run in this route</ion-label
       > -->
       <div>
-        <ion-item v-for="(vehicle, idx) in allVehicles" :key="idx">
-          <ion-checkbox
-            slot="start"
-            class="vehicleCheckbox"
-            :name="vehicle"
-          ></ion-checkbox>
-          <ion-label>{{ vehicle }}</ion-label>
-        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-item v-for="(vehicle, idx) in allVehicles" :key="idx">
+              <ion-checkbox
+                slot="start"
+                class="vehicleCheckbox"
+                :name="vehicle"
+              ></ion-checkbox>
+              <ion-label>{{ vehicle }}</ion-label>
+            </ion-item>
+          </ion-row>
+        </ion-grid>
 
         <ion-item>
           <ion-checkbox slot="start" v-model="other"></ion-checkbox>
@@ -120,6 +124,8 @@ import {
   IonSpinner,
   IonChip,
   IonCheckbox,
+  IonGrid,
+  IonRow,
 } from "@ionic/vue";
 import { closeCircle } from "ionicons/icons";
 

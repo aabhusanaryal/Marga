@@ -23,6 +23,7 @@ export const useRouteStore = defineStore("route", () => {
     // console.log("Bus Route List: ",busRouteList);
     routeDetails.value = data;
     console.log("The update route details are: ", routeDetails.value);
+    return 1;
     // routeDetails.value = <Array>busRouteList;
   };
 
