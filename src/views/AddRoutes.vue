@@ -51,7 +51,7 @@ import {
   IonFabList,
   IonIcon,
   IonSpinner,
-  toastController
+  toastController,
 } from "@ionic/vue";
 import { chevronUp, save, arrowUndo, trashBin } from "ionicons/icons";
 import { onMounted, ref } from "vue";
@@ -148,8 +148,8 @@ const clickSearchResultItm = (event) => {
 
 let showLoadingSpinner = ref(false);
 const saveData = async () => {
-  if (busStops.length>1){
-    console.log("true")
+  if (busStops.length > 1) {
+    console.log("true");
     const modal = await modalController.create({
       component: Modal,
       componentProps: { busStops },
@@ -168,14 +168,12 @@ const saveData = async () => {
         // PS: Only the tile layer has _url
         if (!layer._url) map.removeLayer(layer);
       });
+      busStops = [];
     }
-  }
-  else{
-    console.log("false")
+  } else {
+    console.log("false");
     presentToast("middle", "Please enter the bus stops!");
-
   }
-  
 };
 
 const undoMarker = (e = "") => {

@@ -55,8 +55,6 @@ let routeInfo = ref([]);
 let searchClicked = false;
 let searchedTerm;
 
-routeInfo.value = routeStore.routeDetails;
-
 onIonViewWillEnter(() => {
   routeInfo.value = routeStore.routeDetails;
   searchClicked = false;

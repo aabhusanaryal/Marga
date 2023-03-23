@@ -59,8 +59,9 @@ const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
-const id: number = route.params.routeID;
-const routeInfo = routeStore.routeDetails[id];
+const idx: number = route.params.routeID;
+const routeInfo = routeStore.routeDetails[idx];
+const routeID = routeInfo.route_id;
 let text = "Thank you for voting!";
 let route_id, vote_type;
 
@@ -69,11 +70,11 @@ console.log(authStore.roles);
 console.log(isAdmin);
 
 const votingDetails = {
-  route_id: id,
+  route_id: routeID,
   vote_type: "upvote",
 };
 const routeDetailID = {
-  route_id: id,
+  route_id: routeID,
 };
 let showLoadingSpinner = ref(false);
 
@@ -93,8 +94,11 @@ const del = async () => {
   res = await res.json();
   console.log("response from delete:", res);
   routeStore.getRouteDetails();
-  showLoadingSpinner.value = true;
-  router.back();
+  // artificial delay :(
+  setTimeout(() => {
+    showLoadingSpinner.value = true;
+    router.back();
+  }, 500);
 };
 
 const publish = async () => {
@@ -155,7 +159,7 @@ const downVote = async () => {
   router.push("/tabs/review");
   presentToast("bottom", text);
 };
-console.log("Route ID: ", id);
+console.log("Route ID: ", routeID);
 </script>
 
 <style scoped>
